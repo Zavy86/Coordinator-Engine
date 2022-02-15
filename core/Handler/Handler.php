@@ -152,8 +152,8 @@ final class Handler implements HandlerInterface{
 			$this->Response->addError(HandlerError::errorExecutingFunction($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction()));
 			$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 		}finally{
-			$this->log();  // valutare se mettere qui o dentro try
-		  $this->render(); // dovrebbe stare qui perche dovrò sempre cercare di effetuare un rendering
+			$this->log();  // valutare se mettere qui o dentro un try
+			$this->render(); // dovrebbe stare qui perche dovrò sempre cercare di effetuare un rendering
 		}
 	}
 
@@ -185,7 +185,7 @@ final class Handler implements HandlerInterface{
 	/**
 	 * Render response
 	 */
-	public function render():void{
+	private function render():void{
 		echo $this->Response->render();
 	}
 

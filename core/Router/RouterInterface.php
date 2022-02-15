@@ -12,15 +12,33 @@ use Coordinator\Engine\Callback\CallbackInterface;
 
 interface RouterInterface{
 
+	/**
+	 * Load Routes
+	 */
 	public function loadRoutes();
 
 	/**
+	 * Resolve Route
+	 *
 	 * @throws RouterException
+	 * @return CallbackInterface
 	 */
 	public function resolveRoute(string $method,string $command):CallbackInterface;
 
+	/**
+	 * Add Route
+	 *
+	 * @param string $method
+	 * @param string $command
+	 * @param CallbackInterface $callback
+	 */
 	public function addRoute(string $method,string $command,CallbackInterface $callback):void;
 
+	/**
+	 * Debug
+	 *
+	 * @return array
+	 */
 	public function debug():array;
 
 }

@@ -13,10 +13,16 @@ use Coordinator\Engine\Response\ResponseInterface;
 
 interface ControllerInterface{
 
-	 public function __construct(
+	/**
+	 * Controller constructor
+	 *
+	 * @param RequestInterface $Request
+	 * @param ResponseInterface $Response
+	 */
+	public function __construct(
 		RequestInterface $Request,
 		ResponseInterface $Response
-	 );
+	);
 
 	/**
 	 * Debug

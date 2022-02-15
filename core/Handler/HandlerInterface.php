@@ -13,11 +13,27 @@ use Coordinator\Engine\Response\ResponseInterface;
 
 interface HandlerInterface{
 
+	/**
+	 * Handler constructor
+	 *
+	 * @param RequestInterface $Request
+	 * @param ResponseInterface $Response
+	 */
 	public function __construct(
 	 RequestInterface $Request,
 	 ResponseInterface $Response
 	);
 
-	public function handle();
+	/**
+	 * Handle
+	 */
+	public function handle():void;
+
+	/**
+	 * Debug
+	 *
+	 * @return array
+	 */
+	public function debug():array;
 
 }
