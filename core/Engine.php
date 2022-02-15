@@ -58,7 +58,7 @@ final class Engine{
 
 	private function setParameters(){
 		static::$DEBUG=(isset($_GET['debug']) && $_GET['debug']==1);
-		static::$DIR=str_replace('\\','/',dirname(__DIR__)).'/';
+		static::$DIR=str_replace(['/','\\'],DIRECTORY_SEPARATOR,dirname(__DIR__).'/');
 		static::$URL=(isset($_SERVER["HTTPS"])?"https":"http")."://".$_SERVER["HTTP_HOST"].'/';
 	}
 
