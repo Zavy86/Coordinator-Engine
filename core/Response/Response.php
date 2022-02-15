@@ -11,7 +11,7 @@ namespace Coordinator\Engine\Response;
 use Coordinator\Engine\Error\ErrorInterface;
 use Coordinator\Engine\Object\ObjectInterface;
 
-class Response implements ResponseInterface{
+final class Response implements ResponseInterface{
 
 	/**
 	 * Constants     /@todo spostare fuori da response in un ENUM ?
@@ -29,7 +29,7 @@ class Response implements ResponseInterface{
 	const RC_501_NOT_IMPLEMENTED=501;
 	const RC_503_SERVICE_UNAVAILABLE=503;
 
-	protected int $code=Response::RC_200_OK;
+	protected int $code=Response::RC_500_INTERNAL_SERVER_ERROR;
 	protected array $Errors=[];
 	protected ObjectInterface $Object;
 

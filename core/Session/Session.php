@@ -11,7 +11,7 @@ namespace Coordinator\Engine\Session;
 use Coordinator\Engine\Engine;
 use Coordinator\Engine\Handler\Request;
 
-class Session implements SessionInterface{
+final class Session implements SessionInterface{
 
 	private const SECRET_KEY="@generaresecretkey";              // @todo spostare nelle configurazioni dell'applicazione
 	private const MAX_DURATION=60*60*24;                        // @todo spostare nelle configurazioni dell'applicazione

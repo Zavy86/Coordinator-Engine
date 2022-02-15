@@ -17,7 +17,7 @@ use Coordinator\Engine\Response\Response;
 /**
  * Authentication Controller
  */
-class AuthenticationController extends AbstractController{
+final class AuthenticationController extends AbstractController{
 
 	public function POST_authenticate(){
 		/** @var LoginRequest $LoginRequestModel */

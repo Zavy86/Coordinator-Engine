@@ -14,7 +14,7 @@ use Coordinator\Engine\Callback\Callback;
 /**
  * Authentication Router
  */
-class AuthenticationRouter extends AbstractRouter{
+final class AuthenticationRouter extends AbstractRouter{
 
 	public function loadRoutes(){
 		$this->GET("/^\/Authentication\/Check$/",(new Callback(AuthenticationController::class,"GET_check")));

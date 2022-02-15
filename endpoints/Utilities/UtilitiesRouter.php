@@ -11,7 +11,7 @@ namespace Coordinator\Engine\Endpoints\Utilities;
 use Coordinator\Engine\Router\AbstractRouter;
 use Coordinator\Engine\Callback\Callback;
 
-class UtilitiesRouter extends AbstractRouter{
+final class UtilitiesRouter extends AbstractRouter{
 
 	public function loadRoutes(){
 		$this->GET("/^\/Utilities\/Ping$/",(new Callback(UtilitiesController::class,"GET_ping")));

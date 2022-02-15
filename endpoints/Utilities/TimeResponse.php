@@ -10,7 +10,7 @@ namespace Coordinator\Engine\Endpoints\Utilities;
 
 use Coordinator\Engine\Object\AbstractObject;
 
-class TimeResponse extends AbstractObject{
+final class TimeResponse extends AbstractObject{
 
 	public int $timestamp;
 	public string $datetime;

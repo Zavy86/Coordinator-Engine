@@ -8,6 +8,6 @@
 
 namespace Coordinator\Engine\Response;
 
-class ResponseException extends \Exception{
+final class ResponseException extends \Exception{
 
 }

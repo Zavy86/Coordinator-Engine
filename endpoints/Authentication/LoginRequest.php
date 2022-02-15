@@ -10,7 +10,7 @@ namespace Coordinator\Engine\Endpoints\Authentication;
 
 use Coordinator\Engine\Object\AbstractObject;
 
-class LoginRequest extends AbstractObject{
+final class LoginRequest extends AbstractObject{
 
 	public string $username;
 	public string $password;

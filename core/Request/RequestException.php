@@ -8,7 +8,7 @@
 
 namespace Coordinator\Engine\Request;
 
-class RequestException extends \Exception{
+final class RequestException extends \Exception{
 
 	public const METHOD_NOT_ALLOWED=101;
 	public static function methodNotAllowed(string $method):static{

@@ -10,7 +10,7 @@ namespace Coordinator\Engine\Endpoints\Utilities;
 
 use Coordinator\Engine\Controller\AbstractController;
 
-class UtilitiesController extends AbstractController{
+final class UtilitiesController extends AbstractController{
 
 	public function GET_ping(){
 		$this->Response->setObject(new PingResponse());

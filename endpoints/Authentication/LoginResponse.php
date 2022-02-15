@@ -10,7 +10,7 @@ namespace Coordinator\Engine\Endpoints\Authentication;
 
 use Coordinator\Engine\Object\AbstractObject;
 
-class LoginResponse extends AbstractObject{
+final class LoginResponse extends AbstractObject{
 
 	public string $token;
 	public int $duration;

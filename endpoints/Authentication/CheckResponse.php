@@ -10,7 +10,7 @@ namespace Coordinator\Engine\Endpoints\Authentication;
 
 use Coordinator\Engine\Object\AbstractObject;
 
-class CheckResponse extends AbstractObject{
+final class CheckResponse extends AbstractObject{
 
 	public bool $valid;
 	public string $address;

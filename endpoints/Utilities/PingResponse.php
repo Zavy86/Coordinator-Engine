@@ -10,7 +10,7 @@ namespace Coordinator\Engine\Endpoints\Utilities;
 
 use Coordinator\Engine\Object\AbstractObject;
 
-class PingResponse extends AbstractObject{
+final class PingResponse extends AbstractObject{
 
 	public string $response='pong';
 

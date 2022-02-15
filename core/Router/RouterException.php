@@ -8,7 +8,7 @@
 
 namespace Coordinator\Engine\Router;
 
-class RouterException extends \Exception{
+final class RouterException extends \Exception{
 
 	public const ROUTE_NOT_RESOLVED=101;
 	public static function routeNotResolved(string $class,string $command,string $method):static{
