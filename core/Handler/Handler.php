@@ -10,8 +10,6 @@ namespace Coordinator\Engine\Handler;
 
 use Coordinator\Engine\Engine;
 
-use Coordinator\Engine\Error\HandlerError;
-
 use Coordinator\Engine\Request\RequestInterface;
 use Coordinator\Engine\Response\ResponseInterface;
 use Coordinator\Engine\Response\Response;
@@ -21,7 +19,7 @@ use Coordinator\Engine\Router\RouterInterface;
 use Coordinator\Engine\Callback\CallbackInterface;
 use Coordinator\Engine\Controller\ControllerInterface;
 
-class Handler implements HandlerInterface{
+final class Handler implements HandlerInterface{
 
 	/**
 	 * Interfaces
@@ -140,11 +138,13 @@ class Handler implements HandlerInterface{
 	}
 
 	public function handle():void{
-		$function=(isset($this->Callback)?$this->Callback->getFunction():null);
 		try{
-			if(isset($this->Controller)){
-				$this->Controller->$function();
-			}
+			//if(isset($this->Callback)){
+			$function=$this->Callback->getFunction();
+			//}
+			//if(isset($this->Controller)){
+			$this->Controller->$function();
+			//}
 		}catch(\Exception $Exception){
 			// if in debug mode show real error
 			if(Engine::$DEBUG){throw $Exception;}
@@ -183,7 +183,7 @@ class Handler implements HandlerInterface{
 	}
 
 	/**
-	 * Render output
+	 * Render response
 	 */
 	public function render():void{
 		echo $this->Response->render();
