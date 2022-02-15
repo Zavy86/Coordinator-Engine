@@ -13,16 +13,6 @@ abstract class AbstractRouter implements RouterInterface{
 	/** @var CallbackInterface[][] Callback Routes with keys [command][method] */
 	protected array $routes=[];
 
-	/*final public function debugRoutes(){
-		$routes=array();
-		foreach($this->routes as $method=>$commands){
-			foreach($commands as $command=>$callback){
-				$routes[$method.' '.$command]=$callback[0].'['.$callback[1].']';
-			}
-		}
-		return $routes;
-	}*/
-
 	final public function __construct(){
 		$this->loadRoutes();
 	}
@@ -64,6 +54,13 @@ abstract class AbstractRouter implements RouterInterface{
 			throw RouterException::routeNotResolved(static::class,$cleanedCommand,$cleanedMethod);  // callback instead of command
 		}
 		return $resolved_callback;
+	}
+
+	final public function debug():array{
+		return array(
+			'class'=>$this::class
+			//'routes'=>$this->routes
+		);
 	}
 
 }

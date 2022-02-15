@@ -41,4 +41,12 @@ abstract class AbstractController implements ControllerInterface{
 		}
 	}
 
+	public function debug():array{
+		return array(
+			'class'=>$this::class
+			//'Request'=>$this->Request->debug(),
+			//'Response'=>$this->Request->debug()
+		);
+	}
+
 }

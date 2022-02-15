@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract Model
+ * Abstract Object
  *
  * @package Coordinator\Engine\Object
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>

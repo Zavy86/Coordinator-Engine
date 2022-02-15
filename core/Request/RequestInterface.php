@@ -24,4 +24,11 @@ interface RequestInterface{
 
 	public function getObject(string $class):ObjectInterface;
 
+	/**
+	 * Debug
+	 *
+	 * @return array
+	 */
+	public function debug():array;
+
 }

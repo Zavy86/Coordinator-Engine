@@ -18,4 +18,11 @@ interface ControllerInterface{
 		ResponseInterface $Response
 	 );
 
+	/**
+	 * Debug
+	 *
+	 * @return array
+	 */
+	public function debug():array;
+
 }

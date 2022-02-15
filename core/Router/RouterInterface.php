@@ -19,4 +19,6 @@ interface RouterInterface{
 
 	public function addRoute(string $method,string $command,CallbackInterface $callback):void;
 
+	public function debug():array;
+
 }
