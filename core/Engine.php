@@ -19,7 +19,6 @@ use Coordinator\Engine\Handler\Handler;
 use Coordinator\Engine\Event\EventInterface;
 use Coordinator\Engine\Logger\LoggerInterface;
 
-
 final class Engine{
 
 	public static bool $DEBUG;

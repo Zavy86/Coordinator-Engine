@@ -10,6 +10,6 @@ namespace Coordinator\Engine\Endpoints\Utilities;
 
 use Coordinator\Engine\Endpoint\AbstractEndpoint;
 
-final class UtilitiesEndpoint extends AbstractEndpoint{
+final class Endpoint extends AbstractEndpoint{
 
 }

@@ -11,14 +11,11 @@ namespace Coordinator\Engine\Endpoints\Authentication;
 use Coordinator\Engine\Router\AbstractRouter;
 use Coordinator\Engine\Callback\Callback;
 
-/**
- * Authentication Router
- */
-final class AuthenticationRouter extends AbstractRouter{
+final class Router extends AbstractRouter{
 
 	public function loadRoutes(){
-		$this->GET("/^\/Authentication\/Check$/",(new Callback(AuthenticationController::class,"GET_check")));
-		$this->POST("/^\/Authentication\/Authenticate$/",(new Callback(AuthenticationController::class,"POST_authenticate")));
+		$this->GET("/^\/Authentication\/Check$/",(new Callback(Controller::class,"GET_check")));
+		$this->POST("/^\/Authentication\/Authenticate$/",(new Callback(Controller::class,"POST_authenticate")));
 	}
 
 }

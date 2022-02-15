@@ -86,7 +86,7 @@ final class Handler implements HandlerInterface{
 
 	private function loadEndpoint():void{
 		$endpoint=$this->getEndpointName();
-		$endpointClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.$endpoint.'Endpoint';
+		$endpointClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.'Endpoint';
 		//var_dump($endpointClass);
 		try{
 			$this->Endpoint=new $endpointClass;
@@ -99,7 +99,7 @@ final class Handler implements HandlerInterface{
 
 	private function loadRouter():void{
 		$endpoint=$this->getEndpointName();
-		$routerClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.$endpoint.'Router';
+		$routerClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.'Router';
 		//var_dump($routerClass);
 		try{
 			$this->Router=new $routerClass;

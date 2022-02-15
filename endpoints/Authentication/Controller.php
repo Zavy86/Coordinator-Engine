@@ -14,10 +14,7 @@ use Coordinator\Engine\Engine;
 use Coordinator\Engine\Error\Error;
 use Coordinator\Engine\Response\Response;
 
-/**
- * Authentication Controller
- */
-final class AuthenticationController extends AbstractController{
+final class Controller extends AbstractController{
 
 	public function POST_authenticate(){
 		/** @var LoginRequest $LoginRequestModel */

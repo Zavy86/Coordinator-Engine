@@ -10,6 +10,6 @@ namespace Coordinator\Engine\Endpoints\Authentication;
 
 use Coordinator\Engine\Endpoint\AbstractEndpoint;
 
-final class AuthenticationEndpoint extends AbstractEndpoint{
+final class Endpoint extends AbstractEndpoint{
 
 }

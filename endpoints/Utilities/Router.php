@@ -11,11 +11,11 @@ namespace Coordinator\Engine\Endpoints\Utilities;
 use Coordinator\Engine\Router\AbstractRouter;
 use Coordinator\Engine\Callback\Callback;
 
-final class UtilitiesRouter extends AbstractRouter{
+final class Router extends AbstractRouter{
 
 	public function loadRoutes(){
-		$this->GET("/^\/Utilities\/Ping$/",(new Callback(UtilitiesController::class,"GET_ping")));
-		$this->GET("/^\/Utilities\/Time$/",(new Callback(UtilitiesController::class,"GET_time")));
+		$this->GET("/^\/Utilities\/Ping$/",(new Callback(Controller::class,"GET_ping")));
+		$this->GET("/^\/Utilities\/Time$/",(new Callback(Controller::class,"GET_time")));
 	}
 
 }
