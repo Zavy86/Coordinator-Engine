@@ -63,9 +63,9 @@ final class Engine{
 	}
 
 	private function loadVersion(){
-		if(!file_exists(static::$DIR."VERSION.txt")){throw EngineException::versionFileNotFound();}
+		if(!file_exists(static::$DIR."VERSION.txt")){throw new \Exception('Version file not found.');}
 		static::$VERSION=file_get_contents(static::$DIR."VERSION.txt");
-		if(substr_count(static::$VERSION, ".")!=2){throw EngineException::versionSyntaxError();}
+		if(substr_count(static::$VERSION, ".")!=2){throw new \Exception('Version file syntax error.');}
 	}
 
 	private function loadConfiguration(){
