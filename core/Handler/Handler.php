@@ -16,23 +16,20 @@ use Coordinator\Engine\Request\RequestInterface;
 use Coordinator\Engine\Response\ResponseInterface;
 use Coordinator\Engine\Response\Response;
 
-use Coordinator\Engine\Router\RouterException;
-
+use Coordinator\Engine\Endpoint\EndpointInterface;
 use Coordinator\Engine\Router\RouterInterface;
 use Coordinator\Engine\Router\CallbackInterface;
 use Coordinator\Engine\Controller\ControllerInterface;
 
 class Handler implements HandlerInterface{
 
-	private string $module;
-	private string $command;
-
 	/**
 	 * Interfaces
 	 */
+	private EndpointInterface $Endpoint;
 	private RouterInterface $Router;
-	private ControllerInterface $Controller;
 	private CallbackInterface $Callback;
+	private ControllerInterface $Controller;
 
 	/**
 	 * Constructor
@@ -49,64 +46,35 @@ class Handler implements HandlerInterface{
 		$this->initialize();
 	}
 
-	public function getModule():string{return $this->module;}
-	public function getCommand():string{return $this->command;}
-
 	private function initialize():void{
 		try{
-			$this->parseUri();
-			$this->checkModule();
-			$this->checkRouter();
+			$this->loadEndpoint();
 			$this->loadRouter();
-
-			$this->Callback=$this->Router->resolveRoute($this->Request->getMethod(),$this->getCommand());
-
-			$this->checkCallback();
+			$this->loadCallback();
 			$this->loadController();
+			$this->checkFunction();
 		}catch(HandlerException $Exception){
 			switch($Exception->getCode()){
-				case HandlerException::MODULE_NOT_FOUND:
-					$this->Response->addError(HandlerError::moduleNotFound($this->getModule()));
-					$this->Response->setCode(Response::RC_404_NOT_FOUND);
-					break;
-				case HandlerException::ROUTER_NOT_FOUND:
-					$this->Response->addError(HandlerError::routerNotFound($this->getModule()));
+				case HandlerException::ERROR_LOADING_ENDPOINT:
+					$this->Response->addError(HandlerError::errorLoadingEndpoint($this->getEndpointName()));
 					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
 					break;
 				case HandlerException::ERROR_LOADING_ROUTER:
-					$this->Response->addError(HandlerError::errorLoadingRouter($this->getModule()));
+					$this->Response->addError(HandlerError::errorLoadingRouter($this->getEndpointName()));
 					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
 					break;
-				case HandlerException::CONTROLLER_NOT_FOUND:
-					$this->Response->addError(HandlerError::controllerNotFound($this->getModule(),$this->Callback->getController()));
-					$this->Response->setCode(Response::RC_501_NOT_IMPLEMENTED);
+				case HandlerException::ERROR_LOADING_CALLBACK:
+					$this->Response->addError(HandlerError::errorLoadingCallback($this->Request->getMethod(),$this->Request->getUri()));
+					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
 					break;
 				case HandlerException::ERROR_LOADING_CONTROLLER:
-					$this->Response->addError(HandlerError::errorLoadingController($this->getModule(),$this->Callback->getController()));
+					$this->Response->addError(HandlerError::errorLoadingController($this->getEndpointName(),$this->Callback->getController()));
 					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
 					break;
-				case HandlerException::METHOD_NOT_FOUND:
-					$this->Response->addError(HandlerError::methodNotFound($this->getModule(),$this->Callback->getController(),$this->Callback->getMethod()));
+				case HandlerException::FUNCTION_NOT_IMPLEMENTED:
+					$this->Response->addError(HandlerError::functionNotImplemented($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction()));
 					$this->Response->setCode(Response::RC_501_NOT_IMPLEMENTED);
 					break;
-				case HandlerException::ERROR_EXECUTING_METHOD:
-					$this->Response->addError(HandlerError::errorExecutingMethod($this->getModule(),$this->Callback->getController(),$this->Callback->getMethod()));
-					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
-					break;
-				default:
-					$this->Response->addError(HandlerError::uncatchedError($Exception->getMessage()));
-					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
-			}
-		}catch(RouterException $Exception){
-			switch($Exception->getCode()){
-				case RouterException::ROUTE_NOT_RESOLVED:
-					$this->Response->addError(HandlerError::routeNotResolved($this->Router::class,$this->getCommand(),$this->Request->getMethod()));
-					$this->Response->setCode(Response::RC_404_NOT_FOUND);
-					break;
-				case RouterException::METHOD_NOT_ALLOWED:
-					$this->Response->addError(HandlerError::methodNotAllowed($this->Router::class,$this->getCommand(),$this->Request->getMethod()));
-					$this->Response->setCode(Response::RC_405_METHOD_NOT_ALLOWED);
-					break;
 				default:
 					$this->Response->addError(HandlerError::uncatchedError($Exception->getMessage()));
 					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
@@ -114,79 +82,80 @@ class Handler implements HandlerInterface{
 		}
 	}
 
-	protected function parseUri():void{
-		$uri=$this->Request->getUri();
-		if($uri)
-		$this->command=$uri;
-		$this->module=explode("/",$this->command)[1];
+	private function getEndpointName():string{
+		return explode("/",$this->Request->getUri())[1];
 	}
 
-	private function checkModule():void{
-		$module=$this->getModule();
-		if(!is_dir(Engine::$DIR."modules/".$module)){
-			throw HandlerException::moduleNotFound($module);
-		}
-	}
-
-	private function checkRouter():void{
-		$module=$this->getModule();
-		if(!file_exists(Engine::$DIR."modules/".$module.'/'.$module."Router.php")){    // @todo cambiare con class exists?
-			throw HandlerException::routerNotFound($module);
+	private function loadEndpoint():void{
+		$endpoint=$this->getEndpointName();
+		$endpointClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.$endpoint.'Endpoint';
+		//var_dump($endpointClass);
+		try{
+			$this->Endpoint=new $endpointClass;
+			//var_dump($this->Endpoint);
+		}catch(\Exception|\TypeError $Exception){
+			//var_dump($Exception->getMessage());
+			throw HandlerException::errorLoadingEndpoint($endpoint);
 		}
 	}
 
 	private function loadRouter():void{
-		$module=$this->getModule();
-		$routerClass='\Coordinator\Engine\Modules\\'.$module.'\\'.$module.'Router';
+		$endpoint=$this->getEndpointName();
+		$routerClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.$endpoint.'Router';
 		//var_dump($routerClass);
 		try{
 			$this->Router=new $routerClass;
-			//var_dump($this->Router->debugRoutes());
-		}catch(\Exception $Exception){
-			throw HandlerException::errorLoadingRouter($this->getModule());
+			//var_dump($this->Router);
+		}catch(\Exception|\TypeError $Exception){
+			//var_dump($Exception->getMessage());
+			throw HandlerException::errorLoadingRouter($endpoint);
 		}
 	}
 
-	private function checkCallback():void{    // @todo migliorare DRY
+	private function loadCallback():void{
 		try{
-			class_exists($this->Callback->getController());
-		}catch(\Exception $Exception){
-			throw HandlerException::controllerNotFound($this->getModule(),$this->Callback->getController());
-		}
-		if(!method_exists($this->Callback->getController(),$this->Callback->getMethod())){
-			throw HandlerException::methodNotFound($this->getModule(),$this->Callback->getController(),$this->Callback->getMethod());
+			$this->Callback=$this->Router->resolveRoute($this->Request->getMethod(),$this->Request->getUri());
+			//var_dump($this->Callback);
+		}catch(\Exception|\TypeError $Exception){
+			//var_dump($Exception->getMessage());
+			throw HandlerException::errorLoadingCallback($this->Request->getMethod(),$this->Request->getUri());
 		}
 	}
 
 	private function loadController():void{
-		$controller_class=$this->Callback->getController();
+		$controllerClass=$this->Callback->getController();
+		//var_dump($controllerClass);
 		try{
-			$this->Controller=new $controller_class($this->Request,$this->Response);
-		}catch(\Exception $Exception){
-			throw HandlerException::errorLoadingController($this->getModule(),$this->Callback->getController());
+			$this->Controller=new $controllerClass($this->Request,$this->Response);
+		}catch(\Exception|\TypeError $Exception){
+			//var_dump($Exception->getMessage());
+			throw HandlerException::errorLoadingController($this->getEndpointName(),$this->Callback->getController());
+		}
+	}
+
+	private function checkFunction():void{
+		if(!method_exists($this->Callback->getController(),$this->Callback->getFunction())){
+			throw HandlerException::functionNotImplemented($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction());
 		}
 	}
 
 	public function handle():void{
-		$method=(isset($this->Callback)?$this->Callback->getMethod():null);
+		$function=(isset($this->Callback)?$this->Callback->getFunction():null);
 		try{
 			if(isset($this->Controller)){
-				$this->Controller->$method();
+				$this->Controller->$function();
 			}
 		}catch(\Exception $Exception){
 			// if in debug mode show real error
 			if(Engine::$DEBUG){throw $Exception;}
 			// show generic error for client
-			$this->Response->addError(HandlerError::errorExecutingMethod($this->getModule(),$this->Callback->getController(),$this->Callback->getMethod()));
+			$this->Response->addError(HandlerError::errorExecutingFunction($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction()));
 			$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
 		}finally{
 			$this->log();  // valutare se mettere qui o dentro try
 		  $this->render(); // dovrebbe stare qui perche dovrò sempre cercare di effetuare un rendering
 		}
 	}
-
-
-
 
 	/**
 	 * Log
@@ -220,17 +189,14 @@ class Handler implements HandlerInterface{
 		echo $this->Response->render();
 	}
 
-
-
 	public function debug():array{
 		return array(
-		 'module'=>$this->module??null,
-		 'command'=>$this->command??null,
-		 'Request'=>(isset($this->Request)?$this->Request->debug():null),
-		 //'Router'=>$this->Router??null,
-		 //'Controller'=>$this->Controller??null,
-		 'Callback'=>(isset($this->Callback)?$this->Callback->debug():null),
-		 'Response'=>(isset($this->Response)?$this->Response->debug():null)
+			'Request'=>(isset($this->Request)?$this->Request->debug():null),
+			'Endpoint'=>(isset($this->Endpoint)?$this->Endpoint->debug():null),
+			'Router'=>(isset($this->Router)?$this->Router->debug():null),
+			'Callback'=>(isset($this->Callback)?$this->Callback->debug():null),
+			'Controller'=>(isset($this->Controller)?$this->Controller->debug():null),
+			'Response'=>(isset($this->Response)?$this->Response->debug():null)
 		);
 	}
 
