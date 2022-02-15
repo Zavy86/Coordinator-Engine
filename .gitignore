@@ -1,0 +1,8 @@
+.idea/
+.vscode/
+configurations/*
+datasets/*
+modules/*
+!modules/Authentication/
+!modules/Utilities/
+tmp/*
