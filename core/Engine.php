@@ -8,7 +8,6 @@
 
 namespace Coordinator\Engine;
 
-use Coordinator\Engine\Handler\EngineException;
 use Coordinator\Engine\Configuration\ApplicationConfiguration;
 
 use Coordinator\Engine\Session\Session;

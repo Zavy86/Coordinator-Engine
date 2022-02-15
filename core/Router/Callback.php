@@ -9,8 +9,6 @@
 namespace Coordinator\Engine\Router;
 
 use Coordinator\Engine\Controller\ControllerInterface;
-use Coordinator\Engine\Handler\CallbackException;
-use Coordinator\Engine\Handler\RouterException;
 
 final class Callback implements CallbackInterface{
 
