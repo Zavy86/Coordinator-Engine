@@ -25,7 +25,7 @@ interface ErrorInterface{
 	public function getInformation():?string;
 
 	public function setCode(string $code):bool;
-	public function setDescription(?string $description):bool;
-	public function setInformation(?string $information):bool;
+	public function setDescription(?string $description=null):bool;
+	public function setInformation(?string $information=null):bool;
 
 }

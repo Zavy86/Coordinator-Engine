@@ -36,7 +36,7 @@ abstract class AbstractConfiguration implements ConfigurationInterface{
 		return $properties;
 	}
 
-	private static function maskProperty(?string $value):?string{
+	private static function maskProperty(?string $value=null):?string{
 		if(is_null($value)){return null;}
 		if(strlen($value)<=6){return "********";}
 		return substr($value,0,2).str_repeat("*",(strlen($value)-4)).substr($value,-2);

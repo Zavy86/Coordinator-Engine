@@ -52,7 +52,7 @@ abstract class AbstractError implements ErrorInterface{
 	 * @param ?string $description Error description
 	 * @return bool
 	 */
-	final public function setDescription(?string $description):bool{
+	final public function setDescription(?string $description=null):bool{
 		if(0){return false;}                           /* @todo check */
 		if(is_null($description) || !strlen(trim($description))){return false;}
 		$this->description=trim($description);
@@ -64,7 +64,7 @@ abstract class AbstractError implements ErrorInterface{
 	 * @param ?string $information Error information
 	 * @return bool
 	 */
-	final public function setInformation(?string $information):bool{
+	final public function setInformation(?string $information=null):bool{
 		if(0){return false;}                           /* @todo check */
 		if(is_null($information) || !strlen(trim($information))){return false;}
 		$this->information=trim($information);
