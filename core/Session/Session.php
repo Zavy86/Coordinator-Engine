@@ -206,4 +206,18 @@ final class Session implements SessionInterface{
 	public function getExpiration():?int{return $this->expiration??null;}
 	public function getRemaining():?int{return isset($this->expiration)?($this->expiration-time()):null;}
 
+	public function debug():array{
+		return array(
+			'valid'=>$this->isValid(),
+			'token'=>$this->getToken(),
+			'address'=>$this->getAddress(),
+			'username'=>$this->getUsername(),
+			'client'=>$this->getClient(),
+			'duration'=>$this->getDuration(),
+			'generation'=>$this->getGeneration(),
+			'expiration'=>$this->getExpiration(),
+			'remaining'=>$this->getRemaining()
+		);
+	}
+
 }
