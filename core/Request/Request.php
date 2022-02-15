@@ -10,7 +10,7 @@ namespace Coordinator\Engine\Request;
 
 use Coordinator\Engine\Object\ObjectInterface;
 
-class Request implements RequestInterface{
+final class Request implements RequestInterface{
 
 	protected string $address;
 	protected string $method;

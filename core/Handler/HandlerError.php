@@ -8,7 +8,9 @@
 
 namespace Coordinator\Engine\Handler;
 
-class HandlerError extends AbstractError{  // @todo valutare se spostare sotto Http visto che sono gli errori che escono dall'Handler
+use Coordinator\Engine\Error\AbstractError;
+
+final class HandlerError extends AbstractError{  // @todo valutare se spostare sotto Http visto che sono gli errori che escono dall'Handler
 
 	public static function uncatchedError(string $description):static{
 		return new static(

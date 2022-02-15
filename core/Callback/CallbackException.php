@@ -8,7 +8,7 @@
 
 namespace Coordinator\Engine\Callback;
 
-class CallbackException extends \Exception{
+final class CallbackException extends \Exception{
 
 	public const CONTROLLER_NOT_FOUND=101;
 	public static function controllerNotFound(string $controller):static{

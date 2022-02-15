@@ -8,7 +8,7 @@
 
 namespace Coordinator\Engine\Handler;
 
-class HandlerException extends \Exception{
+final class HandlerException extends \Exception{
 
 	public const ERROR_LOADING_ENDPOINT=101;
 	public static function errorLoadingEndpoint(string $endpoint):static{

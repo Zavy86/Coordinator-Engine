@@ -8,7 +8,7 @@
 
 namespace Coordinator\Engine\Configuration;
 
-class ConfigurationException extends \Exception{
+final class ConfigurationException extends \Exception{
 
 	public const CONFIGURATION_FILE_NOT_FOUND=101;
 	public static function configurationFileNotFound(string $configurationFilePath):static{

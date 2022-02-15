@@ -8,6 +8,6 @@
 
 namespace Coordinator\Engine\Endpoint;
 
-class EndpointException extends \Exception{
+final class EndpointException extends \Exception{
 
 }

@@ -8,6 +8,6 @@
 
 namespace Coordinator\Engine\Controller;
 
-class ControllerException extends \Exception{
+final class ControllerException extends \Exception{
 
 }

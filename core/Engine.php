@@ -20,7 +20,7 @@ use Coordinator\Engine\Event\EventInterface;
 use Coordinator\Engine\Logger\LoggerInterface;
 
 
-class Engine{
+final class Engine{
 
 	public static bool $DEBUG;
 	public static string $VERSION;

@@ -8,7 +8,7 @@
 
 namespace Coordinator\Engine;
 
-class EngineException extends \Exception{
+final class EngineException extends \Exception{
 
 	public const VERSION_FILE_NOT_FOUND=101;
 	public static function versionFileNotFound():static{

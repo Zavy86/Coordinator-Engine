@@ -10,7 +10,7 @@ namespace Coordinator\Engine\Configuration;
 
 use Coordinator\Engine\Handler\ConfigurationException;
 
-class ApplicationConfiguration extends AbstractConfiguration{
+final class ApplicationConfiguration extends AbstractConfiguration{
 
 	protected bool $debug;
 	protected string $title;
