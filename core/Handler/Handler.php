@@ -12,7 +12,7 @@ use Coordinator\Engine\Engine;
 
 use Coordinator\Engine\Request\RequestInterface;
 use Coordinator\Engine\Response\ResponseInterface;
-use Coordinator\Engine\Response\Response;
+use Coordinator\Engine\Response\ResponseCode;
 
 use Coordinator\Engine\Endpoint\EndpointInterface;
 use Coordinator\Engine\Router\RouterInterface;
@@ -55,27 +55,27 @@ final class Handler implements HandlerInterface{
 			switch($Exception->getCode()){
 				case HandlerException::ERROR_LOADING_ENDPOINT:
 					$this->Response->addError(HandlerError::errorLoadingEndpoint($this->getEndpointName()));
-					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
+					$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 					break;
 				case HandlerException::ERROR_LOADING_ROUTER:
 					$this->Response->addError(HandlerError::errorLoadingRouter($this->getEndpointName()));
-					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
+					$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 					break;
 				case HandlerException::ERROR_LOADING_CALLBACK:
 					$this->Response->addError(HandlerError::errorLoadingCallback($this->Request->getMethod(),$this->Request->getUri()));
-					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
+					$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 					break;
 				case HandlerException::ERROR_LOADING_CONTROLLER:
 					$this->Response->addError(HandlerError::errorLoadingController($this->getEndpointName(),$this->Callback->getController()));
-					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
+					$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 					break;
 				case HandlerException::FUNCTION_NOT_IMPLEMENTED:
 					$this->Response->addError(HandlerError::functionNotImplemented($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction()));
-					$this->Response->setCode(Response::RC_501_NOT_IMPLEMENTED);
+					$this->Response->setCode(ResponseCode::NOT_IMPLEMENTED_501);
 					break;
 				default:
 					$this->Response->addError(HandlerError::uncatchedError($Exception->getMessage()));
-					$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
+					$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 			}
 		}
 	}
@@ -150,7 +150,7 @@ final class Handler implements HandlerInterface{
 			if(Engine::$DEBUG){throw $Exception;}
 			// show generic error for client
 			$this->Response->addError(HandlerError::errorExecutingFunction($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction()));
-			$this->Response->setCode(Response::RC_500_INTERNAL_SERVER_ERROR);
+			$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 		}finally{
 			$this->log();  // valutare se mettere qui o dentro try
 		  $this->render(); // dovrebbe stare qui perche dovrò sempre cercare di effetuare un rendering

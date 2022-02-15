@@ -23,9 +23,9 @@ interface ResponseInterface{
 	/**
 	 * Get Response Code
 	 *
-	 * @return int   @todo replace with ENUM
+	 * @return ResponseCode
 	 */
-	public function getCode():int;
+	public function getCode():ResponseCode;
 
 	/**
 	 * Get Errors
@@ -44,9 +44,9 @@ interface ResponseInterface{
 	/**
 	 * Set Response Code
 	 *
-	 * @param int $code      @todo replace with ENUM
+	 * @param ResponseCode $code
 	 */
-	public function setCode(int $code);
+	public function setCode(ResponseCode $code);
 
 	/**
 	 * Add Error
