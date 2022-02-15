@@ -8,6 +8,8 @@
 
 namespace Coordinator\Engine\Router;
 
+use Coordinator\Engine\Callback\CallbackInterface;
+
 interface RouterInterface{
 
 	public function loadRoutes();

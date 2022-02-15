@@ -1,12 +1,12 @@
 <?php
 /**
- * Router Callback
+ * Callback
  *
- * @package Coordinator\Engine\Router
+ * @package Coordinator\Engine\Callback
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 
-namespace Coordinator\Engine\Router;
+namespace Coordinator\Engine\Callback;
 
 use Coordinator\Engine\Controller\ControllerInterface;
 
@@ -14,11 +14,11 @@ final class Callback implements CallbackInterface{
 
 	/**
 	 * @param string $controller Controller class name (must implement ControllerInterface)
-	 * @param string $method Controller method name
+	 * @param string $function Controller function name
 	 */
 	final public function __construct(
 	 private string $controller,
-	 private string $method
+	 private string $function
 	){
 		$this->checkController();
 		$this->checkInterface();
@@ -28,8 +28,8 @@ final class Callback implements CallbackInterface{
 		return $this->controller;
 	}
 
-	final public function getMethod():string{
-		return $this->method;
+	final public function getFunction():string{
+		return $this->function;
 	}
 
 	/** @todo valutare se fare qui o se fare in handler */
@@ -53,7 +53,7 @@ final class Callback implements CallbackInterface{
 		return array(
 		 'class'=>$this::class,
 		 'controller'=>$this->getController(),
-		 'method'=>$this->getMethod()
+		 'function'=>$this->getFunction()
 		);
 	}
 

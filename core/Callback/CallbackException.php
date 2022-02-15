@@ -2,11 +2,11 @@
 /**
  * Callback Exception
  *
- * @package Coordinator\Engine\Router
+ * @package Coordinator\Engine\Callback
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 
-namespace Coordinator\Engine\Router;
+namespace Coordinator\Engine\Callback;
 
 class CallbackException extends \Exception{
 

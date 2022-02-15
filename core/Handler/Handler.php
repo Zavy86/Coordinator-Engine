@@ -18,7 +18,7 @@ use Coordinator\Engine\Response\Response;
 
 use Coordinator\Engine\Endpoint\EndpointInterface;
 use Coordinator\Engine\Router\RouterInterface;
-use Coordinator\Engine\Router\CallbackInterface;
+use Coordinator\Engine\Callback\CallbackInterface;
 use Coordinator\Engine\Controller\ControllerInterface;
 
 class Handler implements HandlerInterface{
@@ -107,7 +107,7 @@ class Handler implements HandlerInterface{
 			$this->Router=new $routerClass;
 			//var_dump($this->Router);
 		}catch(\Exception|\TypeError $Exception){
-			//var_dump($Exception->getMessage());
+			var_dump($Exception->getMessage());
 			throw HandlerException::errorLoadingRouter($endpoint);
 		}
 	}

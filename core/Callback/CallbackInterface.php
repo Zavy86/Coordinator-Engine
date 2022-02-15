@@ -2,21 +2,21 @@
 /**
  * Callback Interface
  *
- * @package Coordinator\Engine\Router
+ * @package Coordinator\Engine\Callback
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 
-namespace Coordinator\Engine\Router;
+namespace Coordinator\Engine\Callback;
 
 interface CallbackInterface{
 
 	public function __construct(
 	 string $controller,
-	 string $method
+	 string $function
 	);
 
 	public function getController():string;
-	public function getMethod():string;
+	public function getFunction():string;
 
 	public function debug():array;
 

@@ -8,6 +8,8 @@
 
 namespace Coordinator\Engine\Router;
 
+use Coordinator\Engine\Callback\CallbackInterface;
+
 abstract class AbstractRouter implements RouterInterface{
 
 	/** @var CallbackInterface[][] Callback Routes with keys [command][method] */
