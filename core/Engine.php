@@ -10,6 +10,7 @@ namespace Coordinator\Engine;
 
 use Coordinator\Engine\Configuration\ApplicationConfiguration;
 
+use Coordinator\Engine\Services\Services;
 use Coordinator\Engine\Session\Session;
 
 use Coordinator\Engine\Request\Request;
@@ -31,7 +32,7 @@ final class Engine{
 	private static ?Engine $SINGLETON=null;
 
 	private static ApplicationConfiguration $Configuration;    // @todo valutare se tenere statiche o meno
-	private static LoggerInterface $Logger;
+	private static ?LoggerInterface $Logger;
 	private static Handler $Handler;
 
 	private static Session $Session;
@@ -68,7 +69,7 @@ final class Engine{
 	}
 
 	private function loadConfiguration(){
-		$Configuration=new ApplicationConfiguration(static::$DIR.'configurations/application.json');
+		$Configuration=new ApplicationConfiguration('application.json');
 		//var_dump($Configuration);
 		static::$Configuration=$Configuration;
 
@@ -109,7 +110,8 @@ final class Engine{
 
 			 'Configuration'=>static::$Configuration,
 			 //'Logger'=>static::$Logger,
-			 'Handler'=>static::$Handler->debug()
+			 'Handler'=>static::$Handler->debug(),
+			 'Services'=>Services::debug()
 			);
 			//print_r($debug);
 			var_dump($debug);
@@ -126,6 +128,7 @@ final class Engine{
 	 * @return bool
 	 */
 	public function log(EventInterface $Event):bool{
+		if(is_null(static::$Logger)){return false;}
 		return static::$Logger->publish($Event);
 	}
 
