@@ -13,9 +13,9 @@ interface ConfigurationInterface{
 	/**
 	 * Load configuration
 	 *
-	 * @param string $configurationFilePath Full path of the configuration file
+	 * @param string $configuration Name configuration file or configuration in jjson format
 	 */
-	public function __construct(string $configurationFilePath);
+	public function __construct(string $configuration);
 
 	/**
 	 * Get property value

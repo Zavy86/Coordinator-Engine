@@ -8,10 +8,9 @@
 
 namespace Coordinator\Engine\Controller;
 
+use Coordinator\Engine\Engine;
 use Coordinator\Engine\Request\RequestInterface;
 use Coordinator\Engine\Response\ResponseInterface;
-use Coordinator\Engine\Services\Services;
-use Coordinator\Engine\Session\Session;
 
 abstract class AbstractController implements ControllerInterface{
 
@@ -20,25 +19,15 @@ abstract class AbstractController implements ControllerInterface{
 	 protected ResponseInterface $Response
 	){}
 
-	protected function checkSessionOrRedirectToLogin(){
-		/** @var Session $Session */
-		$Session=Services::getService("session");
-
-		// @todo check
-		if(!$Session->isValid()){
-			header('location:/admin/authentication/login');
-			$this->Response->setCode(301);
-			return;   // valutare come funziona.. se usare return o exit o cosa..
-		}
+	protected function checkSessionValidity():bool{
+		$Session=Engine::getSession();
+		//var_dump($Session);
+		return $Session->isValid();
 	}
 
-	protected function checkAuthorizationOrRedirect(string $authorization,string $redirect_url='/admin/index'){
-		// @todo check
-		if(false){  //$authorization
-			header('location:'.$redirect_url);
-			$this->Response->setCode(301);
-			return;   // valutare come funziona.. se usare return o exit o cosa..
-		}
+	protected function checkAuthorization(string $authorization):bool{  // @todo fare classe specifica
+		// @todo implementare
+		return false;
 	}
 
 	public function debug():array{
