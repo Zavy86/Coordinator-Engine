@@ -10,13 +10,18 @@ namespace Coordinator\Engine\Configuration;
 
 abstract class AbstractConfiguration implements ConfigurationInterface{
 
-	public function __construct(string $configurationFilePath){
-		if(!file_exists($configurationFilePath)){throw ConfigurationException::configurationFileNotFound($configurationFilePath);}
-		$bytes=file_get_contents($configurationFilePath);
-		$parameters=json_decode($bytes,true);
-		if(!is_array($parameters)){throw ConfigurationException::configurationFileSyntaxError($configurationFilePath);}
+	public function __construct(string|array $configuration){
+		if(is_string($configuration)){
+			$configurationFilePath=DIR.'configurations'.DIRECTORY_SEPARATOR.$configuration;   // @todo verificare se si riesce ad usare Engine::$DIR instanziandola prima
+			if(!file_exists($configurationFilePath)){throw ConfigurationException::configurationFileNotFound($configurationFilePath);}
+			$bytes=file_get_contents($configurationFilePath);
+			$parameters=json_decode($bytes,true);
+		}else{
+			$parameters=$configuration;
+		}
+		if(!is_array($parameters)){throw ConfigurationException::configurationSyntaxError();}
 		foreach(array_keys(get_class_vars($this::class)) as $property){
-			if(!isset($parameters[$property])){throw ConfigurationException::configurationFileParameterNotFound($configurationFilePath,$property);}
+			if(!isset($parameters[$property])){throw ConfigurationException::configurationParameterNotFound($property);}
 			$this->$property=$parameters[$property];
 		}
 	}
