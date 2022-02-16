@@ -2,7 +2,7 @@
 /**
  * Request
  *
- * @package Coordinator\Engine\Request
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

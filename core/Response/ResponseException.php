@@ -2,7 +2,7 @@
 /**
  * Response Exception
  *
- * @package Coordinator\Engine\Exception
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

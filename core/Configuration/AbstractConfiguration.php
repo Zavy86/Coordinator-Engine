@@ -2,7 +2,7 @@
 /**
  * Abstract Configuration
  *
- * @package Coordinator\Engine\Configuration
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

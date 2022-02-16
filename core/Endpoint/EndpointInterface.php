@@ -2,7 +2,7 @@
 /**
  * Endpoint Interface
  *
- * @package Coordinator\Engine\Endpoint
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

@@ -2,7 +2,7 @@
 /**
  * Error Interface
  *
- * @package Coordinator\Engine\Error
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

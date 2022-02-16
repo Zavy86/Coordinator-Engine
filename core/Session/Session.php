@@ -2,7 +2,7 @@
 /**
  * Session
  *
- * @package Coordinator\Engine\Session
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

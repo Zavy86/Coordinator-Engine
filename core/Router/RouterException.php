@@ -2,7 +2,7 @@
 /**
  * Router Exception
  *
- * @package Coordinator\Engine\Router
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

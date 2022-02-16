@@ -2,7 +2,7 @@
 /**
  * Utilities Ping Response
  *
- * @package Coordinator\Engine\Endpoints\Utilities
+ * @package Coordinator\Engine\Utilities
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

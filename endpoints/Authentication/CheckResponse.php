@@ -2,7 +2,7 @@
 /**
  * Authentication Check Response
  *
- * @package Coordinator\Engine\Endpoints\Utilities
+ * @package Coordinator\Engine\Authentication
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

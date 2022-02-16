@@ -2,7 +2,7 @@
 /**
  * Authentication Endpoint
  *
- * @package Coordinator\Engine\Endpoints\Authentication
+ * @package Coordinator\Engine\Authentication
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

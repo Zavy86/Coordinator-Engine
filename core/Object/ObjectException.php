@@ -2,7 +2,7 @@
 /**
  * Object Exception
  *
- * @package Coordinator\Engine\Object
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

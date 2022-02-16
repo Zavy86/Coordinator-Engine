@@ -2,7 +2,7 @@
 /**
  * Response Interface
  *
- * @package Coordinator\Engine\Response
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

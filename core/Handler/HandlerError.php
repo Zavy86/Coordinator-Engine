@@ -2,7 +2,7 @@
 /**
  * Handler Error
  *
- * @package Coordinator\Engine\Handler
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 

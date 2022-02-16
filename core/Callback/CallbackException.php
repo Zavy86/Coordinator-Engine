@@ -2,7 +2,7 @@
 /**
  * Callback Exception
  *
- * @package Coordinator\Engine\Callback
+ * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 
