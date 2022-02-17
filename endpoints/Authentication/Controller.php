@@ -13,6 +13,7 @@ use Coordinator\Engine\Controller\AbstractController;
 use Coordinator\Engine\Engine;
 use Coordinator\Engine\Error\Error;
 use Coordinator\Engine\Response\Response;
+use Coordinator\Engine\Response\ResponseCode;
 
 final class Controller extends AbstractController{
 
@@ -32,7 +33,7 @@ final class Controller extends AbstractController{
 		//var_dump($authentication_success);
 		//var_dump($Session);
 		if(!$authentication_success){
-			$this->Response->setCode(Response::RC_401_UNAUTHORIZED);
+			$this->Response->setCode(ResponseCode::UNAUTHORIZED_401);
 			$this->Response->addError((new Error("authentication_failed",'Authentication failed using supplied parameters')));
 		}else{
 			$LoginResponseModel=new LoginResponse([
@@ -62,7 +63,7 @@ final class Controller extends AbstractController{
 				"expiration"=>$Session->getExpiration()
 			]);
 		}else{
-			$this->Response->setCode(Response::RC_401_UNAUTHORIZED);
+			$this->Response->setCode(ResponseCode::UNAUTHORIZED_401);
 			$CheckResponseModel->setProperties([
 				"valid"=>false
 			]);

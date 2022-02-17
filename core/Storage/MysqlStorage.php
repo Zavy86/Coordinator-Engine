@@ -281,7 +281,8 @@ final class MysqlStorage extends AbstractStorage{
 
 			//var_dump($result,"result");
 
-			if($result==1){$return=true;}
+			//if($result==1){$return=true;}
+			$return=true;  // @occhio*1
 
 		}catch(PDOException $e){
 			throw StorageException::savingError("PDO queryUpdate: ".$e->getMessage());
@@ -513,7 +514,7 @@ final class MysqlStorage extends AbstractStorage{
 		// @todo try
 
 		if($this->exists($Model,$uid)){
-			$result=$this->queryUpdate($table,$uid,$properties);    // @occhio che se non si modifica nulla (salvo senza apportare cambiamenti) da errore anche in caso di query ok..
+			$result=$this->queryUpdate($table,$uid,$properties);    // @occhio*1 che se non si modifica nulla (salvo senza apportare cambiamenti) da errore anche in caso di query ok..
 		}else{
 			$result=$this->queryInsert($table,$uid,$properties);
 		}
