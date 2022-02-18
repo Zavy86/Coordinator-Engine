@@ -14,8 +14,8 @@ final class ModelException extends \Exception{
 		return new static("UID cannot be null.");
 	}
 
-	public static function propertyNotExists(string $property):static{
-		return new static("Property ".$property." does not exists.");
+	public static function propertyNotExists(string $class,string $property):static{
+		return new static('Property `'.$property.'` does not exists in model `'.$class.'`.');
 	}
 
 }

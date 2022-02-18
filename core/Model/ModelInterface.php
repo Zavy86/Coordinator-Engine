@@ -30,6 +30,8 @@ interface ModelInterface{
 
 	public function setProperty(string $property,mixed $value):bool;
 
+	public function debug():array;
+
 	// @todo   hasProperty($property)    getProperty($property)
 
 }

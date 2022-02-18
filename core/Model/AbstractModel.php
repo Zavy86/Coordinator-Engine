@@ -80,13 +80,22 @@ abstract class AbstractModel implements ModelInterface{
 		return $return;
 	}
 
-	/** @todo */
-	public function setProperties(array $properties):int{
+	/** @check */
+	/*public function setProperties(array $properties):int{
 		$set_property_counter=0;
 		foreach($properties as $property=>$value){
 			if($this->setProperty($property,$value)){$set_property_counter++;}
 		}
 		return $set_property_counter;
+	}*/
+	// @todo verificare che siano stati compilati tutti i campi obbligatori
+	final public function setProperties(array $properties=array()):void{
+		foreach($properties as $property=>$value){
+			if(!in_array($property,array_keys(get_class_vars($this::class)))){
+				throw ModelException::propertyNotExists($this::class,$property);
+			}
+			$this->$property=$value;
+		}
 	}
 
 	public function setProperty(string $property,mixed $value):bool{
@@ -138,6 +147,14 @@ abstract class AbstractModel implements ModelInterface{
 	public function remove():bool{
 		if(!$this->getUid()){throw ModelException::cannotDeleteWithoutUID();}
 		return static::getStorageService()->remove($this);
+	}
+
+	public function debug():array{
+		$debug=array('uid'=>$this->getUid());
+		foreach($this->getProperties() as $property=>$value){
+			$debug[$property]=$value;
+		}
+		return $debug;
 	}
 
 }
