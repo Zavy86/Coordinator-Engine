@@ -15,6 +15,7 @@ use Coordinator\Engine\Response\ResponseInterface;
 use Coordinator\Engine\Response\ResponseCode;
 
 use Coordinator\Engine\Endpoint\EndpointInterface;
+use Coordinator\Engine\Router\RouterException;
 use Coordinator\Engine\Router\RouterInterface;
 use Coordinator\Engine\Callback\CallbackInterface;
 use Coordinator\Engine\Controller\ControllerInterface;
@@ -73,6 +74,10 @@ final class Handler implements HandlerInterface{
 					$this->Response->addError(HandlerError::functionNotImplemented($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction()));
 					$this->Response->setCode(ResponseCode::NOT_IMPLEMENTED_501);
 					break;
+				case HandlerException::METHOD_NOT_ALLOWED:
+					$this->Response->addError(HandlerError::methodNotAllowed($this->getEndpointName(),$this->Request->getUri(),$this->Request->getMethod()));
+					$this->Response->setCode(ResponseCode::METHOD_NOT_ALLOWED_405);
+					break;
 				default:
 					$this->Response->addError(HandlerError::uncatchedError($Exception->getMessage()));
 					$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
@@ -115,8 +120,14 @@ final class Handler implements HandlerInterface{
 			$this->Callback=$this->Router->resolveRoute($this->Request->getMethod(),$this->Request->getUri());
 			//var_dump($this->Callback);
 		}catch(\Exception|\TypeError $Exception){
-			//var_dump($Exception->getMessage());  // @todo qui scattano le eccezioni da gestire in maniera diversa ROUTE_NOT_RESOLVED e METHOD_NOT_ALLOWED
-			throw HandlerException::errorLoadingCallback($this->Request->getMethod(),$this->Request->getUri());
+			// @todo qui scattano le eccezioni da gestire in maniera diversa ROUTE_NOT_RESOLVED e METHOD_NOT_ALLOWED
+			//var_dump($Exception);
+			//var_dump($Exception->getMessage());
+			if($Exception->getCode()==RouterException::METHOD_NOT_ALLOWED){
+				throw HandlerException::methodNotAllowed($this->Request->getMethod(),$this->Request->getUri());
+			}else{
+				throw HandlerException::errorLoadingCallback($this->Request->getMethod(),$this->Request->getUri());
+			}
 		}
 	}
 
