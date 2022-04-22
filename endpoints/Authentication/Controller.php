@@ -36,6 +36,7 @@ final class Controller extends AbstractController{
 			$this->Response->setCode(ResponseCode::UNAUTHORIZED_401);
 			$this->Response->addError((new Error("authentication_failed",'Authentication failed using supplied parameters')));
 		}else{
+			$this->Response->setCode(ResponseCode::OK_200);
 			$LoginResponseModel=new LoginResponse([
 				"token"=>$Session->getToken(),
 				"duration"=>$Session->getDuration(),
@@ -51,7 +52,13 @@ final class Controller extends AbstractController{
 		$CheckResponseModel=new CheckResponse();
 		$Session=Engine::getSession();
 		//var_dump($Session);
-		if($Session->isValid()){
+		if(!$Session->isValid()){
+			$this->Response->setCode(ResponseCode::UNAUTHORIZED_401);
+			$CheckResponseModel->setProperties([
+				"valid"=>false
+			]);
+		}else{
+			$this->Response->setCode(ResponseCode::OK_200);
 			$CheckResponseModel->setProperties([
 				"valid"=>true,
 				"address"=>$Session->getAddress(),
@@ -61,11 +68,6 @@ final class Controller extends AbstractController{
 				"remaining"=>$Session->getRemaining(),
 				"generation"=>$Session->getGeneration(),
 				"expiration"=>$Session->getExpiration()
-			]);
-		}else{
-			$this->Response->setCode(ResponseCode::UNAUTHORIZED_401);
-			$CheckResponseModel->setProperties([
-				"valid"=>false
 			]);
 		}
 		$this->Response->setObject($CheckResponseModel);
