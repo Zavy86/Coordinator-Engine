@@ -35,4 +35,9 @@ final class HandlerException extends \Exception{
 		return new static('Method '.$method.' was not implemented in controller '.$controller.' of endpoint '.$endpoint.'.',static::FUNCTION_NOT_IMPLEMENTED);
 	}
 
+	public const METHOD_NOT_ALLOWED=601;
+	public static function methodNotAllowed(string $method,string $command):static{
+		return new static('Method '.$method.' was not allowed in '.$command.'.',static::METHOD_NOT_ALLOWED);
+	}
+
 }
