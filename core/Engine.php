@@ -122,6 +122,18 @@ final class Engine{
 		return static::$Session;
 	}
 
+	public static function getHandler(){
+		return static::$Handler;
+	}
+
+	public static function getRequest(){
+		return static::$Handler->getRequest();
+	}
+
+	public static function getResponse(){
+		return static::$Handler->getResponse();
+	}
+
 	/**
 	 * Log an event and publish it to listeners
 	 * @param EventInterface $Event

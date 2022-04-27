@@ -200,4 +200,12 @@ final class Handler implements HandlerInterface{
 		);
 	}
 
+	public function getRequest():RequestInterface{
+		return $this->Request;
+	}
+
+	public function getResponse():ResponseInterface{
+		return $this->Response;
+	}
+
 }

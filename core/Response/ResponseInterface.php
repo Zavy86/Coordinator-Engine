@@ -9,6 +9,7 @@
 namespace Coordinator\Engine\Response;
 
 use Coordinator\Engine\Error\ErrorInterface;
+use Coordinator\Engine\Model\ModelInterface;
 use Coordinator\Engine\Object\ObjectInterface;
 
 interface ResponseInterface{
@@ -37,9 +38,9 @@ interface ResponseInterface{
 	/**
 	 * Get Output
 	 *
-	 * @return ?ObjectInterface
+	 * @return ObjectInterface|ModelInterface|null
 	 */
-	public function getObject():?ObjectInterface;
+	public function getObject():ObjectInterface|ModelInterface|null;
 
 	/**
 	 * Set Response Code
@@ -58,9 +59,9 @@ interface ResponseInterface{
 	/**
 	 * Set Output
 	 *
-	 * @param ObjectInterface $Datas
+	 * @param ObjectInterface|ModelInterface $Datas
 	 */
-	public function setObject(ObjectInterface $Datas);
+	public function setObject(ObjectInterface|ModelInterface $Object);
 
 	/**
 	 * Debug

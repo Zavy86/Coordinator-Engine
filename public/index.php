@@ -41,7 +41,7 @@
     xhr.send();
 	}
   window.onload=function(){check();}
-  setInterval(function(){check();},1000*5);
+  setInterval(function(){check();},1000*60);
 </script>
 <style>
 	div{width:270px;margin:0 auto;padding-top:99px;text-align:center;}

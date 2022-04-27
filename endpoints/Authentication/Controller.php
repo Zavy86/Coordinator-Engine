@@ -33,7 +33,8 @@ final class Controller extends AbstractController{
 		//var_dump($authentication_success);
 		//var_dump($Session);
 		if(!$authentication_success){
-			$this->Response->setCode(ResponseCode::UNAUTHORIZED_401);
+			//$this->Response->setCode(ResponseCode::UNAUTHORIZED_401);
+			$this->Response->setCode(ResponseCode::OK_200);
 			$this->Response->addError((new Error("authentication_failed",'Authentication failed using supplied parameters')));
 		}else{
 			$LoginResponseModel=new LoginResponse([
@@ -63,7 +64,8 @@ final class Controller extends AbstractController{
 				"expiration"=>$Session->getExpiration()
 			]);
 		}else{
-			$this->Response->setCode(ResponseCode::UNAUTHORIZED_401);
+			//$this->Response->setCode(ResponseCode::UNAUTHORIZED_401);
+			$this->Response->setCode(ResponseCode::OK_200);
 			$CheckResponseModel->setProperties([
 				"valid"=>false
 			]);
