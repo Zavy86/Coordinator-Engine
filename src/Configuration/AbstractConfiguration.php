@@ -13,8 +13,8 @@ abstract class AbstractConfiguration implements ConfigurationInterface{
 	public function __construct(string|array $configuration){
 		if(is_string($configuration)){
 			// @todo verificare se si riesce ad usare Engine::$DIR instanziandola prima
-			$dir=str_replace(['/','\\'],DIRECTORY_SEPARATOR,dirname(dirname(__DIR__)).'/');
-			$configurationFilePath=$dir.'configurations'.DIRECTORY_SEPARATOR.$configuration;
+			//$dir=str_replace(['/','\\'],DIRECTORY_SEPARATOR,dirname(dirname(__DIR__)).'/');
+			$configurationFilePath=DIR.'configurations'.DIRECTORY_SEPARATOR.$configuration;
 			if(!file_exists($configurationFilePath)){throw ConfigurationException::configurationFileNotFound($configurationFilePath);}
 			$bytes=file_get_contents($configurationFilePath);
 			$parameters=json_decode($bytes,true);
