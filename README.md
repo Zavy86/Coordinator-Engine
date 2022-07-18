@@ -4,6 +4,3 @@
 https://www.coordinator.it
 
 Work in progress...
-
-Checkout develop branch!
-
