@@ -24,6 +24,7 @@ final class Engine{
 
 	public static bool $DEBUG;
 	public static string $VERSION;
+	public static string $NAMESPACE;
 	public static string $TITLE;
 	public static string $OWNER;
 	public static string $DIR;
@@ -73,6 +74,7 @@ final class Engine{
 		//var_dump($Configuration);
 		static::$Configuration=$Configuration;
 
+		static::$NAMESPACE=$Configuration->get('namespace');
 		static::$TITLE=$Configuration->get('title');
 		static::$OWNER=$Configuration->get('owner');
 
@@ -101,17 +103,17 @@ final class Engine{
 	public static function debug(){
 		if(static::$DEBUG){
 			$debug=array(
-			 'DEBUG'=>static::$DEBUG,
-			 'VERSION'=>static::$VERSION,
-			 'TITLE'=>static::$TITLE,
-			 'OWNER'=>static::$OWNER,
-			 'DIR'=>static::$DIR,
-			 'URL'=>static::$URL,
+				'DEBUG'=>static::$DEBUG,
+				'VERSION'=>static::$VERSION,
+				'TITLE'=>static::$TITLE,
+				'OWNER'=>static::$OWNER,
+				'DIR'=>static::$DIR,
+				'URL'=>static::$URL,
 
-			 'Configuration'=>static::$Configuration,
-			 //'Logger'=>static::$Logger,
-			 'Handler'=>static::$Handler->debug(),
-			 'Services'=>Services::debug()
+				'Configuration'=>static::$Configuration,
+				//'Logger'=>static::$Logger,
+				'Handler'=>static::$Handler->debug(),
+				'Services'=>Services::debug()
 			);
 			//print_r($debug);
 			var_dump($debug);

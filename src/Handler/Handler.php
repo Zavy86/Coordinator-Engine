@@ -39,9 +39,9 @@ final class Handler implements HandlerInterface{
 	 * @throws HandlerException
 	 */
 	final public function __construct(
-	 private RequestInterface $Request,
-	 private ResponseInterface $Response
-  ){
+		private RequestInterface $Request,
+		private ResponseInterface $Response
+	){
 		$this->initialize();
 	}
 
@@ -91,7 +91,8 @@ final class Handler implements HandlerInterface{
 
 	private function loadEndpoint():void{
 		$endpoint=$this->getEndpointName();
-		$endpointClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.'Endpoint';
+		//$endpointClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.'Endpoint';
+		$endpointClass=Engine::$NAMESPACE.'\\'.$endpoint.'\\'.'Endpoint';
 		//var_dump($endpointClass);
 		try{
 			$this->Endpoint=new $endpointClass;
@@ -104,7 +105,8 @@ final class Handler implements HandlerInterface{
 
 	private function loadRouter():void{
 		$endpoint=$this->getEndpointName();
-		$routerClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.'Router';
+		//$routerClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.'Router';
+		$routerClass=Engine::$NAMESPACE.'\\'.$endpoint.'\\'.'Router';
 		//var_dump($routerClass);
 		try{
 			$this->Router=new $routerClass;
