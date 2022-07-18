@@ -1,0 +1,21 @@
+{
+    "name": "coordinator/engine",
+    "description": "RESTful API Engine",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Manuel Zavatta",
+            "email": "manuel.zavatta@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1"
+    },
+    "require-dev": {},
+    "autoload": {
+        "psr-4": {
+            "Coordinator\\Engine\\": "src/"
+        }
+    }
+}
