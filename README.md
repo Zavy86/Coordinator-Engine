@@ -1,6 +1,4 @@
 # Coordinator-Engine
-🔩 RESTful API Engine
+🔩 RESTful API Engine for microservices
 
-https://www.coordinator.it
-
-Work in progress...
+https://www.coordinator.it/engine
