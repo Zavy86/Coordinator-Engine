@@ -1,7 +1,8 @@
 {
-    "name": "coordinator/engine",
-    "description": "RESTful API Engine",
     "type": "library",
+    "name": "coordinator/engine",
+    "description": "RESTful API Engine for microservices",
+    "homepage": "https://coordinator.it/engine",
     "license": "MIT",
     "authors": [
         {

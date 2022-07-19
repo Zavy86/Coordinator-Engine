@@ -29,6 +29,7 @@ final class Engine{
 	public static string $OWNER;
 	public static string $DIR;
 	public static string $URL;
+	public static string $ENGINE;
 
 	private static ?Engine $SINGLETON=null;
 
@@ -51,7 +52,8 @@ final class Engine{
 
 	private function __construct(){
 		$this->setParameters();
-		$this->loadVersion();
+		$this->loadEngineVersion();
+		$this->loadApplicationVersion();
 		$this->loadConfiguration();
 		$this->loadSession();
 		$this->loadHandler();
@@ -63,9 +65,15 @@ final class Engine{
 		static::$URL=(isset($_SERVER["HTTPS"])?"https":"http")."://".$_SERVER["HTTP_HOST"].'/';
 	}
 
-	private function loadVersion(){
+	private function loadEngineVersion(){
 		if(!file_exists(static::$DIR."VERSION.txt")){throw new \Exception('Version file not found.');}
-		static::$VERSION=file_get_contents(static::$DIR."VERSION.txt");
+		static::$ENGINE=file_get_contents(static::$DIR."VERSION.txt");
+		if(substr_count(static::$ENGINE, ".")!=2){throw new \Exception('Version file syntax error.');}
+	}
+
+	private function loadApplicationVersion(){
+		if(!file_exists(static::$DIR."../../../VERSION.txt")){throw new \Exception('Version file not found.');}  // @todo sistemare path
+		static::$VERSION=file_get_contents(static::$DIR."../../../VERSION.txt");
 		if(substr_count(static::$VERSION, ".")!=2){throw new \Exception('Version file syntax error.');}
 	}
 
@@ -109,7 +117,7 @@ final class Engine{
 				'OWNER'=>static::$OWNER,
 				'DIR'=>static::$DIR,
 				'URL'=>static::$URL,
-
+				'ENGINE'=>static::$ENGINE,
 				'Configuration'=>static::$Configuration,
 				//'Logger'=>static::$Logger,
 				'Handler'=>static::$Handler->debug(),
