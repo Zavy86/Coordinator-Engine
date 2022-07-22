@@ -19,7 +19,7 @@ final class Session implements SessionInterface{
 	protected bool $valid=false;
 	protected string $token='';
 	protected string $address;
-	protected ?string $username=null;
+	protected ?string $account=null;
 	protected ?string $client=null;
 	protected ?int $duration;
 	protected ?int $generation;
@@ -72,7 +72,7 @@ final class Session implements SessionInterface{
 		// @todo check se ci sono 2 punti (o cmq se il formato è corretto)
 		$payload=json_decode(base64_decode(explode(".",$bearer_token)[1]));
 		//var_dump($payload);
-		$this->username=$payload->username;
+		$this->account=$payload->account;
 		$this->client=$payload->client;
 		$this->duration=$payload->duration;
 		$this->generation=$payload->generation;
@@ -112,36 +112,11 @@ final class Session implements SessionInterface{
 		return rtrim(strtr(base64_encode($data),"+/","-_"),"=");
 	}
 
+	public function invalidate(){
+		$this->valid=false;
+	}
 
-
-
-
-  // @todo migliorare sperando in più funzioni
-	public function authenticate(string $username,string $password,string $client,string $secret,int $duration):bool{
-
-		$authentication_success=false;
-
-		// manual checks            @ todo fare classe per gestione autenticazione da config, da database, da ldap ecc...
-		if($username=='administrator'){
-			if(Engine::checkAdministratorPassword($password)){
-				$authentication_success=true;
-			}
-		}
-
-		// check client and secret
-
-		/*
-		 * username and password or ldap
-		if(SystemTokenModel::exists($body['token'])){
-			$SystemToken=SystemTokenModel::get($body['token']);
-			if($SystemToken->secret===md5($body['secret'])){
-				$authentication_success=true;
-			}
-		}*/
-
-		if(!$authentication_success){
-			return false;
-		}
+	public function validate(string $account,string $client,int $duration):bool{
 
 		if($duration<60 || $duration>$this::MAX_DURATION){
 			$duration=$this::MAX_DURATION;
@@ -156,7 +131,7 @@ final class Session implements SessionInterface{
 		);
 		$payload=array(
 			"address"=>$this->getAddress(),
-			"username"=>$username,
+			"account"=>$account,
 			"client"=>$client,
 			"duration"=>$duration,
 			"generation"=>time(),
@@ -165,7 +140,7 @@ final class Session implements SessionInterface{
 		//var_dump($payload);
 		$this->valid=true;
 		$this->token=$this->generate_jwt($headers,$payload);
-		$this->username=$username;
+		$this->account=$account;
 		$this->client=$client;
 		$this->duration=$duration;
 		$this->generation=$generation;
@@ -185,21 +160,21 @@ final class Session implements SessionInterface{
 
 
 
-								public function getPermissions():array{
-									return array();
-								}
+	public function getPermissions():array{
+		return array();
+	}
 
-								public function checkAuthorization(string $authorization):bool{
-									return true;
-								}
+	public function checkAuthorization(string $authorization):bool{
+		return true;
+	}
 
 
 
-  // @todo mettere nell'interfaccia?
+	// @todo mettere nell'interfaccia?
 	public function isValid():bool{return $this->valid;}
 	public function getToken():?string{return $this->token??null;}
 	public function getAddress():?string{return $this->address??null;}
-	public function getUsername():?string{return $this->username??null;}
+	public function getAccount():?string{return $this->account??null;}
 	public function getClient():?string{return $this->client??null;}
 	public function getDuration():?int{return $this->duration??null;}
 	public function getGeneration():?int{return $this->generation??null;}
@@ -211,7 +186,7 @@ final class Session implements SessionInterface{
 			'valid'=>$this->isValid(),
 			'token'=>$this->getToken(),
 			'address'=>$this->getAddress(),
-			'username'=>$this->getUsername(),
+			'account'=>$this->getAccount(),
 			'client'=>$this->getClient(),
 			'duration'=>$this->getDuration(),
 			'generation'=>$this->getGeneration(),

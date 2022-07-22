@@ -18,16 +18,19 @@ interface SessionInterface{
 	public function isValid():bool;
 
 	/**
-	 * Try to Authenticate
+	 * Invalidate the session
+	 */
+	public function invalidate();  // valutare se tenere o meno (fa "le veci" del session_destroy fissando valid a false)
+
+	/**
+	 * Validate the session
 	 *
-	 * @param string $username
-	 * @param string $password
+	 * @param string $account
 	 * @param string $client
-	 * @param string $secret
 	 * @param int $duration
 	 * @return bool
 	 */
-	public function authenticate(string $username,string $password,string $client,string $secret,int $duration):bool;
+	public function validate(string $account,string $client,int $duration):bool;
 
 	/**
 	 * Debug

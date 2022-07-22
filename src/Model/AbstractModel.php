@@ -101,7 +101,7 @@ abstract class AbstractModel implements ModelInterface{
 	public function setProperty(string $property,mixed $value):bool{
 		if(0){return false;}                                                /** @todo check */
 		if($property=="uid"){return false;}          /** @todo logger */
-		if(!in_array($property,array_keys(get_class_vars($this::class)))){throw ModelException::propertyNotExists($property);}          /** @todo logger */
+		if(!in_array($property,array_keys(get_class_vars($this::class)))){throw ModelException::propertyNotExists(static::class,$property);}          /** @todo logger */
 		$this->$property=$value;
 		return true;
 	}
