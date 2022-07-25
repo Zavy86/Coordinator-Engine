@@ -6,7 +6,7 @@
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 
-namespace Coordinator\Engine\Handler;
+namespace Coordinator\Engine\Filter;
 
 class FilterException extends \Exception{
 

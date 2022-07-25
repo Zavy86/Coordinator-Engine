@@ -11,7 +11,7 @@ namespace Coordinator\Engine\Filter;
 class Filter implements FilterInterface{
 
 	public function __construct(
-	 protected Conditions|Condition $condition
+		protected Conditions|Condition $condition
 	){}
 
 	public function returnTextual():string{
@@ -20,6 +20,12 @@ class Filter implements FilterInterface{
 
 	public function getCondition():Conditions|Condition{
 		return $this->condition;
+	}
+
+	public function debug():array{ // @todo?
+		return array(
+			'class'=>$this::class
+		);
 	}
 
 }

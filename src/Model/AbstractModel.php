@@ -121,6 +121,12 @@ abstract class AbstractModel implements ModelInterface{
 		return $Model;
 	}
 
+	protected static function loadFromKeys(array $keys):ModelInterface{   // @todo come sopra
+		$Model=static::getStorageService()->loadFromKeys(new static,$keys,$uid);
+		$Model->setUid($uid);
+		return $Model;
+	}
+
 	public static function count(?FilterInterface $Filters=null):int{
 		return static::getStorageService()->count(new static,$Filters);
 	}
@@ -149,7 +155,7 @@ abstract class AbstractModel implements ModelInterface{
 		return static::getStorageService()->remove($this);
 	}
 
-	public function debug():array{
+	public function debug():array{   // @todo parametro masked property ? per password o altri dati sensibili
 		$debug=array('uid'=>$this->getUid());
 		foreach($this->getProperties() as $property=>$value){
 			$debug[$property]=$value;

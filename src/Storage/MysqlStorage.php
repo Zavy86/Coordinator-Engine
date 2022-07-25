@@ -42,16 +42,16 @@ final class MysqlStorage extends AbstractStorage{
 	protected ?LoggerInterface $Logger;
 
 	public function __construct(
-	 protected MysqlConfiguration $Configuration
+		protected MysqlConfiguration $Configuration
 	){
 		// get logger
 		$this->Logger=Services::getOptional("logger");
 		// make dsn
 		$dsn='mysql'.
-		 ':host='.$Configuration->get('host').
-		 ';port='.$Configuration->get('port').
-		 ';dbname='.$Configuration->get('database').
-		 ';charset='.$Configuration->get('charset');
+			':host='.$Configuration->get('host').
+			';port='.$Configuration->get('port').
+			';dbname='.$Configuration->get('database').
+			';charset='.$Configuration->get('charset');
 		// try to connect for read
 		try{
 			$this->connection_read=new PDO($dsn,$Configuration->get('username_read'),$Configuration->get('password_read'));     // @todo migliorare
@@ -501,6 +501,28 @@ final class MysqlStorage extends AbstractStorage{
 		return $Model;
 	}
 
+	public function loadFromKeys(ModelInterface $Model,array $keys,mixed &$uid):ModelInterface{   // @todo come sopra valutare come sostituire facilmente com browse per evitare un metodo "duplicato" e funzionale solo per i database
+		$table=$Model::$_dataset;
+		// @todo try
+
+		$query_where=array();
+		foreach($keys as $key=>$value){
+			$query_where[]="`".$key."`='".$value."'";
+		}
+
+		$sql="SELECT * FROM `".$table."` WHERE ".implode(" AND ",$query_where);
+
+		//$object=$this->getModelFromCache($Model);
+		$object=$this->queryUniqueObject($sql);
+		if($object===false){throw StorageException::notAvailable($key,$value);}
+		if(!strlen($object->uid)){throw StorageException::notAvailable($key,$value);}  // in caso eliminare anche exception
+		$uid=$object->uid;  // @schifo
+		foreach($object as $property=>$value){  // @todo chiamare setProperties($properties) e contare return
+			$Model->setProperty($property,$value);
+		}
+		return $Model;
+	}
+
 
 	public function save(ModelInterface $Model):bool{
 
@@ -536,5 +558,5 @@ final class MysqlStorage extends AbstractStorage{
 
 		return $result;
 	}
-	
+
 }

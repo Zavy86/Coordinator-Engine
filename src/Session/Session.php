@@ -42,6 +42,16 @@ final class Session implements SessionInterface{
 		$this->address=$_SERVER['REMOTE_ADDR'];
 	}
 
+	private function checkBearerTokenFormat(string $bearer_token):bool{
+		// @todo check se ci sono 2 punti (@todo o cmq se il formato è corretto)
+		if(!strlen($bearer_token)){return false;}
+		$first_dot=strpos($bearer_token,".");
+		if($first_dot===false){return false;}
+		$second_dot=strpos($bearer_token,".",$first_dot);
+		if($second_dot===false){return false;}
+		return true;
+	}
+
 	private function getBearerToken():string{  // @todo verificare per bene copiato spudoratamente da stackoverflow
 		$headers='';
 		if(isset($_SERVER['Authorization'])){
@@ -68,8 +78,7 @@ final class Session implements SessionInterface{
 	}
 
 	private function loadFromBearerToken(string $bearer_token){
-		if(!strlen($bearer_token)){return;}
-		// @todo check se ci sono 2 punti (o cmq se il formato è corretto)
+		if(!$this->checkBearerTokenFormat($bearer_token)){return;}
 		$payload=json_decode(base64_decode(explode(".",$bearer_token)[1]));
 		//var_dump($payload);
 		$this->account=$payload->account;
@@ -81,8 +90,7 @@ final class Session implements SessionInterface{
 	}
 
 	private function bearerTokenIsValid(string $bearer_token,string $secret=self::SECRET_KEY):bool{
-		if(!strlen($bearer_token)){return false;}
-		// @todo check se ci sono 2 punti (o cmq se il formato è corretto)
+		if(!$this->checkBearerTokenFormat($bearer_token)){return false;}
 		$tokenParts=explode(".",$bearer_token);
 		$header=base64_decode($tokenParts[0]);
 		$payload=base64_decode($tokenParts[1]);
