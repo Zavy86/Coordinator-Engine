@@ -74,7 +74,7 @@ abstract class AbstractModel implements ModelInterface{
 	public function getProperties():array{
 		$return=array();
 		foreach(get_object_vars($this) as $property=>$value){
-			if(in_array($property,array("uid"))){continue;}
+			//if(in_array($property,array("uid"))){continue;}
 			$return[$property]=$this->$property;
 		}
 		return $return;

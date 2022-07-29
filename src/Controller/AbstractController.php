@@ -97,7 +97,7 @@ abstract class AbstractController implements ControllerInterface{
 		// @todo capire come estrarlo tramite preg_match
 		$uri_exploded=explode("/",$this->Request->getUri());
 		$uid=end($uri_exploded);
-		//var_dump($uidAccount);
+		//var_dump($uid);
 		/** @var ModelInterface $modelClass */
 		if(!$modelClass::exists($uid)){
 			$this->Response->setCode(ResponseCode::NOT_FOUND_404);
@@ -105,7 +105,9 @@ abstract class AbstractController implements ControllerInterface{
 			return;
 		}
 		$Model=$modelClass::load($uid);
+		//var_dump($Model);
 		$this->Response->setObject($Model);
+		//var_dump($this->Response->debug());
 	}
 
 	protected function _create(string $modelClass):void{
