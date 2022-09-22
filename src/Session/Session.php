@@ -8,24 +8,28 @@
 
 namespace Coordinator\Engine\Session;
 
+use Coordinator\Engine\Configuration\ApplicationConfiguration;
 use Coordinator\Engine\Engine;
 use Coordinator\Engine\Handler\Request;
 
 final class Session implements SessionInterface{
 
-	private const SECRET_KEY="@generaresecretkey";              // @todo spostare nelle configurazioni dell'applicazione
 	private const MAX_DURATION=60*60*24;                        // @todo spostare nelle configurazioni dell'applicazione
+	private string $secret;
 
 	protected bool $valid=false;
 	protected string $token='';
 	protected string $address;
-	protected ?string $username=null;
+	protected ?string $account=null;
 	protected ?string $client=null;
 	protected ?int $duration;
 	protected ?int $generation;
 	protected ?int $expiration=null;
 
 	public function __construct(){
+		$ApplicationConfiguration=new ApplicationConfiguration('../configurations/application.json');
+		$this->secret=$ApplicationConfiguration->get('secret');
+		//var_dump($ApplicationConfiguration);
 		$this->setAddress();
 		$token=$this->getBearerToken();
 		//var_dump($token);
@@ -40,6 +44,16 @@ final class Session implements SessionInterface{
 
 	private function setAddress(){
 		$this->address=$_SERVER['REMOTE_ADDR'];
+	}
+
+	private function checkBearerTokenFormat(string $bearer_token):bool{
+		// @todo check se ci sono 2 punti (@todo o cmq se il formato è corretto)
+		if(!strlen($bearer_token)){return false;}
+		$first_dot=strpos($bearer_token,".");
+		if($first_dot===false){return false;}
+		$second_dot=strpos($bearer_token,".",$first_dot);
+		if($second_dot===false){return false;}
+		return true;
 	}
 
 	private function getBearerToken():string{  // @todo verificare per bene copiato spudoratamente da stackoverflow
@@ -68,11 +82,10 @@ final class Session implements SessionInterface{
 	}
 
 	private function loadFromBearerToken(string $bearer_token){
-		if(!strlen($bearer_token)){return;}
-		// @todo check se ci sono 2 punti (o cmq se il formato è corretto)
+		if(!$this->checkBearerTokenFormat($bearer_token)){return;}
 		$payload=json_decode(base64_decode(explode(".",$bearer_token)[1]));
 		//var_dump($payload);
-		$this->username=$payload->username;
+		$this->account=$payload->account;
 		$this->client=$payload->client;
 		$this->duration=$payload->duration;
 		$this->generation=$payload->generation;
@@ -80,9 +93,8 @@ final class Session implements SessionInterface{
 		//var_dump($this);
 	}
 
-	private function bearerTokenIsValid(string $bearer_token,string $secret=self::SECRET_KEY):bool{
-		if(!strlen($bearer_token)){return false;}
-		// @todo check se ci sono 2 punti (o cmq se il formato è corretto)
+	private function bearerTokenIsValid(string $bearer_token):bool{
+		if(!$this->checkBearerTokenFormat($bearer_token)){return false;}
 		$tokenParts=explode(".",$bearer_token);
 		$header=base64_decode($tokenParts[0]);
 		$payload=base64_decode($tokenParts[1]);
@@ -93,7 +105,7 @@ final class Session implements SessionInterface{
 		// build a signature based on the header and payload using the secret
 		$base64_url_header=$this->base64url_encode($header);
 		$base64_url_payload=$this->base64url_encode($payload);
-		$signature=hash_hmac("SHA256",$base64_url_header.".".$base64_url_payload,$secret,true);  /* @todo unire in funcion ripetuto con sopra */
+		$signature=hash_hmac("SHA256",$base64_url_header.".".$base64_url_payload,$this->secret,true);  /* @todo unire in funcion ripetuto con sopra */
 		$base64_url_signature=$this->base64url_encode($signature);
 		// verify it matches the signature provided in the jwt
 		$is_signature_valid=($base64_url_signature===$signature_provided);
@@ -112,36 +124,11 @@ final class Session implements SessionInterface{
 		return rtrim(strtr(base64_encode($data),"+/","-_"),"=");
 	}
 
+	public function invalidate(){
+		$this->valid=false;
+	}
 
-
-
-
-  // @todo migliorare sperando in più funzioni
-	public function authenticate(string $username,string $password,string $client,string $secret,int $duration):bool{
-
-		$authentication_success=false;
-
-		// manual checks            @ todo fare classe per gestione autenticazione da config, da database, da ldap ecc...
-		if($username=='administrator'){
-			if(Engine::checkAdministratorPassword($password)){
-				$authentication_success=true;
-			}
-		}
-
-		// check client and secret
-
-		/*
-		 * username and password or ldap
-		if(SystemTokenModel::exists($body['token'])){
-			$SystemToken=SystemTokenModel::get($body['token']);
-			if($SystemToken->secret===md5($body['secret'])){
-				$authentication_success=true;
-			}
-		}*/
-
-		if(!$authentication_success){
-			return false;
-		}
+	public function validate(string $account,string $client,int $duration):bool{
 
 		if($duration<60 || $duration>$this::MAX_DURATION){
 			$duration=$this::MAX_DURATION;
@@ -156,7 +143,7 @@ final class Session implements SessionInterface{
 		);
 		$payload=array(
 			"address"=>$this->getAddress(),
-			"username"=>$username,
+			"account"=>$account,
 			"client"=>$client,
 			"duration"=>$duration,
 			"generation"=>time(),
@@ -165,7 +152,7 @@ final class Session implements SessionInterface{
 		//var_dump($payload);
 		$this->valid=true;
 		$this->token=$this->generate_jwt($headers,$payload);
-		$this->username=$username;
+		$this->account=$account;
 		$this->client=$client;
 		$this->duration=$duration;
 		$this->generation=$generation;
@@ -175,31 +162,31 @@ final class Session implements SessionInterface{
 
 	}
 
-	private function generate_jwt(array $headers,array $payload,string $secret=self::SECRET_KEY):string{
+	private function generate_jwt(array $headers,array $payload,):string{
 		$headers_encoded=$this->base64url_encode(json_encode($headers));
 		$payload_encoded=$this->base64url_encode(json_encode($payload));
-		$signature=hash_hmac("SHA256",$headers_encoded.".".$payload_encoded,$secret,true);
+		$signature=hash_hmac("SHA256",$headers_encoded.".".$payload_encoded,$this->secret,true);
 		$signature_encoded=$this->base64url_encode($signature);
 		return $headers_encoded.".".$payload_encoded.".".$signature_encoded;
 	}
 
 
 
-								public function getPermissions():array{
-									return array();
-								}
+	public function getPermissions():array{
+		return array();
+	}
 
-								public function checkAuthorization(string $authorization):bool{
-									return true;
-								}
+	public function checkAuthorization(string $authorization):bool{
+		return true;
+	}
 
 
 
-  // @todo mettere nell'interfaccia?
+	// @todo mettere nell'interfaccia?
 	public function isValid():bool{return $this->valid;}
 	public function getToken():?string{return $this->token??null;}
 	public function getAddress():?string{return $this->address??null;}
-	public function getUsername():?string{return $this->username??null;}
+	public function getAccount():?string{return $this->account??null;}
 	public function getClient():?string{return $this->client??null;}
 	public function getDuration():?int{return $this->duration??null;}
 	public function getGeneration():?int{return $this->generation??null;}
@@ -211,7 +198,7 @@ final class Session implements SessionInterface{
 			'valid'=>$this->isValid(),
 			'token'=>$this->getToken(),
 			'address'=>$this->getAddress(),
-			'username'=>$this->getUsername(),
+			'account'=>$this->getAccount(),
 			'client'=>$this->getClient(),
 			'duration'=>$this->getDuration(),
 			'generation'=>$this->getGeneration(),

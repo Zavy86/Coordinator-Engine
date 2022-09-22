@@ -16,6 +16,6 @@ final class ApplicationConfiguration extends AbstractConfiguration{
 	protected string $namespace;
 	protected string $title;
 	protected string $owner;
-	protected string $password;
+	protected string $secret;
 
 }

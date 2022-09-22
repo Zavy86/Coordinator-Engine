@@ -24,6 +24,7 @@ interface StorageInterface{
 	public function load(ModelInterface $Model,mixed $uid):ModelInterface;
 
 	public function loadFromKey(ModelInterface $Model,string $key,mixed $value,mixed &$uid):ModelInterface;   // al momento è usato solo per mysql capire se possibile usare browse
+	public function loadFromKeys(ModelInterface $Model,array $key,mixed &$uid):ModelInterface;                // vedi sopra
 
 	public function save(ModelInterface $Model):bool;
 

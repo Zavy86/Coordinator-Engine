@@ -22,18 +22,18 @@ use Coordinator\Engine\Response\ResponseCode;
 abstract class AbstractController implements ControllerInterface{
 
 	public function __construct(
-	 protected RequestInterface $Request,
-	 protected ResponseInterface $Response
+		protected RequestInterface $Request,
+		protected ResponseInterface $Response
 	){}
 
 	// @todo implementare
-	protected function check(string $authorization):bool{
+	protected function check(string $authorization=null):bool{
 		$authorized=true;
 		if(!$this->checkSessionValidity()){
 			$authorized=false;
 			$this->Response->addError((new Error("authenticationInvalid",'Authentication token provided is not valid')));
 		}
-		if(strlen($authorization) && !$this->checkAuthorization($authorization)){
+		if(!is_null($authorization) && strlen($authorization) && !$this->checkAuthorization($authorization)){
 			$authorized=false;
 			$this->Response->addError((new Error("authorizationDenied",'You have not the authorization to perform this operation')));
 		}
@@ -61,7 +61,7 @@ abstract class AbstractController implements ControllerInterface{
 	}
 
 	/** @todo fare function perche questa roba serve un po' ovunque */
-	private function checkInterface(string $class,string $interface):bool{
+	protected function checkInterface(string $class,string $interface):bool{
 		$interfaces=class_implements($class);
 		if(is_array($interfaces) && in_array($interface,$interfaces)){return true;}
 		return false;
@@ -97,7 +97,7 @@ abstract class AbstractController implements ControllerInterface{
 		// @todo capire come estrarlo tramite preg_match
 		$uri_exploded=explode("/",$this->Request->getUri());
 		$uid=end($uri_exploded);
-		//var_dump($uidAccount);
+		//var_dump($uid);
 		/** @var ModelInterface $modelClass */
 		if(!$modelClass::exists($uid)){
 			$this->Response->setCode(ResponseCode::NOT_FOUND_404);
@@ -105,7 +105,9 @@ abstract class AbstractController implements ControllerInterface{
 			return;
 		}
 		$Model=$modelClass::load($uid);
+		//var_dump($Model);
 		$this->Response->setObject($Model);
+		//var_dump($this->Response->debug());
 	}
 
 	protected function _create(string $modelClass):void{
@@ -117,7 +119,7 @@ abstract class AbstractController implements ControllerInterface{
 		try{
 			$Model=new $modelClass();
 			$Model->setProperties($this->Request->getBody());
-			var_dump($Model);
+			//var_dump($Model);
 			if(!$Model->save()){
 				throw new \Exception('not created');
 			}
@@ -126,7 +128,7 @@ abstract class AbstractController implements ControllerInterface{
 			$this->Response->setObject($Response);
 		}catch(\Exception|\TypeError $Exception){
 			// @todo fare le varie prove e catchare chiavi duplicate univoci duplicati ecc...
-			var_dump($Exception);
+			//var_dump($Exception);
 			$this->Response->setCode(ResponseCode::BAD_REQUEST_400);
 			$this->Response->addError(new Error('errorCreate','Error creating.'));
 		}

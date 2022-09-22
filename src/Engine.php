@@ -115,6 +115,7 @@ final class Engine{
 				'VERSION'=>static::$VERSION,
 				'TITLE'=>static::$TITLE,
 				'OWNER'=>static::$OWNER,
+				'NAMESPACE'=>static::$NAMESPACE,
 				'DIR'=>static::$DIR,
 				'URL'=>static::$URL,
 				'ENGINE'=>static::$ENGINE,

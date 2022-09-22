@@ -74,7 +74,7 @@ abstract class AbstractModel implements ModelInterface{
 	public function getProperties():array{
 		$return=array();
 		foreach(get_object_vars($this) as $property=>$value){
-			if(in_array($property,array("uid"))){continue;}
+			//if(in_array($property,array("uid"))){continue;}
 			$return[$property]=$this->$property;
 		}
 		return $return;
@@ -101,7 +101,7 @@ abstract class AbstractModel implements ModelInterface{
 	public function setProperty(string $property,mixed $value):bool{
 		if(0){return false;}                                                /** @todo check */
 		if($property=="uid"){return false;}          /** @todo logger */
-		if(!in_array($property,array_keys(get_class_vars($this::class)))){throw ModelException::propertyNotExists($property);}          /** @todo logger */
+		if(!in_array($property,array_keys(get_class_vars($this::class)))){throw ModelException::propertyNotExists(static::class,$property);}          /** @todo logger */
 		$this->$property=$value;
 		return true;
 	}
@@ -117,6 +117,12 @@ abstract class AbstractModel implements ModelInterface{
 
 	protected static function loadFrom(string $key,mixed $value):ModelInterface{   // @todo come gia scritto nell'interfaccia valutare sostituzione con browse filters
 		$Model=static::getStorageService()->loadFromKey(new static,$key,$value,$uid);
+		$Model->setUid($uid);
+		return $Model;
+	}
+
+	protected static function loadFromKeys(array $keys):ModelInterface{   // @todo come sopra
+		$Model=static::getStorageService()->loadFromKeys(new static,$keys,$uid);
 		$Model->setUid($uid);
 		return $Model;
 	}
@@ -149,7 +155,7 @@ abstract class AbstractModel implements ModelInterface{
 		return static::getStorageService()->remove($this);
 	}
 
-	public function debug():array{
+	public function debug():array{   // @todo parametro masked property ? per password o altri dati sensibili
 		$debug=array('uid'=>$this->getUid());
 		foreach($this->getProperties() as $property=>$value){
 			$debug[$property]=$value;
