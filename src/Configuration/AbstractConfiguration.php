@@ -36,7 +36,7 @@ abstract class AbstractConfiguration implements ConfigurationInterface{
 	public function __debugInfo():?array{
 		$properties=get_object_vars($this);   // @todo object or get_class_vars ?
 		foreach($properties as $property=>$value){
-			if(str_contains($property,"password")){
+			if(str_contains($property,"password")||str_contains($property,"secret")){
 				$properties[$property]=$this::maskProperty($value);
 			}
 		}

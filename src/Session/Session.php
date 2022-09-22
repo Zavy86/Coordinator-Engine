@@ -8,13 +8,14 @@
 
 namespace Coordinator\Engine\Session;
 
+use Coordinator\Engine\Configuration\ApplicationConfiguration;
 use Coordinator\Engine\Engine;
 use Coordinator\Engine\Handler\Request;
 
 final class Session implements SessionInterface{
 
-	private const SECRET_KEY="@generaresecretkey";              // @todo spostare nelle configurazioni dell'applicazione
 	private const MAX_DURATION=60*60*24;                        // @todo spostare nelle configurazioni dell'applicazione
+	private string $secret;
 
 	protected bool $valid=false;
 	protected string $token='';
@@ -26,6 +27,9 @@ final class Session implements SessionInterface{
 	protected ?int $expiration=null;
 
 	public function __construct(){
+		$ApplicationConfiguration=new ApplicationConfiguration('../configurations/application.json');
+		$this->secret=$ApplicationConfiguration->get('secret');
+		//var_dump($ApplicationConfiguration);
 		$this->setAddress();
 		$token=$this->getBearerToken();
 		//var_dump($token);
@@ -89,7 +93,7 @@ final class Session implements SessionInterface{
 		//var_dump($this);
 	}
 
-	private function bearerTokenIsValid(string $bearer_token,string $secret=self::SECRET_KEY):bool{
+	private function bearerTokenIsValid(string $bearer_token):bool{
 		if(!$this->checkBearerTokenFormat($bearer_token)){return false;}
 		$tokenParts=explode(".",$bearer_token);
 		$header=base64_decode($tokenParts[0]);
@@ -101,7 +105,7 @@ final class Session implements SessionInterface{
 		// build a signature based on the header and payload using the secret
 		$base64_url_header=$this->base64url_encode($header);
 		$base64_url_payload=$this->base64url_encode($payload);
-		$signature=hash_hmac("SHA256",$base64_url_header.".".$base64_url_payload,$secret,true);  /* @todo unire in funcion ripetuto con sopra */
+		$signature=hash_hmac("SHA256",$base64_url_header.".".$base64_url_payload,$this->secret,true);  /* @todo unire in funcion ripetuto con sopra */
 		$base64_url_signature=$this->base64url_encode($signature);
 		// verify it matches the signature provided in the jwt
 		$is_signature_valid=($base64_url_signature===$signature_provided);
@@ -158,10 +162,10 @@ final class Session implements SessionInterface{
 
 	}
 
-	private function generate_jwt(array $headers,array $payload,string $secret=self::SECRET_KEY):string{
+	private function generate_jwt(array $headers,array $payload,):string{
 		$headers_encoded=$this->base64url_encode(json_encode($headers));
 		$payload_encoded=$this->base64url_encode(json_encode($payload));
-		$signature=hash_hmac("SHA256",$headers_encoded.".".$payload_encoded,$secret,true);
+		$signature=hash_hmac("SHA256",$headers_encoded.".".$payload_encoded,$this->secret,true);
 		$signature_encoded=$this->base64url_encode($signature);
 		return $headers_encoded.".".$payload_encoded.".".$signature_encoded;
 	}
