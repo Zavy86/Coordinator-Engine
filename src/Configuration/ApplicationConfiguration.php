@@ -8,8 +8,6 @@
 
 namespace Coordinator\Engine\Configuration;
 
-use Coordinator\Engine\Handler\ConfigurationException;
-
 final class ApplicationConfiguration extends AbstractConfiguration{
 
 	protected bool $debug;
