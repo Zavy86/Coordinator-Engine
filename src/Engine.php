@@ -67,13 +67,13 @@ final class Engine{
 
 	private function loadEngineVersion(){
 		if(!file_exists(static::$DIR."VERSION.txt")){throw new \Exception('Version file not found.');}
-		static::$ENGINE=file_get_contents(static::$DIR."VERSION.txt");
+		static::$ENGINE=str_replace(["\r","\n"],'',file_get_contents(static::$DIR."VERSION.txt"));
 		if(substr_count(static::$ENGINE, ".")!=2){throw new \Exception('Version file syntax error.');}
 	}
 
 	private function loadApplicationVersion(){
 		if(!file_exists(static::$DIR."../../../VERSION.txt")){throw new \Exception('Version file not found.');}  // @todo sistemare path
-		static::$VERSION=file_get_contents(static::$DIR."../../../VERSION.txt");
+		static::$VERSION=str_replace(["\r","\n"],'',file_get_contents(static::$DIR."../../../VERSION.txt"));
 		if(substr_count(static::$VERSION, ".")!=2){throw new \Exception('Version file syntax error.');}
 	}
 
