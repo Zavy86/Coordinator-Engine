@@ -14,7 +14,6 @@ use Coordinator\Engine\Handler\Request;
 
 final class Session implements SessionInterface{
 
-	private const MAX_DURATION=60*60*24;                        // @todo spostare nelle configurazioni dell'applicazione
 	private string $secret;
 
 	protected bool $valid=false;
@@ -130,9 +129,8 @@ final class Session implements SessionInterface{
 
 	public function validate(string $account,string $client,int $duration):bool{
 
-		if($duration<60 || $duration>$this::MAX_DURATION){
-			$duration=$this::MAX_DURATION;
-		}
+		if($duration<60){$duration=60;}
+		if($duration>(60*60*24*10)){$duration=(60*60*24*10);}
 
 		$generation=time();
 		$expiration=($generation+$duration);

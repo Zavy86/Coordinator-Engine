@@ -102,6 +102,4 @@ final class JsonDirectoryStorage extends AbstractStorage{
 		return unlink($path.$uid.".json");  // trown  instead of bool?
 	}
 
-
-
 }

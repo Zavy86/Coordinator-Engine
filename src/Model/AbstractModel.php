@@ -158,9 +158,19 @@ abstract class AbstractModel implements ModelInterface{
 	public function debug():array{   // @todo parametro masked property ? per password o altri dati sensibili
 		$debug=array('uid'=>$this->getUid());
 		foreach($this->getProperties() as $property=>$value){
-			$debug[$property]=$value;
+			if(str_contains($property,"password")||str_contains($property,"secret")){
+				$debug[$property]=$this::maskProperty($value);
+			}else{
+				$debug[$property]=$value;
+			}
 		}
 		return $debug;
+	}
+
+	private static function maskProperty(?string $value=null):?string{
+		if(is_null($value)){return null;}
+		if(strlen($value)<=6){return "********";}
+		return substr($value,0,2).str_repeat("*",(strlen($value)-4)).substr($value,-2);
 	}
 
 }

@@ -8,8 +8,6 @@
 
 namespace Coordinator\Engine\Configuration;
 
-use Coordinator\Engine\Handler\ConfigurationException;
-
 final class SmtpConfiguration extends AbstractConfiguration{
 
 	protected string $sender_mail;

@@ -8,8 +8,6 @@
 
 namespace Coordinator\Engine\Configuration;
 
-use Coordinator\Engine\Handler\ConfigurationException;
-
 final class MysqlConfiguration extends AbstractConfiguration{
 
 	protected string $host;
