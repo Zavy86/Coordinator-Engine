@@ -28,9 +28,10 @@ interface SessionInterface{
 	 * @param string $account
 	 * @param string $client
 	 * @param int $duration
+	 * @param array $authorizations
 	 * @return bool
 	 */
-	public function validate(string $account,string $client,int $duration):bool;
+	public function validate(string $account,string $client,int $duration,array $authorizations):bool;
 
 	/**
 	 * Debug
