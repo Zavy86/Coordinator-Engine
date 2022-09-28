@@ -24,6 +24,7 @@ final class Session implements SessionInterface{
 	protected ?int $duration;
 	protected ?int $generation;
 	protected ?int $expiration=null;
+	protected array $authorizations=[];
 
 	public function __construct(){
 		$ApplicationConfiguration=new ApplicationConfiguration('../configurations/application.json');
@@ -89,6 +90,7 @@ final class Session implements SessionInterface{
 		$this->duration=$payload->duration;
 		$this->generation=$payload->generation;
 		$this->expiration=$payload->expiration;
+		$this->authorizations=$payload->authorizations;
 		//var_dump($this);
 	}
 
@@ -127,7 +129,7 @@ final class Session implements SessionInterface{
 		$this->valid=false;
 	}
 
-	public function validate(string $account,string $client,int $duration):bool{
+	public function validate(string $account,string $client,int $duration,array $authorizations):bool{
 
 		if($duration<60){$duration=60;}
 		if($duration>(60*60*24*10)){$duration=(60*60*24*10);}
@@ -145,7 +147,8 @@ final class Session implements SessionInterface{
 			"client"=>$client,
 			"duration"=>$duration,
 			"generation"=>time(),
-			"expiration"=>$expiration
+			"expiration"=>$expiration,
+			"authorizations"=>$authorizations
 		);
 		//var_dump($payload);
 		$this->valid=true;
@@ -155,6 +158,7 @@ final class Session implements SessionInterface{
 		$this->duration=$duration;
 		$this->generation=$generation;
 		$this->expiration=$expiration;
+		$this->authorizations=$authorizations;
 
 		return true;
 
@@ -168,17 +172,9 @@ final class Session implements SessionInterface{
 		return $headers_encoded.".".$payload_encoded.".".$signature_encoded;
 	}
 
-
-
-	public function getPermissions():array{
-		return array();
-	}
-
 	public function checkAuthorization(string $authorization):bool{
 		return true;
 	}
-
-
 
 	// @todo mettere nell'interfaccia?
 	public function isValid():bool{return $this->valid;}
@@ -190,6 +186,7 @@ final class Session implements SessionInterface{
 	public function getGeneration():?int{return $this->generation??null;}
 	public function getExpiration():?int{return $this->expiration??null;}
 	public function getRemaining():?int{return isset($this->expiration)?($this->expiration-time()):null;}
+	public function getAuthorizations():array{return $this->authorizations;}
 
 	public function debug():array{
 		return array(
@@ -201,7 +198,8 @@ final class Session implements SessionInterface{
 			'duration'=>$this->getDuration(),
 			'generation'=>$this->getGeneration(),
 			'expiration'=>$this->getExpiration(),
-			'remaining'=>$this->getRemaining()
+			'remaining'=>$this->getRemaining(),
+			'authorizations'=>$this->getAuthorizations()
 		);
 	}
 
