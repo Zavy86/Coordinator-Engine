@@ -8,7 +8,9 @@
 
 namespace Coordinator\Engine\Router;
 
+use Coordinator\Engine\Controller\ApplicationController;
 use Coordinator\Engine\Callback\CallbackInterface;
+use Coordinator\Engine\Callback\Callback;
 
 abstract class AbstractRouter implements RouterInterface{
 
@@ -16,6 +18,11 @@ abstract class AbstractRouter implements RouterInterface{
 	protected array $routes=[];
 
 	final public function __construct(){
+		// add application routes
+		$this->GET('/^\/Service$/',(new Callback(ApplicationController::class,'service')));
+		$this->GET('/^\/Ping$/',(new Callback(ApplicationController::class,'ping')));
+		$this->GET('/^\/Time$/',(new Callback(ApplicationController::class,'time')));
+		// load application routes
 		$this->loadRoutes();
 	}
 
