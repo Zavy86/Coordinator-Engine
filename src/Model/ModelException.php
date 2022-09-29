@@ -21,7 +21,7 @@ final class ModelException extends \Exception{
 	public static function valueNotAcceptable(string $class,string $property,array $acceptedValues=[]):static{
 		$error='The value passed for the `'.$property.'` property is not acceptable ';
 		if(count($acceptedValues)){$error.='(possible values: '.implode(', ',$acceptedValues).') ';}
-		$error.=' in model `'.$class.'`.';
+		$error.='in model `'.$class.'`.';
 		return new static( $error);
 	}
 

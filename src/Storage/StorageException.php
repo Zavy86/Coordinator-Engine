@@ -10,6 +10,11 @@ namespace Coordinator\Engine\Storage;
 
 final class StorageException extends \Exception{
 
+	public const GENERIC_EXCEPTION=101;
+	final public static function genericException(string $exception):static{
+		return new static($exception,self::GENERIC_EXCEPTION);
+	}
+
 	public static function pathUnavailable($path):static{
 		return new static("Path ".$path." was not available.");
 	}

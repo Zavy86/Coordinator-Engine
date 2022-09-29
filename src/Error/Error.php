@@ -14,10 +14,7 @@ namespace Coordinator\Engine\Error;
 final class Error extends AbstractError{
 
 	final public static function genericError(string $description,?string $information=null):static{
-		return new static(
-			'genericError',
-			$description,
-			$information
-		);
+		return new static('genericError',$description,$information);
 	}
+
 }
