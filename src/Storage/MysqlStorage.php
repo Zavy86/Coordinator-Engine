@@ -334,7 +334,7 @@ final class MysqlStorage extends AbstractStorage{
 		}elseif(is_a($Condition,Condition::class)){
 			$conditions_parsed.=$this->parseCondition($Condition);
 		}else{
-			throw StorageException::genericError("Invalid condition class: ".$Condition::class);
+			throw StorageException::genericException("Invalid condition class: ".$Condition::class);
 		}
 		//var_dump($conditions_parsed,'filter to where parsed conditions');
 		return $conditions_parsed;
@@ -349,7 +349,7 @@ final class MysqlStorage extends AbstractStorage{
 			}elseif(is_a($Condition,Condition::class)){
 				$conditions_parsed_array[]=$this->parseCondition($Condition);
 			}else{
-				throw StorageException::genericError("Invalid condition class: ".$Condition::class);
+				throw StorageException::genericException("Invalid condition class: ".$Condition::class);
 			}
 		}
 		return '( '.implode(' '.$Conditions->getOperator().' ',$conditions_parsed_array).' )';
@@ -372,7 +372,7 @@ final class MysqlStorage extends AbstractStorage{
 			case 'isIn':$return.=" IN ('".implode(',',$Condition->getValue())."')";break;
 			case 'isNotBetween':$return.=" NOT"; // continue down
 			case 'isBetween':$return.=" BETWEEN '".$Condition->getValue()[0]."' AND '".$Condition->getValue()[1]."'";break;
-			default:throw StorageException::genericError("Assertion '".$Condition->getAssertion()."' is not implemented");
+			default:throw StorageException::genericException("Assertion '".$Condition->getAssertion()."' is not implemented");
 		}
 		return $return;
 	}

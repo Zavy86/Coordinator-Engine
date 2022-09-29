@@ -24,4 +24,16 @@ final class BooleanObject extends AbstractObject{
 		return self::build(false);
 	}
 
+	public function setResponse(bool $response):void{
+		$this->response=$response;
+	}
+
+	public function setTrue():void{
+		$this->setResponse(true);
+	}
+
+	public function setFalse():void{
+		$this->setResponse(false);
+	}
+
 }
