@@ -164,7 +164,7 @@ final class Handler implements HandlerInterface{
 			// if in debug mode show real error
 			if(Engine::$DEBUG){throw $Exception;}
 			// show generic error for client
-			$this->Response->addError(HandlerError::errorExecutingFunction($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction()));
+			$this->Response->addError(HandlerError::errorExecutingFunction($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction(),$Exception->getMessage()));
 			$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 		}finally{
 			$this->log();  // valutare se mettere qui o dentro un try

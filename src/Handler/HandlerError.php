@@ -14,8 +14,8 @@ final class HandlerError extends AbstractError{  // @todo valutare se spostare s
 
 	public static function uncatchedError(string $description):static{
 		return new static(
-		 'uncatchedError',     // @todo valutare se mettere handler.uncatchedError
-		 $description
+			'uncatchedError',     // @todo valutare se mettere handler.uncatchedError
+			$description
 		);
 	}
 
@@ -28,8 +28,8 @@ final class HandlerError extends AbstractError{  // @todo valutare se spostare s
 
 	public static function errorLoadingRouter(string $endpoint):static{
 		return new static(
-		 'errorLoadingRouter',
-		 'An error occurred while loading endpoint '.$endpoint.' router.'
+			'errorLoadingRouter',
+			'An error occurred while loading endpoint '.$endpoint.' router.'
 		);
 	}
 
@@ -49,29 +49,30 @@ final class HandlerError extends AbstractError{  // @todo valutare se spostare s
 
 	public static function functionNotImplemented(string $endpoint,string $controller,string $method):static{
 		return new static(
-		 'functionNotImplemented',
-		 'Method '.$method.' was not implemented in controller '.$controller.' of endpoint '.$endpoint.'.'
+			'functionNotImplemented',
+			'Method '.$method.' was not implemented in controller '.$controller.' of endpoint '.$endpoint.'.'
 		);
 	}
 
-	public static function errorExecutingFunction(string $endpoint,string $controller,string $function):static{
+	public static function errorExecutingFunction(string $endpoint,string $controller,string $function,string $information):static{
 		return new static(
-		 'errorExecutingMethod',
-		 'An error occurred while executing function '.$function.' of controller '.$controller.' in endpoint '.$endpoint.'.'
+			'errorExecutingMethod',
+			'An error occurred while executing function '.$function.' of controller '.$controller.' in endpoint '.$endpoint.'.',
+			$information
 		);
 	}
 
 	public static function routeNotResolved(string $router,string $command,string $method):static{
 		return new static(
-		 'routeNotResolved',
-		 'Route '.strtoupper($method).' '.$command.' was not resolved in '.$router.'.'
+			'routeNotResolved',
+			'Route '.strtoupper($method).' '.$command.' was not resolved in '.$router.'.'
 		);
 	}
 
 	public static function methodNotAllowed(string $router,string $command,string $method):static{
 		return new static(
-		 'methodNotAllowed',
-		 'Method '.strtoupper($method).' was not allowed for '.$command.' in '.$router.'.'
+			'methodNotAllowed',
+			'Method '.strtoupper($method).' was not allowed for '.$command.' in '.$router.'.'
 		);
 	}
 

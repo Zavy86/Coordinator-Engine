@@ -53,6 +53,18 @@ abstract class AbstractController implements ControllerInterface{
 		return (in_array($authorization,$Session->getAuthorizations()));
 	}
 
+	protected function checkModelExists(string $modelClass,string $uid):bool{
+		if(!$this->checkInterface($modelClass,ModelInterface::class)){
+			throw new \Exception('ModelInterface not implemented by '.$modelClass);
+		}
+		if(!$modelClass::exists($uid)){
+			$this->Response->setCode(ResponseCode::NOT_FOUND_404);
+			$this->Response->addError(new Error('notFound',$uid.' was not found in class '.$modelClass.'.'));
+			return false;
+		}
+		return true;
+	}
+
 	public function debug():array{
 		return array(
 			'class'=>$this::class
