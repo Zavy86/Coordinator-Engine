@@ -208,7 +208,9 @@ final class MysqlStorage extends AbstractStorage{
 			foreach(array_keys($properties) as $key){
 				//
 				if($fields2_array[$key]->DATA_TYPE=='varchar'){
-					$properties[$key]=substr($properties[$key],0,$fields2_array[$key]->CHARACTER_MAXIMUM_LENGTH);
+					if(!is_null($properties[$key])){
+						$properties[$key]=substr($properties[$key],0,$fields2_array[$key]->CHARACTER_MAXIMUM_LENGTH);
+					}
 				}
 				$statement->bindParam(':'.$key, $properties[$key]);
 			}
@@ -232,6 +234,7 @@ final class MysqlStorage extends AbstractStorage{
 	}
 
 	public function queryUpdate(string $table,mixed $uid,array $properties){
+		var_dump($properties);
 		$return=false;
 		$fields_array=array();
 		$results=$this->connection_read->query("SHOW COLUMNS FROM `".$table."`");
@@ -244,10 +247,9 @@ final class MysqlStorage extends AbstractStorage{
 
 		if(isset($fields_array['uid'])){unset($fields_array['uid']);}else{throw StorageException::cannotSaveWithoutUID();}  // @todo valutare se cambiare metodo
 		$sql="UPDATE `".$table."` SET ";
-		/*
-		var_dump($fields_array,"fields");
-		var_dump($properties,"properties");
-		*/
+		//var_dump($fields_array);
+		var_dump($properties);
+
 		foreach(array_keys($properties) as $key){   // remove - from keys
 			if(!is_string($key) || !array_key_exists($key,$fields_array)){unset($properties[$key]);continue;}
 			if(is_string($properties[$key]) && trim($properties[$key])===''){unset($properties[$key]);continue;}
@@ -255,7 +257,7 @@ final class MysqlStorage extends AbstractStorage{
 			$sql.="`".$key."`=:".$key.",";
 		}
 
-		//var_dump($properties,"properties2");
+		var_dump($properties);
 
 		if(!count($properties)){throw StorageException::savingError("No properties to save");}
 
@@ -268,7 +270,9 @@ final class MysqlStorage extends AbstractStorage{
 			foreach(array_keys($properties) as $key){
 				//
 				if($fields2_array[$key]->DATA_TYPE=='varchar'){
-					$properties[$key]=substr($properties[$key],0,$fields2_array[$key]->CHARACTER_MAXIMUM_LENGTH);
+					if(!is_null($properties[$key])){
+						$properties[$key]=substr($properties[$key],0,$fields2_array[$key]->CHARACTER_MAXIMUM_LENGTH);
+					}
 				}
 				$statement->bindParam(':'.$key, $properties[$key]);
 			}
