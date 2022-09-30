@@ -189,7 +189,9 @@ final class MysqlStorage extends AbstractStorage{
 		if(isset($fields_array['uid'])){unset($fields_array['uid']);}else{throw StorageException::cannotSaveWithoutUID();}  // @todo valutare se cambiare metodo
 		$sql="INSERT INTO `".$table."` (`uid`,";
 		foreach(array_keys($properties) as $key){   // remove - from keys
-			if(!is_string($key) || trim($properties[$key])==='' || !array_key_exists($key,$fields_array)){unset($properties[$key]);continue;}
+			if(!is_string($key) || !array_key_exists($key,$fields_array)){unset($properties[$key]);continue;}
+			if(is_string($properties[$key]) && trim($properties[$key])===''){unset($properties[$key]);continue;}
+			if(is_bool($properties[$key])){$properties[$key]=(int)$properties[$key];}
 			$sql.="`".$key."`,";
 		}
 
@@ -210,7 +212,7 @@ final class MysqlStorage extends AbstractStorage{
 				}
 				$statement->bindParam(':'.$key, $properties[$key]);
 			}
-			//var_dump($statement->queryString,"query");
+			//var_dump($statement->queryString);
 			//var_dump($uid);
 			//var_dump($properties);
 			$statement->execute();
