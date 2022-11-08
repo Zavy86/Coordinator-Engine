@@ -62,6 +62,7 @@ final class MysqlStorage extends AbstractStorage{
 		}catch(PDOException $e){
 			// connection failed
 			$this->log("connection_read_error","Error connecting to ".$Configuration->get('database')." database on server ".$Configuration->get('host')." in read mode");
+			throw StorageException::genericException("Error connecting to ".$Configuration->get('database')." database on server ".$Configuration->get('host')." in read mode");
 		}
 		// try to connect for write
 		try{
@@ -73,6 +74,7 @@ final class MysqlStorage extends AbstractStorage{
 		}catch(PDOException $e){
 			// connection failed
 			$this->log("connection_write_error","Error connecting to ".$Configuration->get('database')." database on server ".$Configuration->get('host')." in write mode");
+			throw StorageException::genericException("Error connecting to ".$Configuration->get('database')." database on server ".$Configuration->get('host')." in write mode");
 		}
 	}
 
