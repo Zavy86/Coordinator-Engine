@@ -27,7 +27,7 @@ final class Request implements RequestInterface{
 	}
 
 	private function getDecodedRequest():string{
-		return rawurldecode(filter_var(trim($_SERVER["REQUEST_URI"]),FILTER_SANITIZE_URL));
+		return str_replace('//','/',rawurldecode(filter_var(trim($_SERVER["REQUEST_URI"]),FILTER_SANITIZE_URL)));
 	}
 
 	private function setAddress():void{
