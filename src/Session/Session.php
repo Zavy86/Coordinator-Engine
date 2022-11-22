@@ -35,7 +35,7 @@ final class Session implements SessionInterface{
 		//var_dump($token);
 		if(strlen($token)){
 			// @todo check se ci sono 2 punti (o cmq se il formato è corretto)
-			$this->token=$this->getBearerToken();
+			$this->token=$token;
 			$this->loadFromBearerToken($this->token);
 			$this->valid=$this->bearerTokenIsValid($this->token);
 			//var_dump($this);
@@ -113,6 +113,8 @@ final class Session implements SessionInterface{
 		// verify if address match
 		$address=json_decode($payload)->address;
 		$is_address_match=($address==$this->getAddress());
+		// skip address verification for localhost engine
+		if(str_contains(Engine::$URL,'localhost')){$is_address_match=true;}
 		// checks
 		if($is_token_expired||!$is_signature_valid||!$is_address_match){
 			return false;
