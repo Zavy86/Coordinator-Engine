@@ -62,7 +62,7 @@ final class Response implements ResponseInterface{
 		 "error"=>(bool)count($this->getErrors()),
 		 "errors"=>array(),
 		 "object"=>'',
-		 "data"=>array()
+		 "data"=>null
 		);
 		if(isset($this->Object)){
 			$response['object']=$this->Object::class;
