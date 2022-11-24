@@ -50,6 +50,7 @@ abstract class AbstractController implements ControllerInterface{
 	protected function checkAuthorization(string $authorization):bool{  // @todo fare classe specifica?
 		if(!strlen($authorization)){return true;}
 		$Session=Engine::getSession();
+		if(!$Session->isValid()){return false;}
 		return (in_array($authorization,$Session->getAuthorizations()));
 	}
 
