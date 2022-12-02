@@ -19,9 +19,12 @@ abstract class AbstractObject implements ObjectInterface{
 
 	final public function isSet($property):bool{
 		$rp=new \ReflectionProperty(static::class,$property);
-		//var_dump($rp->isInitialized($this));
-		//if($rp->isInitialized($this)){var_dump($this->{$property});}
 		return $rp->isInitialized($this);
+	}
+
+	final public function isArray($property):bool{
+		if(!$this->isSet($property)){return false;}
+		return is_array($this->$property);
 	}
 
 	final public function setProperties(array $properties=array()):void{
