@@ -19,12 +19,9 @@ abstract class AbstractObject implements ObjectInterface{
 
 	final public function isSet($property):bool{
 		$rp=new \ReflectionProperty(static::class,$property);
+		//var_dump($rp->isInitialized($this));
+		//if($rp->isInitialized($this)){var_dump($this->{$property});}
 		return $rp->isInitialized($this);
-	}
-
-	final public function isArray($property):bool{
-		if(!$this->isSet($property)){return false;}
-		return is_array($this->$property);
 	}
 
 	final public function setProperties(array $properties=array()):void{
@@ -52,7 +49,19 @@ abstract class AbstractObject implements ObjectInterface{
 	}
 
 	final public function debug():array{
-		return $this->getProperties();
+		$properties=$this->getProperties();
+		foreach($properties as $property=>$value){
+			if(str_contains($property,"password")||str_contains($property,"secret")){
+				$properties[$property]=$this::maskProperty($value);
+			}
+		}
+		return $properties;
+	}
+
+	private static function maskProperty(?string $value=null):?string{
+		if(is_null($value)){return null;}
+		if(strlen($value)<=6){return "********";}
+		return substr($value,0,2).str_repeat("*",(strlen($value)-4)).substr($value,-2);
 	}
 
 }
