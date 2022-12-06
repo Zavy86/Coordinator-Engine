@@ -522,8 +522,8 @@ final class MysqlStorage extends AbstractStorage{
 
 		//$object=$this->getModelFromCache($Model);
 		$object=$this->queryUniqueObject($sql);
-		if($object===false){throw StorageException::notAvailable($key,$value);}
-		if(!strlen($object->uid)){throw StorageException::notAvailable($key,$value);}  // in caso eliminare anche exception
+		if($object===false){throw StorageException::notAvailable('('.implode(',',array_keys($keys)).')','('.implode(',',$keys).')');}
+		if(!strlen($object->uid)){throw StorageException::notAvailable('('.implode(',',array_keys($keys)).')','('.implode(',',$keys).')');}  // in caso eliminare anche exception
 		$uid=$object->uid;  // @schifo
 		foreach($object as $property=>$value){  // @todo chiamare setProperties($properties) e contare return
 			$Model->setProperty($property,$value);

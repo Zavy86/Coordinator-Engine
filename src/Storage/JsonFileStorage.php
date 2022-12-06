@@ -8,7 +8,10 @@
 
 namespace Coordinator\Engine\Storage;
 
+use Coordinator\Engine\Filter\FilterInterface;
 use Coordinator\Engine\Model\ModelInterface;
+use Coordinator\Engine\Pagination\PaginationInterface;
+use Coordinator\Engine\Sorting\SortingInterface;
 
 final class JsonFileStorage extends AbstractStorage{
 
@@ -79,27 +82,49 @@ final class JsonFileStorage extends AbstractStorage{
 		if(!$bytes){throw StorageException::savingError();}
 	}
 
+	public function count(ModelInterface $Model,?FilterInterface $Filters=null):int{
+		$objects=$this->browse($Model,$Filters);
+		return count($objects);
+	}
 
+	public function browse(ModelInterface $Model,?FilterInterface $Filters=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array{
 
-	public function browse(ModelInterface $Model,?FiltersInterface $filters=null):array{
+		/*
+		var_dump($Filters,'Filters');
+		var_dump($Sorting,'Sorting');
+		var_dump($Pagination,'Pagination');
+		*/
+
+		$index=-1;
+		$counter=0;
 		$return=array();
 		$objects=$this->getModelFromCache($Model);
 		if(!is_array($objects)){throw StorageException::invalidFormat();}
-		//foreach($objects as $uid=>$object){ @todo chiamare get e usare $uid come chiave (in caso modificare funzione sotto con array_key_exists) [o valutare come fare per i filtri]?
-		foreach(array_keys($objects) as $uid){
+		foreach($objects as $uid=>$object){
+
+			// @todo valutare come fare per i filtri -> array_key_exists?
+
+			$index++;
+			if(!is_null($Pagination) && $index<$Pagination->getOffset()){continue;}
+			if(!is_null($Pagination) && $counter==$Pagination->getLimit()){break;}
+			//var_dump($uid);
+			//var_dump($object);
 			$return[]=$uid;
+			$counter++;
 		}
+
+		// @todo valutare come fare il sorting
+
+		//var_dump($return);
 		return $return;
 	}
-
 
 	public function exists(ModelInterface $Model,mixed $uid):bool{
 		$objects=$this->browse($Model);
 		return in_array($uid,$objects);
 	}
 
-
-	public function get(ModelInterface $Model,mixed $uid):ModelInterface{
+	public function load(ModelInterface $Model,mixed $uid):ModelInterface{
 		if(!$this->exists($Model,$uid)){throw StorageException::uidNotAvailable($uid);}
 		$objects=$this->getModelFromCache($Model);
 		foreach($objects[$uid] as $property=>$value){  // @todo chiamare setProperties($properties) e contare return
@@ -108,6 +133,40 @@ final class JsonFileStorage extends AbstractStorage{
 		return $Model;
 	}
 
+	public function loadFromKey(ModelInterface $Model,string $key,mixed $value,mixed &$uid):ModelInterface{
+		$objects=$this->getModelFromCache($Model);
+		$found=false;
+		foreach($objects as $uid=>$object){
+			if($object[$key]===$value){
+				$found=true;
+				foreach($object as $property=>$value){  // @todo chiamare setProperties($properties) e contare return
+					$Model->setProperty($property,$value);
+				}
+				break;
+			}
+		}
+		if(!$found){throw StorageException::notAvailable($key,$value);}
+		return $Model;
+	}
+
+	public function loadFromKeys(ModelInterface $Model,array $keys,mixed &$uid):ModelInterface{
+		$objects=$this->getModelFromCache($Model);
+		$found=false;
+		foreach($objects as $uid=>$object){
+			$matchAll=true;
+			foreach($keys as $key=>$value){
+				if($object[$key]!==$value){$matchAll=false;}
+			}
+			if($matchAll){
+				$found=true;
+				foreach($object as $property=>$value){  // @todo chiamare setProperties($properties) e contare return
+					$Model->setProperty($property,$value);
+				}
+			}
+		}
+		if(!$found){throw StorageException::notAvailable('('.implode(',',array_keys($keys)).')','('.implode(',',$keys).')');}
+		return $Model;
+	}
 
 	public function save(ModelInterface $Model):bool{      // @todo @best vedi browse per cache
 		$uid=$Model->getUid();
@@ -121,7 +180,6 @@ final class JsonFileStorage extends AbstractStorage{
 		$this->storeModelsJson($Model,$objects);
 		return true; // @todo valutare return or throw
 	}
-
 
 	public function remove(ModelInterface $Model):bool{
 		$uid=$Model->getUid();
