@@ -26,19 +26,26 @@ abstract class AbstractController implements ControllerInterface{
 		protected ResponseInterface $Response
 	){}
 
-	// @todo implementare
-	protected function check(string $authorization=null):bool{
-		$authorized=true;
-		if(!$this->checkSessionValidity()){
-			$authorized=false;
+	// @todo migliorare?
+	protected function check(array|string|null $authorization=null):bool{
+		if(!is_array($authorization)){$authorization=array($authorization);}
+		$authorization_array=array_filter($authorization);
+		var_dump($authorization_array);
+		if($this->checkSessionValidity()){
+			if(!count($authorization_array)){
+				return true;
+			}else{
+				foreach($authorization_array as $authorization){
+					if($this->checkAuthorization($authorization)){
+						return true;
+					}
+				}
+				$this->Response->addError((new Error("authorizationDenied",'You have not the authorization to perform this operation')));
+			}
+		}else{
 			$this->Response->addError((new Error("authenticationInvalid",'Authentication token provided is not valid')));
 		}
-		if(!is_null($authorization) && strlen($authorization) && !$this->checkAuthorization($authorization)){
-			$authorized=false;
-			$this->Response->addError((new Error("authorizationDenied",'You have not the authorization to perform this operation')));
-		}
-		if($authorized==false){$this->Response->setCode(ResponseCode::UNAUTHORIZED_401);}
-		return $authorized;
+		return false;
 	}
 
 	private function checkSessionValidity():bool{
@@ -48,7 +55,7 @@ abstract class AbstractController implements ControllerInterface{
 	}
 
 	protected function checkAuthorization(string $authorization):bool{  // @todo fare classe specifica?
-		if(!strlen($authorization)){return true;}
+		if(!strlen($authorization)){return false;}
 		$Session=Engine::getSession();
 		if(!$Session->isValid()){return false;}
 		return (in_array($authorization,$Session->getAuthorizations()));
