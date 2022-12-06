@@ -30,7 +30,7 @@ abstract class AbstractController implements ControllerInterface{
 	protected function check(array|string|null $authorization=null):bool{
 		if(!is_array($authorization)){$authorization=array($authorization);}
 		$authorization_array=array_filter($authorization);
-		var_dump($authorization_array);
+		//var_dump($authorization_array);
 		if($this->checkSessionValidity()){
 			if(!count($authorization_array)){
 				return true;
