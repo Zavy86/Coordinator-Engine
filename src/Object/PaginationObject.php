@@ -1,0 +1,17 @@
+<?php
+/**
+ * Pagination Object
+ *
+ * @package Coordinator\Engine
+ * @author Manuel Zavatta <manuel.zavatta@gmail.com>
+ */
+
+namespace Coordinator\Engine\Object;
+
+final class PaginationObject extends AbstractObject{
+
+	public int $count=0;
+	public int $limit=0;
+	public int $offset=0;
+
+}
