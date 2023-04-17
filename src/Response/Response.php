@@ -15,7 +15,7 @@ use Coordinator\Engine\Object\ObjectInterface;
 final class Response implements ResponseInterface{
 
 	protected ResponseCode $Code;
-	protected ObjectInterface|ModelInterface $Object;
+	protected ObjectInterface $Object;
 	protected array $Errors=[];
 
 	public function __construct(){
@@ -49,20 +49,20 @@ final class Response implements ResponseInterface{
 		$this->Errors[]=$Error;
 	}
 
-	public function getObject():ObjectInterface|ModelInterface|null{
+	public function getObject():?ObjectInterface{
 		return $this->Object??null;
 	}
 
-	public function setObject(ObjectInterface|ModelInterface $Object):void{
+	public function setObject(ObjectInterface $Object):void{
 		$this->Object=$Object;
 	}
 
 	public function render():string{
 		$response=array(
-		 "error"=>(bool)count($this->getErrors()),
-		 "errors"=>array(),
-		 "object"=>'',
-		 "data"=>null
+			"error"=>(bool)count($this->getErrors()),
+			"errors"=>array(),
+			"object"=>'',
+			"data"=>new \stdClass()
 		);
 		if(isset($this->Object)){
 			$response['object']=$this->Object::class;
@@ -72,19 +72,19 @@ final class Response implements ResponseInterface{
 		foreach($this->getErrors() as $Error){
 			$response['errors'][]=$Error->output();
 		}
-		
-		sleep(3);
-		
+
+		//sleep(3);
+
 		if(!count($this->getErrors())){$this->setCode(ResponseCode::OK_200);}
 		return json_encode($response,JSON_PRETTY_PRINT);
 	}
 
 	public function debug():array{
 		return array(
-		 'class'=>$this::class,
-		 'code'=>$this->getCode(),
-		 'Errors'=>$this->getErrors(),
-		 'Object'=>(isset($this->Object)?$this->Object->debug():null)
+			'class'=>$this::class,
+			'code'=>$this->getCode(),
+			'Errors'=>$this->getErrors(),
+			'Object'=>(isset($this->Object)?$this->Object->debug():null)
 		);
 	}
 
