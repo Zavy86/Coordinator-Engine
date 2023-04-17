@@ -36,7 +36,7 @@ trait PartsTraitController{
 	 *
 	 * @return string[]
 	 */
-	private function getParts():array{
+	public function getParts():array{
 		if(empty($this->_parts)){$this->_loadParts();}
 		return $this->_parts;
 	}
@@ -47,7 +47,7 @@ trait PartsTraitController{
 	 * @param string $part
 	 * @return bool
 	 */
-	private function hasPart(string $part):bool{
+	public function hasPart(string $part):bool{
 		return in_array(strtolower($part),$this->getParts());
 	}
 
