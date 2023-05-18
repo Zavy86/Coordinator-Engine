@@ -73,9 +73,11 @@ final class Response implements ResponseInterface{
 			$response['errors'][]=$Error->output();
 		}
 
-		//sleep(3);
-
-		if(!count($this->getErrors())){$this->setCode(ResponseCode::OK_200);}
+		if(!count($this->getErrors())){
+			$this->setCode(ResponseCode::OK_200);
+		}else{ // @todo parsare errori per valutare codice di errore corretto
+			$this->setCode(ResponseCode::BAD_REQUEST_400);
+		}
 		return json_encode($response,JSON_PRETTY_PRINT);
 	}
 
