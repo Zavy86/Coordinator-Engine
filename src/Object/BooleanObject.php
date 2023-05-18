@@ -8,20 +8,20 @@
 
 namespace Coordinator\Engine\Object;
 
-final class BooleanObject extends AbstractObject{
+class BooleanObject extends AbstractObject{
 
 	public bool $response;
 
-	private static function build(bool $response):self{
-		return new self(['response'=>$response]);
+	private static function build(bool $response):static{
+		return new static(['response'=>$response]);
 	}
 
-	public static function true():self{
-		return self::build(true);
+	public static function true():static{
+		return static::build(true);
 	}
 
-	public static function false():self{
-		return self::build(false);
+	public static function false():static{
+		return static::build(false);
 	}
 
 	public function setResponse(bool $response):void{
