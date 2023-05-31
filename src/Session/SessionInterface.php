@@ -31,7 +31,7 @@ interface SessionInterface{
 	 * @param array $authorizations
 	 * @return bool
 	 */
-	public function validate(string $account,string $client,int $duration,array $authorizations):bool;
+	public function validate(string $account,string $client,int $duration,bool $administrator,array $authorizations):bool;
 
 	/**
 	 * Debug
