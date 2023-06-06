@@ -115,8 +115,11 @@ final class Session implements SessionInterface{
 		// verify if address match
 		$address=json_decode($payload)->address;
 		$is_address_match=($address==$this->getAddress());
-		// skip address verification for localhost engine
-		if(str_contains(Engine::$URL,'localhost')){$is_address_match=true;}
+		// skip address verification for local engine
+		if(str_contains(Engine::$URL,'127.0.0.1')
+			|| str_contains(Engine::$URL,'localhost')
+			|| str_contains(Engine::$URL,'docker.internal')
+		){$is_address_match=true;}
 		// checks
 		if($is_token_expired||!$is_signature_valid||!$is_address_match){
 			return false;
