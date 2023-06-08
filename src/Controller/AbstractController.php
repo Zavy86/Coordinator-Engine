@@ -58,6 +58,7 @@ abstract class AbstractController implements ControllerInterface{
 		if(!strlen($authorization)){return false;}
 		$Session=Engine::getSession();
 		if(!$Session->isValid()){return false;}
+		if($Session->isAdministrator()){return true;}  // @todo valutare se tenere o se parametrizzare
 		return (in_array($authorization,$Session->getAuthorizations()));
 	}
 
