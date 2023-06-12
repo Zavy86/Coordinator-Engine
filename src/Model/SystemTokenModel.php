@@ -9,7 +9,7 @@
 namespace Coordinator\Engine\Model;
 
 final class SystemTokenModel extends AbstractModel{
-
+	/* @todo probabilmente non serve piu
 	static protected int $_uid_length=32;
 	static public string $_service="Coordinator\Engine_database";
 	static public string $_dataset="system__tokens";
@@ -18,5 +18,5 @@ final class SystemTokenModel extends AbstractModel{
 	protected string $secret;
 	protected string $label;
 	protected bool $active;
-
+*/
 }

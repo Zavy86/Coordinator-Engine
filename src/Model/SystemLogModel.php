@@ -11,6 +11,7 @@ namespace Coordinator\Engine\Model;
 use Coordinator\Engine\Error\ErrorInterface;
 
 final class SystemLogModel extends AbstractModel{
+	/* @todo probabilmente non serve piu
 
 	static protected int $_uid_length=32;
 	static public string $_service="Coordinator\Engine_database";
@@ -37,7 +38,7 @@ final class SystemLogModel extends AbstractModel{
 
 	public function setErrors(array $errors){
 		$errors_parsed=array();
-		/** @var ErrorInterface $error */
+		/** @var ErrorInterface $error *
 		foreach($errors as $error){
 			$errors_parsed[]=array(
 			 'code'=>$error->getCode(),
@@ -48,5 +49,5 @@ final class SystemLogModel extends AbstractModel{
 		// @todo checks and throws
 		$this->errors_json=json_encode($errors_parsed,JSON_PRETTY_PRINT);   // @todo levare dopo debug per comprimere
 	}
-
+*/
 }

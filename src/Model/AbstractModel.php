@@ -61,13 +61,12 @@ abstract class AbstractModel implements ModelInterface{
 		return $this->setUid($uid);      // decidere se sopra tengo bool o throw e in caso fare un try (magari dentro il loop gestendo un max per evitare l'INFL)
 	}
 
-	public function getProperty($property):mixed{
-		if(!in_array($property,array_keys(get_object_vars($this)))){return false;}  // @todo throw instead of boolean?
-		return $this->$property;;
+	public function __get($property):mixed{             /** @todo valutare se tenere o meno */
+		return $this->getProperty($property);
 	}
 
-	public function __get($property):mixed{             /** @todo valutare se tenere o meno */
-		if(!in_array($property,array_keys(get_object_vars($this)))){return false;}  // @todo throw instead of boolean?
+	public function getProperty($property):mixed{
+		if(!in_array($property,array_keys(get_object_vars($this)))){throw ModelException::propertyNotExists(self::class,$property);}
 		return $this->$property;;
 	}
 

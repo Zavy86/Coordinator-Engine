@@ -9,7 +9,7 @@
 namespace Coordinator\Engine\Model;
 
 final class SystemEventModel extends AbstractModel{
-
+	/* @todo probabilmente non serve piu
 	static public string $_service="Coordinator\Engine_database";
 	static public string $_dataset="system__events";
 
@@ -22,5 +22,5 @@ final class SystemEventModel extends AbstractModel{
 	public function getData():array{
 		return json_decode($this->data_json,true);
 	}
-
+*/
 }
