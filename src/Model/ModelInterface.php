@@ -22,9 +22,13 @@ interface ModelInterface{
 
 	public static function load(mixed $uid):static;
 
+	public static function build(array $properties):static;
+
 	public function save():bool;
 
 	public function remove():bool;
+
+	public function getUid():mixed;
 
 	public function getProperties():array;
 
@@ -32,6 +36,6 @@ interface ModelInterface{
 
 	public function debug():array;
 
-	// @todo   hasProperty($property)    getProperty($property)
+	// @todo   hasProperty($property)
 
 }

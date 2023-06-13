@@ -8,6 +8,7 @@
 
 namespace Coordinator\Engine\Model;
 
+use Coordinator\Engine\Engine;
 use Coordinator\Engine\Services\Services;
 use Coordinator\Engine\Storage\StorageInterface;
 use Coordinator\Engine\Filter\FilterInterface;
@@ -25,21 +26,11 @@ abstract class AbstractModel implements ModelInterface{
 	/** @var string $_service Storage Service */
 	static public string $_service;
 
-	//static private array $properties=[];
-
 	/**
 	 * Model Properties
 	 */
 
 	protected mixed $uid=null;
-
-
-
-	/*static protected function setProperties(string ...$properties){
-		foreach(array_filter($properties) as $property){
-			static::$properties[$property]=null;
-		}
-	}*/
 
 	final public function getUid():?string{return $this->uid;}
 
@@ -73,39 +64,24 @@ abstract class AbstractModel implements ModelInterface{
 	public function getProperties():array{
 		$return=array();
 		foreach(get_object_vars($this) as $property=>$value){
-			//if(in_array($property,array("uid"))){continue;}
 			$return[$property]=$this->$property;
 		}
 		return $return;
 	}
 
-	/** @check */
-	/*public function setProperties(array $properties):int{
-		$set_property_counter=0;
-		foreach($properties as $property=>$value){
-			if($this->setProperty($property,$value)){$set_property_counter++;}
-		}
-		return $set_property_counter;
-	}*/
-	// @todo verificare che siano stati compilati tutti i campi obbligatori
 	final public function setProperties(array $properties=array()):void{
+		// @todo verificare che siano stati compilati tutti i campi obbligatori
 		foreach($properties as $property=>$value){
-			if(!in_array($property,array_keys(get_class_vars($this::class)))){
-				throw ModelException::propertyNotExists($this::class,$property);
-			}
-			$this->$property=$value;
+			$this->setProperty($property,$value);
 		}
 	}
 
 	public function setProperty(string $property,mixed $value):bool{
-		if(0){return false;}                                                /** @todo check */
-		if($property=="uid"){return false;}          /** @todo logger */
-		if(!in_array($property,array_keys(get_class_vars($this::class)))){throw ModelException::propertyNotExists(static::class,$property);}          /** @todo logger */
+		if($property=="uid"){return false;}                                                        /** @todo logger ? */
+		if(!in_array($property,array_keys(get_class_vars($this::class)))){throw ModelException::propertyNotExists(static::class,$property);}
 		$this->$property=$value;
 		return true;
 	}
-
-
 
 	private static function getStorageService():StorageInterface{
 		//echo "<br>service ".static::$service;
@@ -144,6 +120,12 @@ abstract class AbstractModel implements ModelInterface{
 		return $Model;
 	}
 
+	public static function build(array $properties):static{
+		$Model=new static();
+		$Model->setProperties($properties);
+		return $Model;
+	}
+
 	public function save():bool{
 		if(!$this->getUid()){$this->generateUid();}
 		return static::getStorageService()->save($this);
@@ -152,6 +134,25 @@ abstract class AbstractModel implements ModelInterface{
 	public function remove():bool{
 		if(!$this->getUid()){throw ModelException::cannotDeleteWithoutUID();}
 		return static::getStorageService()->remove($this);
+	}
+
+	public function hasEvents():bool{return property_exists(static::class,'_events');}
+
+	/** @return ModelEvent[] */
+	public function getEvents():array{
+		$return=[];
+		if(!$this->hasEvents()){throw ModelException::noEvents(static::class);}
+		$events=array_filter((isset($this->_events)?json_decode($this->_events):[]));
+		foreach($events as $event){$return[]=new ModelEvent($event->timestamp,$event->account,$event->event,$event->data);}
+		return $return;
+	}
+
+	public function addEvent(string $event,mixed $data=null):void{
+		if(!$this->hasEvents()){throw ModelException::noEvents(static::class);}
+		if(!strlen($event)){throw ModelException::valueNotAcceptable(ModelEvent::class,'event');}
+		$events=$this->getEvents();
+		array_unshift($events,new ModelEvent(time(),Engine::getSession()->getAccount(),$event,$data));
+		$this->_events=json_encode($events);
 	}
 
 	public function debug():array{   // @todo parametro masked property ? per password o altri dati sensibili
