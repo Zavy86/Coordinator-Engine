@@ -26,6 +26,25 @@ abstract class AbstractController implements ControllerInterface{
 		protected ResponseInterface $Response
 	){}
 
+	private static function checkSessionValidity():bool{
+		$Session=Engine::getSession();
+		//var_dump($Session);
+		return $Session->isValid();
+	}
+
+	protected static function checkAuthorization(string $authorization):bool{  // @todo fare classe specifica?
+		if(!strlen($authorization)){return false;}
+		$Session=Engine::getSession();
+		if(!$Session->isValid()){return false;}
+		if($Session->isAdministrator()){return true;}  // @todo valutare se tenere o se parametrizzare
+		return (in_array($authorization,$Session->getAuthorizations()));
+	}
+
+	protected static function checkAuthorizations(array $authorizations):bool{
+		foreach($authorizations as $authorization){if(self::checkAuthorization($authorization)){return true;}}
+		return false;
+	}
+
 	// @todo migliorare?
 	protected function check(array|string|null $authorization=null):bool{
 		if(!is_array($authorization)){$authorization=array($authorization);}
@@ -46,20 +65,6 @@ abstract class AbstractController implements ControllerInterface{
 			$this->Response->addError((new Error("authenticationInvalid",'Authentication token provided is not valid')));
 		}
 		return false;
-	}
-
-	private function checkSessionValidity():bool{
-		$Session=Engine::getSession();
-		//var_dump($Session);
-		return $Session->isValid();
-	}
-
-	protected function checkAuthorization(string $authorization):bool{  // @todo fare classe specifica?
-		if(!strlen($authorization)){return false;}
-		$Session=Engine::getSession();
-		if(!$Session->isValid()){return false;}
-		if($Session->isAdministrator()){return true;}  // @todo valutare se tenere o se parametrizzare
-		return (in_array($authorization,$Session->getAuthorizations()));
 	}
 
 	protected function checkModelExists(string $modelClass,string $uid):bool{
