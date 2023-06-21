@@ -58,6 +58,7 @@ final class Request implements RequestInterface{
 	private function setBody():void{
 		if(isset($_POST) && count($_POST)){$body=$_POST;}
 		else{$body=json_decode(file_get_contents("php://input"),true);}
+		if(is_null($body)){$body=array();}
 		if(!is_array($body)){$body=array($body);}
 		$this->body=$body;
 	}
@@ -67,6 +68,8 @@ final class Request implements RequestInterface{
 	final public function getUri():string{return $this->uri;}
 	final public function getQuery():array{return $this->query;}
 	final public function getBody():array{return $this->body;}
+
+	final public function hasBody():bool{return count($this->body);}
 
 	final public function getObject(string $class):ObjectInterface{
 		$interfaces=class_implements($class);

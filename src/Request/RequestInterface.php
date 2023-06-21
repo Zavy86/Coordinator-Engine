@@ -48,6 +48,13 @@ interface RequestInterface{
 	public function getBody():array;
 
 	/**
+	 * Has Body
+	 *
+	 * @return boolean
+	 */
+	public function hasBody():bool;
+
+	/**
 	 * Get Object
 	 *
 	 * @param string $class
