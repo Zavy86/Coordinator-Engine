@@ -377,7 +377,7 @@ final class MysqlStorage extends AbstractStorage{
 			case 'isNotLike':$return.=" NOT"; // continue down
 			case 'isLike':$return.=" LIKE '".str_replace('*','%',$Condition->getValue())."'";break;
 			case 'isNotIn':$return.=" NOT"; // continue down
-			case 'isIn':$return.=" IN ('".implode(',',$Condition->getValue())."')";break;
+			case 'isIn':$return.=" IN ('".implode("','",$Condition->getValue())."')";break;
 			case 'isNotBetween':$return.=" NOT"; // continue down
 			case 'isBetween':$return.=" BETWEEN '".$Condition->getValue()[0]."' AND '".$Condition->getValue()[1]."'";break;
 			default:throw StorageException::genericException("Assertion '".$Condition->getAssertion()."' is not implemented");
@@ -448,7 +448,7 @@ final class MysqlStorage extends AbstractStorage{
 			if($Pagination->getOffset()>0){$sql.=' OFFSET '.$Pagination->getOffset();}
 		}
 
-		//var_dump($sql,"SQL Query");
+		//var_dump($sql);
 
 		$objects=$this->queryObjects($sql);
 
