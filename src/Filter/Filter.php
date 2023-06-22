@@ -139,7 +139,7 @@ abstract class Condition{
 }
 
 
-abstract class NullValueCondition extends Condition{public function __construct(string $property){parent::__construct($property);}}
+abstract class NullValueCondition extends Condition{public function __construct(string $property){parent::__construct($property,null);}}
 abstract class SingleValueCondition extends Condition{public function __construct(string $property,bool|int|float|string $value){parent::__construct($property,$value);}}
 abstract class MultipleValuesCondition extends Condition{public function __construct(string $property,array $value){parent::__construct($property,$value);}}
 abstract class RangeValuesCondition extends Condition{public function __construct(string $property,int|float|string $value_from,int|float|string $value_to){parent::__construct($property,[$value_from,$value_to]);}}
