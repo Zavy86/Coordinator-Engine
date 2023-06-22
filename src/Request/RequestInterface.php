@@ -82,9 +82,11 @@ interface RequestInterface{
 	/**
 	 * Get Pagination
 	 *
+	 * @param int $limitDefault
+	 * @param int $limitMax
 	 * @return ?PaginationInterface
 	 */
-	public function getPagination():?PaginationInterface;
+	public function getPagination(int $limitDefault=20,int $limitMax=100):?PaginationInterface;
 
 	/**
 	 * Get Search

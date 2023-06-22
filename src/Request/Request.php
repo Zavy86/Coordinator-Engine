@@ -11,6 +11,7 @@ namespace Coordinator\Engine\Request;
 use Coordinator\Engine\Filter\Filter;
 use Coordinator\Engine\Filter\FilterInterface;
 use Coordinator\Engine\Object\ObjectInterface;
+use Coordinator\Engine\Pagination\Pagination;
 use Coordinator\Engine\Pagination\PaginationInterface;
 use Coordinator\Engine\Sorting\SortingInterface;
 
@@ -96,10 +97,14 @@ final class Request implements RequestInterface{
 
 	}
 
-	public function getPagination():?PaginationInterface{
-
-		return null;
-
+	public function getPagination(int $limitDefault=20,int $limitMax=100):?PaginationInterface{
+		$query=$this->getQuery();
+		$limit=(int)($query['limit']??0);
+		$offset=(int)($query['offset']??0);
+		if(!is_int($limit)||$limit<1){$limit=$limitDefault;}
+		if($limit>$limitMax){$limit=$limitMax;}
+		if(!is_int($offset)){$offset=0;}
+		return new Pagination($limit,$offset);
 	}
 
 	public function getSearch():?string{
