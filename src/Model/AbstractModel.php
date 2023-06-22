@@ -90,7 +90,7 @@ abstract class AbstractModel implements ModelInterface{
 		return Services::getRequired(static::$_service);
 	}
 
-	protected static function loadFrom(string $key,mixed $value):ModelInterface{   // @todo come gia scritto nell'interfaccia valutare sostituzione con browse filters
+	protected static function loadFrom(string $key,mixed $value):ModelInterface{   // @todo come gia scritto nell'interfaccia valutare sostituzione con browse filter
 		$Model=static::getStorageService()->loadFromKey(new static,$key,$value,$uid);
 		$Model->setUid($uid);
 		return $Model;
@@ -102,12 +102,12 @@ abstract class AbstractModel implements ModelInterface{
 		return $Model;
 	}
 
-	public static function count(?FilterInterface $Filters=null):int{
-		return static::getStorageService()->count(new static,$Filters);
+	public static function count(?FilterInterface $Filter=null):int{
+		return static::getStorageService()->count(new static,$Filter);
 	}
 
-	public static function browse(?FilterInterface $Filters=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array{
-		return static::getStorageService()->browse(new static,$Filters,$Sorting,$Pagination);
+	public static function browse(?FilterInterface $Filter=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array{
+		return static::getStorageService()->browse(new static,$Filter,$Sorting,$Pagination);
 	}
 
 	public static function exists(mixed $uid):bool{

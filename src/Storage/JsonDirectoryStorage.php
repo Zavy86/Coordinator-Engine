@@ -8,7 +8,10 @@
 
 namespace Coordinator\Engine\Storage;
 
+use Coordinator\Engine\Filter\FilterInterface;
 use Coordinator\Engine\Model\ModelInterface;
+use Coordinator\Engine\Pagination\PaginationInterface;
+use Coordinator\Engine\Sorting\SortingInterface;
 
 final class JsonDirectoryStorage extends AbstractStorage{
 
@@ -52,9 +55,11 @@ final class JsonDirectoryStorage extends AbstractStorage{
 		return true;
 	}
 
+	public function count(ModelInterface $Model,?FilterInterface $Filter=null):int{
+		return 0; // @todo
+	}
 
-
-	public function browse(ModelInterface $Model,?FiltersInterface $filters=null):array{
+	public function browse(ModelInterface $Model,?FilterInterface $Filter=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array{
 		$path=$this->getFullPathAndMakeIfNotExists($Model);
 		$files=array();
 		foreach(scandir($path) as $file){   // @todo ->getDataset()?
@@ -72,7 +77,7 @@ final class JsonDirectoryStorage extends AbstractStorage{
 	}
 
 
-	public function get(ModelInterface $Model,mixed $uid):ModelInterface{
+	public function load(ModelInterface $Model,mixed $uid):ModelInterface{
 		if(!$this->exists($Model,$uid)){throw StorageException::uidNotAvailable($uid);}
 		$path=$this->getFullPathAndMakeIfNotExists($Model);
 		$bytes=file_get_contents($path.$uid.".json");
@@ -83,6 +88,13 @@ final class JsonDirectoryStorage extends AbstractStorage{
 		return $Model;
 	}
 
+	public function loadFromKey(ModelInterface $Model,string $key,mixed $value,mixed &$uid):ModelInterface{
+		// @todo
+	}
+
+	public function loadFromKeys(ModelInterface $Model,array $keys,mixed &$uid):ModelInterface{
+		// @todo
+	}
 
 	public function save(ModelInterface $Model):bool{
 		$uid=$Model->getUid();

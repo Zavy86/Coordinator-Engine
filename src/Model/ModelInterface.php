@@ -14,9 +14,9 @@ use Coordinator\Engine\Pagination\PaginationInterface;
 
 interface ModelInterface{
 
-	public static function count(?FilterInterface $Filters=null):int;
+	public static function count(?FilterInterface $Filter=null):int;
 
-	public static function browse(?FilterInterface $Filters=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array;
+	public static function browse(?FilterInterface $Filter=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array;
 
 	public static function exists(mixed $uid):bool;
 

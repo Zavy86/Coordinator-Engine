@@ -389,13 +389,13 @@ final class MysqlStorage extends AbstractStorage{
 
 
 
-	public function count(ModelInterface $Model,?FilterInterface $Filters=null):int{
+	public function count(ModelInterface $Model,?FilterInterface $Filter=null):int{
 		$table=$this->getDataset($Model);
 
 		$sql='SELECT COUNT(`uid`) AS `counter` FROM `'.$table.'`';
 
-		if(!is_null($Filters)){        // @todo sistemare con prepare ecc
-			$sql.=$this->filtersToWhere($Filters);
+		if(!is_null($Filter)){        // @todo sistemare con prepare ecc
+			$sql.=$this->filtersToWhere($Filter);
 		}
 
 		//var_dump($sql,"SQL Count Query");
@@ -413,7 +413,7 @@ final class MysqlStorage extends AbstractStorage{
 
 
 
-	public function browse(ModelInterface $Model,?FilterInterface $Filters=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array{
+	public function browse(ModelInterface $Model,?FilterInterface $Filter=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array{
 
 		$result=array();
 
@@ -431,8 +431,8 @@ final class MysqlStorage extends AbstractStorage{
 
 		// @todo mettere tutto in private function in modo da usare sia per browse che per count la query generation
 
-		if(!is_null($Filters)){        // @todo sistemare con prepare ecc
-			$sql.=$this->filtersToWhere($Filters);
+		if(!is_null($Filter)){        // @todo sistemare con prepare ecc
+			$sql.=$this->filtersToWhere($Filter);
 		}
 
 		if(!is_null($Sorting)){

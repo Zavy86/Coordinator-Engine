@@ -82,17 +82,17 @@ final class JsonFileStorage extends AbstractStorage{
 		if(!$bytes){throw StorageException::savingError();}
 	}
 
-	public function count(ModelInterface $Model,?FilterInterface $Filters=null):int{
-		$objects=$this->browse($Model,$Filters);
+	public function count(ModelInterface $Model,?FilterInterface $Filter=null):int{
+		$objects=$this->browse($Model,$Filter);
 		return count($objects);
 	}
 
-	public function browse(ModelInterface $Model,?FilterInterface $Filters=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array{
+	public function browse(ModelInterface $Model,?FilterInterface $Filter=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array{
 
 		/*
-		var_dump($Filters,'Filters');
-		var_dump($Sorting,'Sorting');
-		var_dump($Pagination,'Pagination');
+		var_dump($Filter);
+		var_dump($Sorting);
+		var_dump($Pagination);
 		*/
 
 		$index=-1;

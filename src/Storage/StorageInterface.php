@@ -15,9 +15,9 @@ use Coordinator\Engine\Pagination\PaginationInterface;
 
 interface StorageInterface{
 
-	public function count(ModelInterface $Model,?FilterInterface $Filters=null):int;
+	public function count(ModelInterface $Model,?FilterInterface $Filter=null):int;
 
-	public function browse(ModelInterface $Model,?FilterInterface $Filters=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array;
+	public function browse(ModelInterface $Model,?FilterInterface $Filter=null,?SortingInterface $Sorting=null,?PaginationInterface $Pagination=null):array;
 
 	public function exists(ModelInterface $Model,mixed $uid):bool;
 
