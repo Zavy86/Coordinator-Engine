@@ -66,6 +66,13 @@ interface RequestInterface{
 	public function getObject(string $class):ObjectInterface;
 
 	/**
+	 * Get Search
+	 *
+	 * @return ?string
+	 */
+	public function getSearch():?string;
+
+	/**
 	 * Get Filter
 	 *
 	 * @return ?FilterInterface
@@ -87,13 +94,6 @@ interface RequestInterface{
 	 * @return ?PaginationInterface
 	 */
 	public function getPagination(int $limitDefault=20,int $limitMax=100):?PaginationInterface;
-
-	/**
-	 * Get Search
-	 *
-	 * @return ?string
-	 */
-	public function getSearch():?string;
 
 	/**
 	 * Debug

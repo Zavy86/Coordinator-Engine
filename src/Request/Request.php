@@ -86,6 +86,14 @@ final class Request implements RequestInterface{
 		return new $class($this->getBody());
 	}
 
+	public function getSearch():?string{
+		$query=$this->getQuery();
+		if(!array_key_exists('search',$query)){return null;}
+		$search=trim(htmlspecialchars($query['search']));
+		if(!strlen($search)){return null;}
+		return $search;
+	}
+
 	public function getFilter():?FilterInterface{
 		if(!$this->hasBody()){return null;}
 		$body_properties=$this->getBody();
@@ -114,14 +122,6 @@ final class Request implements RequestInterface{
 		if($limit>$limitMax){$limit=$limitMax;}
 		if(!is_int($offset)){$offset=0;}
 		return new Pagination($limit,$offset);
-	}
-
-	public function getSearch():?string{
-		$query=$this->getQuery();
-		if(!array_key_exists('search',$query)){return null;}
-		$search=trim(htmlspecialchars($query['search']));
-		if(!strlen($search)){return null;}
-		return $search;
 	}
 
 	public function debug():array{
