@@ -8,7 +8,11 @@
 
 namespace Coordinator\Engine\Request;
 
+use Coordinator\Engine\Filter\Filter;
+use Coordinator\Engine\Filter\FilterInterface;
 use Coordinator\Engine\Object\ObjectInterface;
+use Coordinator\Engine\Pagination\PaginationInterface;
+use Coordinator\Engine\Sorting\SortingInterface;
 
 final class Request implements RequestInterface{
 
@@ -77,6 +81,25 @@ final class Request implements RequestInterface{
 			throw RequestException::objectTypeMismatch($class);
 		}
 		return new $class($this->getBody());
+	}
+
+	public function getFilter():?FilterInterface{
+		if(!$this->hasBody()){return null;}
+		$body_properties=$this->getBody();
+		if(!array_key_exists('Filter',$body_properties)){return null;}
+		return Filter::buildFromArray($body_properties['Filter']);
+	}
+
+	public function getSorting():?SortingInterface{
+
+		return null;
+
+	}
+
+	public function getPagination():?PaginationInterface{
+
+		return null;
+
 	}
 
 	public function debug():array{

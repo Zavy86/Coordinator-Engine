@@ -8,7 +8,10 @@
 
 namespace Coordinator\Engine\Request;
 
+use Coordinator\Engine\Filter\FilterInterface;
 use Coordinator\Engine\Object\ObjectInterface;
+use Coordinator\Engine\Pagination\PaginationInterface;
+use Coordinator\Engine\Sorting\SortingInterface;
 
 interface RequestInterface{
 
@@ -61,6 +64,34 @@ interface RequestInterface{
 	 * @return ObjectInterface
 	 */
 	public function getObject(string $class):ObjectInterface;
+
+	/**
+	 * Get Filter
+	 *
+	 * @return ?FilterInterface
+	 */
+	public function getFilter():?FilterInterface;
+
+	/**
+	 * Get Sorting
+	 *
+	 * @return ?SortingInterface
+	 */
+	public function getSorting():?SortingInterface;
+
+	/**
+	 * Get Pagination
+	 *
+	 * @return ?PaginationInterface
+	 */
+	public function getPagination():?PaginationInterface;
+
+	/**
+	 * Get Search
+	 *
+	 * @return ?string
+	 */
+	public function getSearch():?string;
 
 	/**
 	 * Debug
