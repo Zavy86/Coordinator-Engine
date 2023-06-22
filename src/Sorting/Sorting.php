@@ -17,8 +17,9 @@ class Sorting implements SortingInterface{
 	 */
 	public function __construct(array $properties){
 		foreach($properties as $property=>$method){
-			if(is_int($property)){$property=$method;$method='';}
-			if(in_array(strtoupper($method),array('ASC','DESC'))){$method=strtoupper($method);}else{$method='ASC';}
+			if(is_int($property)){$property=$method;$method='ASC';}
+			else{$method=strtoupper($method);}
+			if(!in_array($method,['ASC','DESC'])){throw SortingException::methodInvalid($method);}
 			$this->properties[$property]=$method;
 		}
 	}

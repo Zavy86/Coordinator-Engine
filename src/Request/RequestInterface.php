@@ -77,7 +77,7 @@ interface RequestInterface{
 	 *
 	 * @return ?SortingInterface
 	 */
-	public function getSorting():?SortingInterface;
+	public function getSorting(?SortingInterface $defaultSorting=null):?SortingInterface;
 
 	/**
 	 * Get Pagination

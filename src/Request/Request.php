@@ -13,6 +13,8 @@ use Coordinator\Engine\Filter\FilterInterface;
 use Coordinator\Engine\Object\ObjectInterface;
 use Coordinator\Engine\Pagination\Pagination;
 use Coordinator\Engine\Pagination\PaginationInterface;
+use Coordinator\Engine\Sorting\Sorting;
+use Coordinator\Engine\Sorting\SortingException;
 use Coordinator\Engine\Sorting\SortingInterface;
 
 final class Request implements RequestInterface{
@@ -91,10 +93,17 @@ final class Request implements RequestInterface{
 		return Filter::buildFromArray($body_properties['Filter']);
 	}
 
-	public function getSorting():?SortingInterface{
-
-		return null;
-
+	public function getSorting(?SortingInterface $defaultSorting=null):?SortingInterface{
+		if(!$this->hasBody()){return $defaultSorting;}
+		$body_properties=$this->getBody();
+		if(!array_key_exists('Sorting',$body_properties)){return $defaultSorting;}
+		$sorting_array=[];
+		foreach($body_properties['Sorting'] as $sorting){
+			if(!array_key_exists('property',$sorting) || !array_key_exists('method',$sorting)){continue;}
+			$sorting_array[$sorting['property']]=$sorting['method'];
+		}
+		if(!count($sorting_array)){SortingException::parsingError();}
+		return new Sorting($sorting_array);
 	}
 
 	public function getPagination(int $limitDefault=20,int $limitMax=100):?PaginationInterface{
