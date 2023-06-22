@@ -102,6 +102,14 @@ final class Request implements RequestInterface{
 
 	}
 
+	public function getSearch():?string{
+		$query=$this->getQuery();
+		if(!array_key_exists('search',$query)){return null;}
+		$search=trim(htmlspecialchars($query['search']));
+		if(!strlen($search)){return null;}
+		return $search;
+	}
+
 	public function debug():array{
 		return array(
 			'class'=>$this::class,
