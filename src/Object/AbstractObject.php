@@ -26,6 +26,11 @@ abstract class AbstractObject implements ObjectInterface{
 		return $rp->isInitialized($this);
 	}
 
+	final public function isArray($property):bool{
+		$rp=new \ReflectionProperty(static::class,$property);
+		return ($rp->getType()->getName()==='array');
+	}
+
 	final public function setProperties(array $properties=array()):void{
 		foreach($properties as $property=>$value){
 			if(!in_array($property,array_keys(get_class_vars($this::class)))){
