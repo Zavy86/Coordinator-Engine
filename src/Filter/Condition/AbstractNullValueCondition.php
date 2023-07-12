@@ -8,7 +8,7 @@
 
 namespace Coordinator\Engine\Filter\Condition;
 
-abstract class AbstractNullValueCondition extends Condition{
+abstract class AbstractNullValueCondition extends AbstractCondition{
 	public function __construct(string $property){
 		parent::__construct($property,null);
 	}

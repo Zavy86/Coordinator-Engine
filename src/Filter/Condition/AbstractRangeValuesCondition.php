@@ -8,7 +8,7 @@
 
 namespace Coordinator\Engine\Filter\Condition;
 
-abstract class AbstractRangeValuesCondition extends Condition{
+abstract class AbstractRangeValuesCondition extends AbstractCondition{
 	public function __construct(string $property,int|float|string $value_from,int|float|string $value_to){
 		parent::__construct($property,[$value_from,$value_to]);
 	}

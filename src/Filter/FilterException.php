@@ -15,7 +15,7 @@ class FilterException extends \Exception{
 	}
 
 	public static function conditionInvalid(string $assertion):static{
-		return new static("Condition ".$assertion." is not valid. Supported assertions are: isNull, isNotNull, isEqualsTo, isNotEqualsTo, isGreaterThan, isGreaterEqualThan, isLesserThan, isLesserEqualThan, isLike, isNotLike, isIn, isNotIn, isBetween, isNotBetween");
+		return new static("Condition ".$assertion." is not valid. Supported assertions are: isNull, isNotNull, isEqualsTo, isNotEqualsTo, isGreaterThan, isGreaterEqualsThan, isLesserThan, isLesserEqualsThan, isLike, isNotLike, isIn, isNotIn, isBetween, isNotBetween");
 	}
 
 	public static function conditionsOperatorInvalid(string $operator):static{

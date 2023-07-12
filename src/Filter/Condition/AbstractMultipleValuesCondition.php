@@ -8,7 +8,7 @@
 
 namespace Coordinator\Engine\Filter\Condition;
 
-abstract class AbstractMultipleValuesCondition extends Condition{
+abstract class AbstractMultipleValuesCondition extends AbstractCondition{
 	public function __construct(string $property,array $value){
 		parent::__construct($property,$value);
 	}

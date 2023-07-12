@@ -10,8 +10,6 @@ namespace Coordinator\Engine\Filter\Condition;
 
 interface ConditionInterface{
 
-	public function __construct(string $property,mixed $value);
-
 	public function getAssertion():string;
 	public function getProperty():string;
 	public function getValue():mixed;

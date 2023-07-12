@@ -10,7 +10,7 @@ namespace Coordinator\Engine\Storage;
 
 use Coordinator\Engine\Configuration\MysqlConfiguration;
 use Coordinator\Engine\Filter\Condition\ConditionInterface;
-use Coordinator\Engine\Filter\Condition\Conditions;
+use Coordinator\Engine\Filter\FilterConditions;
 use Coordinator\Engine\Filter\FilterInterface;
 use Coordinator\Engine\Logger\LoggerInterface;
 use Coordinator\Engine\Model\ModelInterface;
@@ -333,7 +333,7 @@ final class MysqlStorage extends AbstractStorage{
 		//var_dump($Filters);
 		$conditions_parsed=' WHERE ';
 		$Condition=$Filters->getCondition();
-		if(is_a($Condition,Conditions::class)){
+		if(is_a($Condition,FilterConditions::class)){
 			$conditions_parsed.=$this->parseConditions($Condition);
 		}elseif(is_a($Condition,ConditionInterface::class)){
 			$conditions_parsed.=$this->parseCondition($Condition);
@@ -344,11 +344,11 @@ final class MysqlStorage extends AbstractStorage{
 		return $conditions_parsed;
 	}
 
-	private function parseConditions(Conditions $Conditions):string{
+	private function parseConditions(FilterConditions $Conditions):string{
 		$conditions_parsed_array=array();
-		/** @var Conditions|ConditionInterface $Condition */
+		/** @var FilterConditions|ConditionInterface $Condition */
 		foreach($Conditions->getConditions() as $Condition){
-			if(is_a($Condition,Conditions::class)){
+			if(is_a($Condition,FilterConditions::class)){
 				$conditions_parsed_array[]=$this->parseConditions($Condition);
 			}elseif(is_a($Condition,ConditionInterface::class)){
 				$conditions_parsed_array[]=$this->parseCondition($Condition);
@@ -362,20 +362,20 @@ final class MysqlStorage extends AbstractStorage{
 	private function parseCondition(ConditionInterface $Condition):string{
 		$return='`'.$Condition->getProperty().'`';
 		switch($Condition->getAssertion()){
-			case 'isNull':$return.=" IS NULL";break;
-			case 'isNotNull':$return.=" IS NOT NULL";break;
-			case 'isEqualsTo':$return.=" = '".$Condition->getValue()."'";break;
-			case 'isNotEqualsTo':$return.=" <> '".$Condition->getValue()."'";break;
-			case 'isGreaterThan':$return.=" > '".$Condition->getValue()."'";break;
-			case 'isGreaterEqualsThan':$return.=" >= '".$Condition->getValue()."'";break;
-			case 'isLesserThan':$return.=" < '".$Condition->getValue()."'";break;
-			case 'isLesserEqualsThan':$return.=" <= '".$Condition->getValue()."'";break;
-			case 'isNotLike':$return.=" NOT"; // continue down
-			case 'isLike':$return.=" LIKE '".str_replace('*','%',$Condition->getValue())."'";break;
-			case 'isNotIn':$return.=" NOT"; // continue down
-			case 'isIn':$return.=" IN ('".implode("','",$Condition->getValue())."')";break;
-			case 'isNotBetween':$return.=" NOT"; // continue down
-			case 'isBetween':$return.=" BETWEEN '".$Condition->getValue()[0]."' AND '".$Condition->getValue()[1]."'";break;
+			case 'ConditionIsNull':$return.=" IS NULL";break;
+			case 'ConditionIsNotNull':$return.=" IS NOT NULL";break;
+			case 'ConditionIsEqualsTo':$return.=" = '".$Condition->getValue()."'";break;
+			case 'ConditionIsNotEqualsTo':$return.=" <> '".$Condition->getValue()."'";break;
+			case 'ConditionIsGreaterThan':$return.=" > '".$Condition->getValue()."'";break;
+			case 'ConditionIsGreaterEqualsThan':$return.=" >= '".$Condition->getValue()."'";break;
+			case 'ConditionIsLesserThan':$return.=" < '".$Condition->getValue()."'";break;
+			case 'ConditionIsLesserEqualsThan':$return.=" <= '".$Condition->getValue()."'";break;
+			case 'ConditionIsNotLike':$return.=" NOT"; // continue down
+			case 'ConditionIsLike':$return.=" LIKE '".str_replace('*','%',$Condition->getValue())."'";break;
+			case 'ConditionIsNotIn':$return.=" NOT"; // continue down
+			case 'ConditionIsIn':$return.=" IN ('".implode("','",$Condition->getValue())."')";break;
+			case 'ConditionIsNotBetween':$return.=" NOT"; // continue down
+			case 'ConditionIsBetween':$return.=" BETWEEN '".$Condition->getValue()[0]."' AND '".$Condition->getValue()[1]."'";break;
 			default:throw StorageException::genericException("Assertion '".$Condition->getAssertion()."' is not implemented");
 		}
 		return $return;

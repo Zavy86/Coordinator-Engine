@@ -6,16 +6,16 @@
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 
-namespace Coordinator\Engine\Filter\Condition;
+namespace Coordinator\Engine\Filter;
 
-use Coordinator\Engine\Filter\FilterException;
+use Coordinator\Engine\Filter\Condition\ConditionInterface;
 
-class Conditions{
+class FilterConditions{
 
 	protected string $operator;
 	protected array $conditions=[];
 
-	public function __construct(string $operator,Conditions|ConditionInterface...$conditionFilters){
+	public function __construct(Operator $operator,FilterConditions|ConditionInterface...$conditionFilters){
 		$this->setOperator($operator);
 		foreach($conditionFilters as $conditionFilter){
 			$this->addCondition($conditionFilter);
@@ -27,7 +27,7 @@ class Conditions{
 		$this->operator=trim(strtoupper($operator));
 	}
 
-	public function addCondition(Conditions|ConditionInterface $conditionFilter){
+	public function addCondition(FilterConditions|ConditionInterface $conditionFilter){
 		$this->conditions[]=$conditionFilter;
 	}
 
