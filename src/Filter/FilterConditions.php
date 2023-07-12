@@ -15,15 +15,15 @@ class FilterConditions{
 	protected string $operator;
 	protected array $conditions=[];
 
-	public function __construct(Operator $operator,FilterConditions|ConditionInterface...$conditionFilters){
+	public function __construct(string $operator,FilterConditions|ConditionInterface...$conditionFilters){
 		$this->setOperator($operator);
 		foreach($conditionFilters as $conditionFilter){
 			$this->addCondition($conditionFilter);
 		}
 	}
 
-	public function setOperator(Operator $operator){
-		$this->operator=$operator->value;
+	public function setOperator(string $operator){
+		$this->operator=$operator;
 	}
 
 	public function addCondition(FilterConditions|ConditionInterface $conditionFilter){

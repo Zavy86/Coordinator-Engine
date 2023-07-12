@@ -62,13 +62,12 @@ class Filter implements FilterInterface{
 				throw FilterException::parsingError();
 			}
 		}
-		$operator=Operator::tryFrom($properties['operator']) ?? throw FilterException::conditionsOperatorInvalid($properties['operator']);
-		return new FilterConditions($operator,...$Conditions);
+		return new FilterConditions($properties['operator'],...$Conditions);
 	}
 
 	private static function buildCondition(array $properties):ConditionInterface{
 		if(!array_key_exists('assertion',$properties) || !array_key_exists('property',$properties)){throw FilterException::parsingError();}
-		$class='Coordinator\\Engine\\Filter\\Condition\\Condition'.ucfirst($properties['assertion']);
+		$class='Coordinator\\Engine\\Filter\\Condition\\'.$properties['assertion'];
 		if(!class_exists($class)){throw FilterException::conditionInvalid($properties['assertion']);}
 		switch($properties['assertion']){
 			case 'isNull':return new isNull($properties['property']);
