@@ -16,11 +16,4 @@ interface ConditionInterface{
 
 	public function returnTextual(int $depth=0):string;
 
-	/**
-	 * Debug
-	 *
-	 * @return array
-	 */
-	public function debug():array;
-
 }

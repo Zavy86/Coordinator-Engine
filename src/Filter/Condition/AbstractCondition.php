@@ -32,10 +32,4 @@ abstract class AbstractCondition implements ConditionInterface{
 		return str_repeat(' ',$depth).$this->property.'" '.$this->assertion.$value_string.PHP_EOL;
 	}
 
-	public function debug():array{ // @todo?
-		return array(
-			'class'=>$this::class
-		);
-	}
-
 }

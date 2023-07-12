@@ -1,6 +1,6 @@
 <?php
 /**
- * Not In Condition Filter
+ * Greater Equals Than Condition Filter
  *
  * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
@@ -8,4 +8,4 @@
 
 namespace Coordinator\Engine\Filter\Condition;
 
-class ConditionIsNotIn extends AbstractMultipleValuesCondition{}
+class isGreaterEqualsThan extends AbstractSingleValueCondition{}

@@ -22,9 +22,8 @@ class FilterConditions{
 		}
 	}
 
-	public function setOperator(string $operator){
-		if(!in_array(trim(strtoupper($operator)),array('AND','OR'))){throw FilterException::conditionsOperatorInvalid($operator);}
-		$this->operator=trim(strtoupper($operator));
+	public function setOperator(Operator $operator){
+		$this->operator=$operator->value;
 	}
 
 	public function addCondition(FilterConditions|ConditionInterface $conditionFilter){

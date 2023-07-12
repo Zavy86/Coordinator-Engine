@@ -9,20 +9,20 @@
 namespace Coordinator\Engine\Filter;
 
 use Coordinator\Engine\Filter\Condition\ConditionInterface;
-use Coordinator\Engine\Filter\Condition\ConditionIsBetween;
-use Coordinator\Engine\Filter\Condition\ConditionIsEqualsTo;
-use Coordinator\Engine\Filter\Condition\ConditionIsGreaterEqualsThan;
-use Coordinator\Engine\Filter\Condition\ConditionIsGreaterThan;
-use Coordinator\Engine\Filter\Condition\ConditionIsIn;
-use Coordinator\Engine\Filter\Condition\ConditionIsLesserEqualsThan;
-use Coordinator\Engine\Filter\Condition\ConditionIsLesserThan;
-use Coordinator\Engine\Filter\Condition\ConditionIsLike;
-use Coordinator\Engine\Filter\Condition\ConditionIsNotBetween;
-use Coordinator\Engine\Filter\Condition\ConditionIsNotEqualsTo;
-use Coordinator\Engine\Filter\Condition\ConditionIsNotIn;
-use Coordinator\Engine\Filter\Condition\ConditionIsNotLike;
-use Coordinator\Engine\Filter\Condition\ConditionIsNotNull;
-use Coordinator\Engine\Filter\Condition\ConditionIsNull;
+use Coordinator\Engine\Filter\Condition\isBetween;
+use Coordinator\Engine\Filter\Condition\isEqualsTo;
+use Coordinator\Engine\Filter\Condition\isGreaterEqualsThan;
+use Coordinator\Engine\Filter\Condition\isGreaterThan;
+use Coordinator\Engine\Filter\Condition\isIn;
+use Coordinator\Engine\Filter\Condition\isLesserEqualsThan;
+use Coordinator\Engine\Filter\Condition\isLesserThan;
+use Coordinator\Engine\Filter\Condition\isLike;
+use Coordinator\Engine\Filter\Condition\isNotBetween;
+use Coordinator\Engine\Filter\Condition\isNotEqualsTo;
+use Coordinator\Engine\Filter\Condition\isNotIn;
+use Coordinator\Engine\Filter\Condition\isNotLike;
+use Coordinator\Engine\Filter\Condition\isNotNull;
+use Coordinator\Engine\Filter\Condition\isNull;
 
 class Filter implements FilterInterface{
 
@@ -50,29 +50,6 @@ class Filter implements FilterInterface{
 		else{throw FilterException::parsingError();}
 	}
 
-	private static function buildCondition(array $properties):ConditionInterface{
-		if(!array_key_exists('assertion',$properties) || !array_key_exists('property',$properties)){throw FilterException::parsingError();}
-		$class='Coordinator\\Engine\\Filter\\Condition\\Condition'.ucfirst($properties['assertion']);
-		if(!class_exists($class)){throw FilterException::conditionInvalid($properties['assertion']);}
-		switch($properties['assertion']){
-			case 'isNull':return new ConditionIsNull($properties['property']);
-			case 'isNotNull':return new ConditionIsNotNull($properties['property']);
-			case 'isEqualsTo':return new ConditionIsEqualsTo($properties['property'],$properties['value']);
-			case 'isNotEqualsTo':return new ConditionIsNotEqualsTo($properties['property'],$properties['value']);
-			case 'isGreaterThan':return new ConditionIsGreaterThan($properties['property'],$properties['value']);
-			case 'isGreaterEqualsThan':return new ConditionIsGreaterEqualsThan($properties['property'],$properties['value']);
-			case 'isLesserThan':return new ConditionIsLesserThan($properties['property'],$properties['value']);
-			case 'isLesserEqualsThan':return new ConditionIsLesserEqualsThan($properties['property'],$properties['value']);
-			case 'isNotLike':return new ConditionIsNotLike($properties['property'],$properties['value']);
-			case 'isLike':return new ConditionIsLike($properties['property'],$properties['value']);
-			case 'isNotIn':return new ConditionIsNotIn($properties['property'],$properties['value']);
-			case 'isIn':return new ConditionIsIn($properties['property'],$properties['value']);
-			case 'isNotBetween':return new ConditionIsNotBetween($properties['property'],$properties['value'][0],$properties['value'][1]);
-			case 'isBetween':return new ConditionIsBetween($properties['property'],$properties['value'][0],$properties['value'][1]);
-			default:throw FilterException::conditionInvalid($properties['assertion']);
-		}
-	}
-
 	private static function buildConditions(array $properties):FilterConditions{
 		if(!array_key_exists('operator',$properties) || !array_key_exists('Conditions',$properties)){throw FilterException::parsingError();}
 		$Conditions=[];
@@ -87,6 +64,29 @@ class Filter implements FilterInterface{
 		}
 		$operator=Operator::tryFrom($properties['operator']) ?? throw FilterException::conditionsOperatorInvalid($properties['operator']);
 		return new FilterConditions($operator,...$Conditions);
+	}
+
+	private static function buildCondition(array $properties):ConditionInterface{
+		if(!array_key_exists('assertion',$properties) || !array_key_exists('property',$properties)){throw FilterException::parsingError();}
+		$class='Coordinator\\Engine\\Filter\\Condition\\Condition'.ucfirst($properties['assertion']);
+		if(!class_exists($class)){throw FilterException::conditionInvalid($properties['assertion']);}
+		switch($properties['assertion']){
+			case 'isNull':return new isNull($properties['property']);
+			case 'isNotNull':return new isNotNull($properties['property']);
+			case 'isEqualsTo':return new isEqualsTo($properties['property'],$properties['value']);
+			case 'isNotEqualsTo':return new isNotEqualsTo($properties['property'],$properties['value']);
+			case 'isGreaterThan':return new isGreaterThan($properties['property'],$properties['value']);
+			case 'isGreaterEqualsThan':return new isGreaterEqualsThan($properties['property'],$properties['value']);
+			case 'isLesserThan':return new isLesserThan($properties['property'],$properties['value']);
+			case 'isLesserEqualsThan':return new isLesserEqualsThan($properties['property'],$properties['value']);
+			case 'isNotLike':return new isNotLike($properties['property'],$properties['value']);
+			case 'isLike':return new isLike($properties['property'],$properties['value']);
+			case 'isNotIn':return new isNotIn($properties['property'],$properties['value']);
+			case 'isIn':return new isIn($properties['property'],$properties['value']);
+			case 'isNotBetween':return new isNotBetween($properties['property'],$properties['value'][0],$properties['value'][1]);
+			case 'isBetween':return new isBetween($properties['property'],$properties['value'][0],$properties['value'][1]);
+			default:throw FilterException::conditionInvalid($properties['assertion']);
+		}
 	}
 
 }

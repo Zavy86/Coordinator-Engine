@@ -362,20 +362,20 @@ final class MysqlStorage extends AbstractStorage{
 	private function parseCondition(ConditionInterface $Condition):string{
 		$return='`'.$Condition->getProperty().'`';
 		switch($Condition->getAssertion()){
-			case 'ConditionIsNull':$return.=" IS NULL";break;
-			case 'ConditionIsNotNull':$return.=" IS NOT NULL";break;
-			case 'ConditionIsEqualsTo':$return.=" = '".$Condition->getValue()."'";break;
-			case 'ConditionIsNotEqualsTo':$return.=" <> '".$Condition->getValue()."'";break;
-			case 'ConditionIsGreaterThan':$return.=" > '".$Condition->getValue()."'";break;
-			case 'ConditionIsGreaterEqualsThan':$return.=" >= '".$Condition->getValue()."'";break;
-			case 'ConditionIsLesserThan':$return.=" < '".$Condition->getValue()."'";break;
-			case 'ConditionIsLesserEqualsThan':$return.=" <= '".$Condition->getValue()."'";break;
-			case 'ConditionIsNotLike':$return.=" NOT"; // continue down
-			case 'ConditionIsLike':$return.=" LIKE '".str_replace('*','%',$Condition->getValue())."'";break;
-			case 'ConditionIsNotIn':$return.=" NOT"; // continue down
-			case 'ConditionIsIn':$return.=" IN ('".implode("','",$Condition->getValue())."')";break;
-			case 'ConditionIsNotBetween':$return.=" NOT"; // continue down
-			case 'ConditionIsBetween':$return.=" BETWEEN '".$Condition->getValue()[0]."' AND '".$Condition->getValue()[1]."'";break;
+			case 'isNull':$return.=" IS NULL";break;
+			case 'isNotNull':$return.=" IS NOT NULL";break;
+			case 'isEqualsTo':$return.=" = '".$Condition->getValue()."'";break;
+			case 'isNotEqualsTo':$return.=" <> '".$Condition->getValue()."'";break;
+			case 'isGreaterThan':$return.=" > '".$Condition->getValue()."'";break;
+			case 'isGreaterEqualsThan':$return.=" >= '".$Condition->getValue()."'";break;
+			case 'isLesserThan':$return.=" < '".$Condition->getValue()."'";break;
+			case 'isLesserEqualsThan':$return.=" <= '".$Condition->getValue()."'";break;
+			case 'isNotLike':$return.=" NOT"; // continue down
+			case 'isLike':$return.=" LIKE '".str_replace('*','%',$Condition->getValue())."'";break;
+			case 'isNotIn':$return.=" NOT"; // continue down
+			case 'isIn':$return.=" IN ('".implode("','",$Condition->getValue())."')";break;
+			case 'isNotBetween':$return.=" NOT"; // continue down
+			case 'isBetween':$return.=" BETWEEN '".$Condition->getValue()[0]."' AND '".$Condition->getValue()[1]."'";break;
 			default:throw StorageException::genericException("Assertion '".$Condition->getAssertion()."' is not implemented");
 		}
 		return $return;

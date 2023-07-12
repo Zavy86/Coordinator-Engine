@@ -1,6 +1,6 @@
 <?php
 /**
- * Like Condition Filter
+ * Not In Condition Filter
  *
  * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
@@ -8,4 +8,4 @@
 
 namespace Coordinator\Engine\Filter\Condition;
 
-class ConditionIsLike extends AbstractSingleValueCondition{}
+class isNotIn extends AbstractMultipleValuesCondition{}

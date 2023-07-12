@@ -1,6 +1,6 @@
 <?php
 /**
- * Greater Equals Than Condition Filter
+ * Equals To Condition Filter
  *
  * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
@@ -8,4 +8,4 @@
 
 namespace Coordinator\Engine\Filter\Condition;
 
-class ConditionIsGreaterEqualsThan extends AbstractSingleValueCondition{}
+class isEqualsTo extends AbstractSingleValueCondition{}

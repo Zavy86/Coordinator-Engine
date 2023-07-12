@@ -1,6 +1,6 @@
 <?php
 /**
- * Not Null Condition Filter
+ * In Condition Filter
  *
  * @package Coordinator\Engine
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
@@ -8,4 +8,4 @@
 
 namespace Coordinator\Engine\Filter\Condition;
 
-class ConditionIsNotNull extends AbstractNullValueCondition{}
+class isIn extends AbstractMultipleValuesCondition{}

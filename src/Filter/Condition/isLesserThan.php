@@ -8,4 +8,4 @@
 
 namespace Coordinator\Engine\Filter\Condition;
 
-class ConditionIsLesserThan extends AbstractSingleValueCondition{}
+class isLesserThan extends AbstractSingleValueCondition{}
