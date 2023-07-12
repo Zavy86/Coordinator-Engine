@@ -8,11 +8,13 @@
 
 namespace Coordinator\Engine\Filter;
 
+use Coordinator\Engine\Filter\Condition\Conditions;
+
 interface FilterInterface{
 
-	public function __construct(Conditions|Condition $condition);
+	public function __construct(Conditions|ConditionInterface $condition);
 
-	public function getCondition():Conditions|Condition;
+	public function getCondition():Conditions|ConditionInterface;
 
 	/**
 	 * Debug

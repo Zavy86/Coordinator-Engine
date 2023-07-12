@@ -8,19 +8,15 @@
 
 namespace Coordinator\Engine\Storage;
 
-use Coordinator\Engine\Filter\Condition;
-use Coordinator\Engine\Filter\Conditions;
-
-use Coordinator\Engine\Logger\LoggerInterface;
-
 use Coordinator\Engine\Configuration\MysqlConfiguration;
-use Coordinator\Engine\Services\Services;
-
-use Coordinator\Engine\Model\ModelInterface;
+use Coordinator\Engine\Filter\Condition\ConditionInterface;
+use Coordinator\Engine\Filter\Condition\Conditions;
 use Coordinator\Engine\Filter\FilterInterface;
-use Coordinator\Engine\Sorting\SortingInterface;
+use Coordinator\Engine\Logger\LoggerInterface;
+use Coordinator\Engine\Model\ModelInterface;
 use Coordinator\Engine\Pagination\PaginationInterface;
-
+use Coordinator\Engine\Services\Services;
+use Coordinator\Engine\Sorting\SortingInterface;
 use PDO;
 use PDOException;
 
@@ -339,7 +335,7 @@ final class MysqlStorage extends AbstractStorage{
 		$Condition=$Filters->getCondition();
 		if(is_a($Condition,Conditions::class)){
 			$conditions_parsed.=$this->parseConditions($Condition);
-		}elseif(is_a($Condition,Condition::class)){
+		}elseif(is_a($Condition,ConditionInterface::class)){
 			$conditions_parsed.=$this->parseCondition($Condition);
 		}else{
 			throw StorageException::genericException("Invalid condition class: ".$Condition::class);
@@ -350,11 +346,11 @@ final class MysqlStorage extends AbstractStorage{
 
 	private function parseConditions(Conditions $Conditions):string{
 		$conditions_parsed_array=array();
-		/** @var Conditions|Condition $Condition */
+		/** @var Conditions|ConditionInterface $Condition */
 		foreach($Conditions->getConditions() as $Condition){
 			if(is_a($Condition,Conditions::class)){
 				$conditions_parsed_array[]=$this->parseConditions($Condition);
-			}elseif(is_a($Condition,Condition::class)){
+			}elseif(is_a($Condition,ConditionInterface::class)){
 				$conditions_parsed_array[]=$this->parseCondition($Condition);
 			}else{
 				throw StorageException::genericException("Invalid condition class: ".$Condition::class);
@@ -363,7 +359,7 @@ final class MysqlStorage extends AbstractStorage{
 		return '( '.implode(' '.$Conditions->getOperator().' ',$conditions_parsed_array).' )';
 	}
 
-	private function parseCondition(Condition $Condition):string{
+	private function parseCondition(ConditionInterface $Condition):string{
 		$return='`'.$Condition->getProperty().'`';
 		switch($Condition->getAssertion()){
 			case 'isNull':$return.=" IS NULL";break;
@@ -371,9 +367,9 @@ final class MysqlStorage extends AbstractStorage{
 			case 'isEqualsTo':$return.=" = '".$Condition->getValue()."'";break;
 			case 'isNotEqualsTo':$return.=" <> '".$Condition->getValue()."'";break;
 			case 'isGreaterThan':$return.=" > '".$Condition->getValue()."'";break;
-			case 'isGreaterEqualThan':$return.=" >= '".$Condition->getValue()."'";break;
+			case 'isGreaterEqualsThan':$return.=" >= '".$Condition->getValue()."'";break;
 			case 'isLesserThan':$return.=" < '".$Condition->getValue()."'";break;
-			case 'isLesserEqualThan':$return.=" <= '".$Condition->getValue()."'";break;
+			case 'isLesserEqualsThan':$return.=" <= '".$Condition->getValue()."'";break;
 			case 'isNotLike':$return.=" NOT"; // continue down
 			case 'isLike':$return.=" LIKE '".str_replace('*','%',$Condition->getValue())."'";break;
 			case 'isNotIn':$return.=" NOT"; // continue down
