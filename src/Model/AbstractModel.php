@@ -136,7 +136,9 @@ abstract class AbstractModel implements ModelInterface{
 		return static::getStorageService()->remove($this);
 	}
 
-	public function hasEvents():bool{return property_exists(static::class,'_events');}
+	public function hasEvents():bool{
+		return property_exists(static::class,'_events');
+	}
 
 	/** @return ModelEvent[] */
 	public function getEvents():array{
@@ -153,6 +155,11 @@ abstract class AbstractModel implements ModelInterface{
 		$events=$this->getEvents();
 		array_unshift($events,new ModelEvent(time(),Engine::getSession()->getAccount(),$event,$data));
 		$this->_events=json_encode($events);
+	}
+
+	public function clearEvent():void{
+		if(!$this->hasEvents()){throw ModelException::noEvents(static::class);}
+		$this->_events=null;
 	}
 
 	public function debug():array{   // @todo parametro masked property ? per password o altri dati sensibili
