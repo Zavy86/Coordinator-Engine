@@ -34,6 +34,14 @@ interface ModelInterface{
 
 	public function setProperty(string $property,mixed $value):bool;
 
+	public function hasEvents():bool;
+
+	public function getEvents():array;
+
+	public function addEvent(string $event,mixed $data=null):void;
+
+	public function clearEvent():void;
+
 	public function debug():array;
 
 	// @todo   hasProperty($property)
