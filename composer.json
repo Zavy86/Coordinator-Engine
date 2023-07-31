@@ -28,7 +28,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Coordinator\\Engine\\Test\\": "test/"
+            "Coordinator\\Engine\\Test\\": "tests/"
         }
     }
 }
