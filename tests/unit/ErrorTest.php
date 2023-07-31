@@ -6,11 +6,10 @@
  * @author Manuel Zavatta <manuel.zavatta@gmail.com>
  */
 
-namespace Coordinator\Engine\Test;   // @todo oppure solo test senza engine?
-
-use PHPUnit\Framework\TestCase;
+namespace Coordinator\Engine\Test\unit;
 
 use Coordinator\Engine\Error\Error;
+use PHPUnit\Framework\TestCase;
 
 class ErrorTest extends TestCase{
 
