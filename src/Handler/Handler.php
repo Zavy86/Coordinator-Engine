@@ -215,6 +215,10 @@ final class Handler implements HandlerInterface{
 		);
 	}
 
+	public function getRouter():RouterInterface{
+		return $this->Router;
+	}
+
 	public function getRequest():RequestInterface{
 		return $this->Request;
 	}
