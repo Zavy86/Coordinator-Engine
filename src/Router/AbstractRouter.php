@@ -22,6 +22,7 @@ abstract class AbstractRouter implements RouterInterface{
 		$this->GET('/^\/Service$/',(new Callback(ApplicationController::class,'service')));
 		$this->GET('/^\/Ping$/',(new Callback(ApplicationController::class,'ping')));
 		$this->GET('/^\/Time$/',(new Callback(ApplicationController::class,'time')));
+		$this->GET('/^\/Docs$/',(new Callback(ApplicationController::class,'docs')));
 		// load application routes
 		$this->loadRoutes();
 	}
@@ -44,6 +45,13 @@ abstract class AbstractRouter implements RouterInterface{
 
 	final public function addRoute(string $method,string $command,CallbackInterface $callback):void{
 		$this->routes[$command][strtoupper($method)]=$callback;
+	}
+
+	/**
+	 * @return CallbackInterface[][]
+	 */
+	final public function getRoutes():array{
+		return $this->routes;
 	}
 
 	final public function resolveRoute(string $requestMethod,string $requestCommand):CallbackInterface{

@@ -35,6 +35,13 @@ interface RouterInterface{
 	public function addRoute(string $method,string $command,CallbackInterface $callback):void;
 
 	/**
+	 * Return Routes
+	 *
+	 * @return CallbackInterface[][]
+	 */
+	public function getRoutes():array;
+
+	/**
 	 * Debug
 	 *
 	 * @return array
