@@ -5,8 +5,8 @@
 				 colors = "true"
 >
 	<testsuites>
-		<testsuite name="CoordinatorEngineTests">
-			<directory>./tests</directory>
+		<testsuite name="Coordinator Engine Unit Tests">
+			<directory>./tests/unit</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>
