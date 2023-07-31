@@ -12,6 +12,6 @@ use Coordinator\Engine\Object\AbstractObject;
 
 final class PingResponse extends AbstractObject{
 
-	public string $response;
+	public string $response = 'pong';
 
 }

@@ -12,7 +12,9 @@ use Coordinator\Engine\Object\AbstractObject;
 
 final class TimeResponse extends AbstractObject{
 
+	#[Information('UNIX timestamp')]
 	public int $timestamp;
+	#[Information('YYYY-MM-DD HH:MM:SS')]
 	public string $datetime;
 	public string $timezone;
 

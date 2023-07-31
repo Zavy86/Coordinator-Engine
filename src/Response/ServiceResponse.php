@@ -15,6 +15,7 @@ final class ServiceResponse extends AbstractObject{
 	public string $version;
 	public string $title;
 	public string $owner;
+	public string $host;
 	public string $engine;
 
 }
