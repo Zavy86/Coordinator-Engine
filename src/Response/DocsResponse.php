@@ -21,19 +21,26 @@ final class DocsEndpoint{
 	public string $method;
 	public string $command;
 	public ?string $description = null;
+	public ?DocsObject $query = null;
+	public ?DocsObject $filter = null;
+	public ?DocsObject $sorting = null;
 	public ?DocsObject $request = null;
 	public ?DocsObject $response = null;
 }
 
 final class DocsObject{
-	public string $name;
-	public array $properties = [];
+	public function __construct(
+		public string $name,
+		public array $properties = []
+	){}
 }
 
 final class DocsObjectProperty{
-	public string $name;
-	public string $typology;
-	public string $default;
-	public ?string $information;
-	public ?DocsObject $class = null;
+	public function __construct(
+		public string $name,
+		public string $typology,
+		public string $default = 'null',
+		public ?string $information = null,
+		public ?DocsObject $class = null
+	){}
 }

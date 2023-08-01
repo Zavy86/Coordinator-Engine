@@ -12,6 +12,7 @@ use Coordinator\Engine\Object\AbstractObject;
 
 final class PingResponse extends AbstractObject{
 
+	#[Information('Always return pong')]
 	public string $response = 'pong';
 
 }
