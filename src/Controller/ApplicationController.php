@@ -193,6 +193,8 @@ final class ApplicationController extends AbstractController{
 				if($typology==$object->name){$typology.='[] (recursive)';}else{$typology.='[]';}
 			}
 
+			if($property->getType()->allowsNull()){$typology.=' | null';}
+
 			$property=new DocsObjectProperty($name,$typology,json_encode($property->getDefaultValue()),$information,$class);
 
 			$object->properties[]=$property;
