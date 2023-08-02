@@ -22,8 +22,6 @@ final class DocsEndpoint{
 	public string $command;
 	public ?string $description = null;
 	public ?DocsObject $query = null;
-	public ?DocsObject $filter = null;
-	public ?DocsObject $sorting = null;
 	public ?DocsObject $request = null;
 	public ?DocsObject $response = null;
 }
