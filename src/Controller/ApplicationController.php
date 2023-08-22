@@ -173,7 +173,7 @@ final class ApplicationController extends AbstractController{
 				}
 			}
 
-			if(!in_array($typology,['bool','int','float','string','array','object'])){
+			if(!in_array($typology,['bool','int','float','string','array','object','mixed'])){
 				$typology='class';
 				$class=$this->parseObject($property->getType()->getName());
 			}
