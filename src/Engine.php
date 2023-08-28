@@ -29,6 +29,7 @@ final class Engine{
 	public static string $OWNER;
 	public static string $DIR;
 	public static string $URL;
+	public static string $PATH;
 	public static string $ENGINE;
 
 	private static ?Engine $SINGLETON=null;
@@ -53,7 +54,7 @@ final class Engine{
 	private function __construct(){
 		$this->setParameters();
 		$this->loadEngineVersion();
-		$this->loadApplicationVersion();
+		$this->loadApplication();
 		$this->loadConfiguration();
 		$this->loadSession();
 		$this->loadHandler();
@@ -66,26 +67,36 @@ final class Engine{
 	}
 
 	private function loadEngineVersion(){
-		if(!file_exists(static::$DIR."VERSION.txt")){throw new \Exception('Version file not found.');}
-		static::$ENGINE=str_replace(["\r","\n"],'',file_get_contents(static::$DIR."VERSION.txt"));
-		if(substr_count(static::$ENGINE, ".")!=2){throw new \Exception('Version file syntax error.');}
+		if(!file_exists(static::$DIR."../../../vendor/coordinator/engine/composer.json")){throw new \Exception('engine composer.json file not found.');}
+		$bytes=file_get_contents(static::$DIR."../../../vendor/coordinator/engine/composer.json");
+		$parameters=json_decode($bytes,true);
+		if(!is_array($parameters)){throw new \Exception('engine composer.json file syntax error.');}
+		if(!array_key_exists('version',$parameters)){throw new \Exception('engine version is not defined.');}
+		static::$ENGINE=$parameters['version'];
 	}
 
-	private function loadApplicationVersion(){
-		if(!file_exists(static::$DIR."../../../VERSION.txt")){throw new \Exception('Version file not found.');}  // @todo sistemare path
-		static::$VERSION=str_replace(["\r","\n"],'',file_get_contents(static::$DIR."../../../VERSION.txt"));
-		if(substr_count(static::$VERSION, ".")!=2){throw new \Exception('Version file syntax error.');}
+	private function loadApplication(){
+		if(!file_exists(static::$DIR."../../../composer.json")){throw new \Exception('application composer.json file not found.');}
+		$bytes=file_get_contents(static::$DIR."../../../composer.json");
+		$parameters=json_decode($bytes,true);
+		if(!is_array($parameters)){throw new \Exception('application composer.json file syntax error.');}
+		if(!array_key_exists('version',$parameters)){throw new \Exception('application version is not defined.');}
+		if(!array_key_exists('title',$parameters)){throw new \Exception('application title is not defined.');}
+		if(!array_key_exists('owner',$parameters)){throw new \Exception('application owner is not defined.');}
+		if(!array_key_exists('autoload',$parameters)){throw new \Exception('application autoload is not defined.');}
+		if(!array_key_exists('psr-4',$parameters['autoload'])){throw new \Exception('application psr-4 autoload is not defined.');}
+		static::$VERSION=$parameters['version'];
+		static::$TITLE=$parameters['title'];
+		static::$OWNER=$parameters['owner'];
+		foreach($parameters['autoload']['psr-4'] as $namespace=>$directory){if(str_contains($directory,'src')){static::$NAMESPACE=$namespace;}}
+		if(!isset(static::$NAMESPACE)){throw new \Exception('unable to retrieve application namespace.');}
 	}
 
 	private function loadConfiguration(){
 		$Configuration=new ApplicationConfiguration('application.json');
 		//var_dump($Configuration);
 		static::$Configuration=$Configuration;
-
-		static::$NAMESPACE=$Configuration->get('namespace');
-		static::$TITLE=$Configuration->get('title');
-		static::$OWNER=$Configuration->get('owner');
-
+		static::$PATH=$Configuration->get('path');
 		if(!$Configuration->get('debug')){static::$DEBUG=false;}
 	}
 

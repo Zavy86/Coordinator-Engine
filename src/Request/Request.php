@@ -8,6 +8,7 @@
 
 namespace Coordinator\Engine\Request;
 
+use Coordinator\Engine\Engine;
 use Coordinator\Engine\Filter\Filter;
 use Coordinator\Engine\Filter\FilterInterface;
 use Coordinator\Engine\Object\ObjectInterface;
@@ -48,7 +49,9 @@ final class Request implements RequestInterface{
 	}
 
 	private function setUri():void{
-		$this->uri=explode("?",$this->getDecodedRequest())[0];
+		$uri=explode("?",$this->getDecodedRequest())[0];
+		if(Engine::$PATH!='/'){$uri=str_replace(Engine::$PATH,'/',$uri);}
+		$this->uri=$uri;
 	}
 
 	private function setQuery():void{

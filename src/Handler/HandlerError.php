@@ -19,17 +19,17 @@ final class HandlerError extends AbstractError{  // @todo valutare se spostare s
 		);
 	}
 
-	public static function errorLoadingEndpoint(string $endpoint):static{
+	public static function errorLoadingEndpoint():static{
 		return new static(
 			'errorLoadingEndpoint',
-			'An error occurred while loading endpoint '.$endpoint.'.'
+			'An error occurred while loading endpoint.'
 		);
 	}
 
-	public static function errorLoadingRouter(string $endpoint):static{
+	public static function errorLoadingRouter():static{
 		return new static(
 			'errorLoadingRouter',
-			'An error occurred while loading endpoint '.$endpoint.' router.'
+			'An error occurred while loading endpoint router.'
 		);
 	}
 
@@ -40,24 +40,24 @@ final class HandlerError extends AbstractError{  // @todo valutare se spostare s
 		);
 	}
 
-	public static function errorLoadingController(string $endpoint,string $controller):static{
+	public static function errorLoadingController(string $controller):static{
 		return new static(
 			'errorLoadingController',
-			'An error occurred while loading controller '.$controller.' of endpoint '.$endpoint.'.'
+			'An error occurred while loading controller '.$controller.'.'
 		);
 	}
 
-	public static function functionNotImplemented(string $endpoint,string $controller,string $method):static{
+	public static function functionNotImplemented(string $controller,string $method):static{
 		return new static(
 			'functionNotImplemented',
-			'Method '.$method.' was not implemented in controller '.$controller.' of endpoint '.$endpoint.'.'
+			'Method '.$method.' was not implemented in controller '.$controller.'.'
 		);
 	}
 
-	public static function errorExecutingFunction(string $endpoint,string $controller,string $function,string $information):static{
+	public static function errorExecutingFunction(string $controller,string $function,string $information):static{
 		return new static(
 			'errorExecutingMethod',
-			'An error occurred while executing function '.$function.' of controller '.$controller.' in endpoint '.$endpoint.'.',
+			'An error occurred while executing function '.$function.' of controller '.$controller.'.',
 			$information
 		);
 	}

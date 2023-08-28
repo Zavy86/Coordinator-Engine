@@ -55,11 +55,11 @@ final class Handler implements HandlerInterface{
 		}catch(HandlerException $Exception){
 			switch($Exception->getCode()){
 				case HandlerException::ERROR_LOADING_ENDPOINT:
-					$this->Response->addError(HandlerError::errorLoadingEndpoint($this->getEndpointName()));
+					$this->Response->addError(HandlerError::errorLoadingEndpoint());
 					$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 					break;
 				case HandlerException::ERROR_LOADING_ROUTER:
-					$this->Response->addError(HandlerError::errorLoadingRouter($this->getEndpointName()));
+					$this->Response->addError(HandlerError::errorLoadingRouter());
 					$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 					break;
 				case HandlerException::ERROR_LOADING_CALLBACK:
@@ -67,15 +67,15 @@ final class Handler implements HandlerInterface{
 					$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 					break;
 				case HandlerException::ERROR_LOADING_CONTROLLER:
-					$this->Response->addError(HandlerError::errorLoadingController($this->getEndpointName(),$this->Callback->getController()));
+					$this->Response->addError(HandlerError::errorLoadingController($this->Callback->getController()));
 					$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 					break;
 				case HandlerException::FUNCTION_NOT_IMPLEMENTED:
-					$this->Response->addError(HandlerError::functionNotImplemented($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction()));
+					$this->Response->addError(HandlerError::functionNotImplemented($this->Callback->getController(),$this->Callback->getFunction()));
 					$this->Response->setCode(ResponseCode::NOT_IMPLEMENTED_501);
 					break;
 				case HandlerException::METHOD_NOT_ALLOWED:
-					$this->Response->addError(HandlerError::methodNotAllowed($this->getEndpointName(),$this->Request->getUri(),$this->Request->getMethod()));
+					$this->Response->addError(HandlerError::methodNotAllowed($this->Request->getUri(),$this->Request->getMethod()));
 					$this->Response->setCode(ResponseCode::METHOD_NOT_ALLOWED_405);
 					break;
 				default:
@@ -85,37 +85,27 @@ final class Handler implements HandlerInterface{
 		}
 	}
 
-	private function getEndpointName():string{
-		return explode("/",$this->Request->getUri())[1];
-	}
-
 	private function loadEndpoint():void{
-		//$endpoint=$this->getEndpointName();
-		//$endpointClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.'Endpoint';
-		//$endpointClass=Engine::$NAMESPACE.'\\'.$endpoint.'\\'.'Endpoint';
-		$endpointClass=Engine::$NAMESPACE.'\\'.'Endpoint';
+		$endpointClass=Engine::$NAMESPACE.'Endpoint';
 		//var_dump($endpointClass);
 		try{
 			$this->Endpoint=new $endpointClass;
 			//var_dump($this->Endpoint);
 		}catch(\Exception|\TypeError $Exception){
 			//var_dump($Exception->getMessage());
-			throw HandlerException::errorLoadingEndpoint($endpoint);
+			throw HandlerException::errorLoadingEndpoint($endpointClass);
 		}
 	}
 
 	private function loadRouter():void{
-		//$endpoint=$this->getEndpointName();
-		//$routerClass='\Coordinator\Engine\Endpoints\\'.$endpoint.'\\'.'Router';
-		//$routerClass=Engine::$NAMESPACE.'\\'.$endpoint.'\\'.'Router';
-		$routerClass=Engine::$NAMESPACE.'\\'.'Router';
+		$routerClass=Engine::$NAMESPACE.'Router';
 		//var_dump($routerClass);
 		try{
 			$this->Router=new $routerClass;
 			//var_dump($this->Router);
 		}catch(\Exception|\TypeError $Exception){
 			//var_dump($Exception->getMessage());
-			throw HandlerException::errorLoadingRouter($endpoint);
+			throw HandlerException::errorLoadingRouter($routerClass);
 		}
 	}
 
@@ -142,13 +132,13 @@ final class Handler implements HandlerInterface{
 			$this->Controller=new $controllerClass($this->Request,$this->Response);
 		}catch(\Exception|\TypeError $Exception){
 			//var_dump($Exception->getMessage());
-			throw HandlerException::errorLoadingController($this->getEndpointName(),$this->Callback->getController());
+			throw HandlerException::errorLoadingController($this->Callback->getController());
 		}
 	}
 
 	private function checkFunction():void{
 		if(!method_exists($this->Callback->getController(),$this->Callback->getFunction())){
-			throw HandlerException::functionNotImplemented($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction());
+			throw HandlerException::functionNotImplemented($this->Callback->getController(),$this->Callback->getFunction());
 		}
 	}
 
@@ -164,7 +154,7 @@ final class Handler implements HandlerInterface{
 			// if in debug mode show real error
 			if(Engine::$DEBUG){throw $Exception;}
 			// show generic error for client
-			$this->Response->addError(HandlerError::errorExecutingFunction($this->getEndpointName(),$this->Callback->getController(),$this->Callback->getFunction(),$Exception->getMessage()));
+			$this->Response->addError(HandlerError::errorExecutingFunction($this->Callback->getController(),$this->Callback->getFunction(),$Exception->getMessage()));
 			$this->Response->setCode(ResponseCode::INTERNAL_SERVER_ERROR_500);
 		}finally{
 			$this->log();  // valutare se mettere qui o dentro un try
