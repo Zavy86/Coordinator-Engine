@@ -11,7 +11,6 @@ namespace Coordinator\Engine\Configuration;
 final class ApplicationConfiguration extends AbstractConfiguration{
 
 	protected bool $debug;
-	protected string $path;
 	protected string $secret;
 
 }

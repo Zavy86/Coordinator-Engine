@@ -96,7 +96,6 @@ final class Engine{
 		$Configuration=new ApplicationConfiguration('application.json');
 		//var_dump($Configuration);
 		static::$Configuration=$Configuration;
-		static::$PATH=$Configuration->get('path');
 		if(!$Configuration->get('debug')){static::$DEBUG=false;}
 	}
 

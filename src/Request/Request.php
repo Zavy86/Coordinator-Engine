@@ -49,9 +49,7 @@ final class Request implements RequestInterface{
 	}
 
 	private function setUri():void{
-		$uri=explode("?",$this->getDecodedRequest())[0];
-		if(Engine::$PATH!='/'){$uri=str_replace(Engine::$PATH,'/',$uri);}
-		$this->uri=$uri;
+		$this->uri=explode("?",$this->getDecodedRequest())[0];
 	}
 
 	private function setQuery():void{
