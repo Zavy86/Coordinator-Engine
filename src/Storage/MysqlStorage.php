@@ -8,6 +8,8 @@
 
 namespace Coordinator\Engine\Storage;
 
+use PDO;
+use PDOException;
 use Coordinator\Engine\Configuration\MysqlConfiguration;
 use Coordinator\Engine\Filter\Condition\ConditionInterface;
 use Coordinator\Engine\Filter\FilterConditions;
@@ -17,14 +19,11 @@ use Coordinator\Engine\Model\ModelInterface;
 use Coordinator\Engine\Pagination\PaginationInterface;
 use Coordinator\Engine\Services\Services;
 use Coordinator\Engine\Sorting\SortingInterface;
-use PDO;
-use PDOException;
 
 final class MysqlStorage extends AbstractStorage{
 
 	protected PDO $connection_read;
 	protected PDO $connection_write;
-	//protected PDO $connection_admin;
 
 	protected int $counter_queries_executed=0;
 	protected int $counter_queries_from_cached=0;

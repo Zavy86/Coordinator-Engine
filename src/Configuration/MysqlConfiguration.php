@@ -18,7 +18,5 @@ final class MysqlConfiguration extends AbstractConfiguration{
 	protected string $password_read;
 	protected string $username_write;
 	protected string $password_write;
-	protected string $username_admin;
-	protected string $password_admin;
 
 }
