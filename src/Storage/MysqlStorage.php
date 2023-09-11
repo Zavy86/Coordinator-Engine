@@ -387,7 +387,7 @@ final class MysqlStorage extends AbstractStorage{
 	public function count(ModelInterface $Model,?FilterInterface $Filter=null):int{
 		$table=$this->getDataset($Model);
 
-		$sql='SELECT COUNT(`uid`) AS `counter` FROM `'.$table.'`';
+		$sql='SELECT COUNT(*) AS `counter` FROM `'.$table.'`';
 
 		if(!is_null($Filter)){        // @todo sistemare con prepare ecc
 			$sql.=$this->filtersToWhere($Filter);
