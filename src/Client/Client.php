@@ -49,7 +49,7 @@ class Client implements ClientInterface{
 
 	private function execute(string $method,string $url,mixed $body=null){
 		$curl=curl_init();
-		if($curl===false){throw new Exception('failed to initialize curl');}
+		if($curl===false){throw new \Exception('failed to initialize curl');}
 		curl_setopt_array($curl,array(
 			CURLOPT_HTTPHEADER=>array('Content-Type:application/json'),
 			CURLOPT_RETURNTRANSFER=>true,
@@ -64,7 +64,7 @@ class Client implements ClientInterface{
 		if($body){curl_setopt($curl,CURLOPT_POSTFIELDS,json_encode($body));}
 		if($this->token){curl_setopt($curl,CURLOPT_HTTPHEADER,array('Content-Type:application/json','Authorization: Bearer '.$this->token));}
 		$response=json_decode(curl_exec($curl));
-		if($response===false || $response===null || !isset($response->error)){throw new Exception(curl_error($curl),curl_errno($curl));}
+		if($response===false || $response===null || !isset($response->error)){throw new \Exception(curl_error($curl),curl_errno($curl));}
 		curl_close($curl);
 		if($response->error==true){
 			if($response->errors[0]->code=='authenticationInvalid'){throw ClientException::sessionExpired();}
