@@ -42,6 +42,15 @@ trait PartsTraitController{
 	}
 
 	/**
+	 * check if any parts has requested
+	 *
+	 * @return bool
+	 */
+	public function hasParts():bool{
+		return (count($this->getParts())>0);
+	}
+
+	/**
 	 * check if a specific part has requested
 	 *
 	 * @param string $part
