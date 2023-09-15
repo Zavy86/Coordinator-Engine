@@ -26,6 +26,7 @@ final class Session implements SessionInterface{
 	protected ?int $expiration=null;
 	protected bool $administrator=false;
 	protected array $authorizations=[];
+	protected array $data=[];
 
 	public function __construct(){
 		$ApplicationConfiguration=new ApplicationConfiguration('../configurations/application.json');
@@ -93,6 +94,7 @@ final class Session implements SessionInterface{
 		$this->expiration=$payload->expiration;
 		$this->administrator=$payload->administrator;
 		$this->authorizations=$payload->authorizations;
+		$this->data=$payload->data;
 		//var_dump($this);
 	}
 
@@ -132,7 +134,7 @@ final class Session implements SessionInterface{
 		$this->valid=false;
 	}
 
-	public function validate(string $account,string $client,int $duration,bool $administrator,array $authorizations):bool{
+	public function validate(string $account,string $client,int $duration,bool $administrator,array $authorizations,array $data=[]):bool{
 
 		if($duration<60){$duration=60;}
 		if($duration>(60*60*24*10)){$duration=(60*60*24*10);}
@@ -152,7 +154,8 @@ final class Session implements SessionInterface{
 			"generation"=>time(),
 			"expiration"=>$expiration,
 			"administrator"=>$administrator,
-			"authorizations"=>$authorizations
+			"authorizations"=>$authorizations,
+			"data"=>$data
 		);
 		//var_dump($payload);
 		$this->valid=true;
@@ -164,6 +167,7 @@ final class Session implements SessionInterface{
 		$this->expiration=$expiration;
 		$this->administrator=$administrator;
 		$this->authorizations=$authorizations;
+		$this->data=$data;
 
 		return true;
 
@@ -193,6 +197,7 @@ final class Session implements SessionInterface{
 	public function getExpiration():?int{return $this->expiration??null;}
 	public function getRemaining():?int{return isset($this->expiration)?($this->expiration-time()):null;}
 	public function getAuthorizations():array{return $this->authorizations;}
+	public function getData():array{return $this->data;}
 
 	public function debug():array{
 		return array(
@@ -206,7 +211,8 @@ final class Session implements SessionInterface{
 			'expiration'=>$this->getExpiration(),
 			'remaining'=>$this->getRemaining(),
 			'administrator'=>$this->isAdministrator(),
-			'authorizations'=>$this->getAuthorizations()
+			'authorizations'=>$this->getAuthorizations(),
+			'data'=>$this->getData()
 		);
 	}
 
