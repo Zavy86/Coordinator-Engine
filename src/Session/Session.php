@@ -18,7 +18,6 @@ final class Session implements SessionInterface{
 
 	protected bool $valid=false;
 	protected string $token='';
-	protected string $address;
 	protected ?string $account=null;
 	protected ?string $client=null;
 	protected ?int $duration;
@@ -32,7 +31,6 @@ final class Session implements SessionInterface{
 		$ApplicationConfiguration=new ApplicationConfiguration('../configurations/application.json');
 		$this->secret=$ApplicationConfiguration->get('secret');
 		//var_dump($ApplicationConfiguration);
-		$this->setAddress();
 		$token=$this->getBearerToken();
 		//var_dump($token);
 		if(strlen($token)){
@@ -42,10 +40,6 @@ final class Session implements SessionInterface{
 			$this->valid=$this->bearerTokenIsValid($this->token);
 			//var_dump($this);
 		}
-	}
-
-	private function setAddress(){
-		$this->address=$_SERVER['REMOTE_ADDR'];
 	}
 
 	private function checkBearerTokenFormat(string $bearer_token):bool{
@@ -114,12 +108,8 @@ final class Session implements SessionInterface{
 		$base64_url_signature=$this->base64url_encode($signature);
 		// verify it matches the signature provided in the jwt
 		$is_signature_valid=($base64_url_signature===$signature_provided);
-		// verify if address match
-		$address=json_decode($payload)->address;
-		//$is_address_match=($address==$this->getAddress());
-		$is_address_match=true;
 		// checks
-		if($is_token_expired||!$is_signature_valid||!$is_address_match){
+		if($is_token_expired||!$is_signature_valid){
 			return false;
 		}else{
 			return true;
@@ -147,7 +137,6 @@ final class Session implements SessionInterface{
 			"typ"=>"JWT"
 		);
 		$payload=array(
-			"address"=>$this->getAddress(),
 			"account"=>$account,
 			"client"=>$client,
 			"duration"=>$duration,
@@ -189,7 +178,6 @@ final class Session implements SessionInterface{
 	public function isValid():bool{return $this->valid;}
 	public function isAdministrator():bool{return $this->administrator;}
 	public function getToken():?string{return $this->token??null;}
-	public function getAddress():?string{return $this->address??null;}
 	public function getAccount():?string{return $this->account??null;}
 	public function getClient():?string{return $this->client??null;}
 	public function getDuration():?int{return $this->duration??null;}
@@ -203,7 +191,6 @@ final class Session implements SessionInterface{
 		return array(
 			'valid'=>$this->isValid(),
 			'token'=>$this->getToken(),
-			'address'=>$this->getAddress(),
 			'account'=>$this->getAccount(),
 			'client'=>$this->getClient(),
 			'duration'=>$this->getDuration(),
