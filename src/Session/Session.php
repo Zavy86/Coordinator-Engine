@@ -81,14 +81,14 @@ final class Session implements SessionInterface{
 		if(!$this->checkBearerTokenFormat($bearer_token)){return;}
 		$payload=json_decode(base64_decode(explode(".",$bearer_token)[1]),true);
 		//var_dump($payload);
-		$this->account=$payload->account;
-		$this->client=$payload->client;
-		$this->duration=$payload->duration;
-		$this->generation=$payload->generation;
-		$this->expiration=$payload->expiration;
-		$this->administrator=$payload->administrator;
-		$this->authorizations=$payload->authorizations;
-		$this->data=$payload->data;
+		$this->account=$payload['account'];
+		$this->client=$payload['client'];
+		$this->duration=$payload['duration'];
+		$this->generation=$payload['generation'];
+		$this->expiration=$payload['expiration'];
+		$this->administrator=$payload['administrator'];
+		$this->authorizations=$payload['authorizations'];
+		$this->data=$payload['data'];
 		//var_dump($this);
 	}
 
