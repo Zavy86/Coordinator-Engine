@@ -62,17 +62,17 @@ final class HandlerError extends AbstractError{  // @todo valutare se spostare s
 		);
 	}
 
-	public static function routeNotResolved(string $router,string $command,string $method):static{
+	public static function routeNotResolved(string $command,string $method):static{
 		return new static(
 			'routeNotResolved',
-			'Route '.strtoupper($method).' '.$command.' was not resolved in '.$router.'.'
+			'Route '.strtoupper($method).' '.$command.' was not resolved.'
 		);
 	}
 
-	public static function methodNotAllowed(string $router,string $command,string $method):static{
+	public static function methodNotAllowed(string $command,string $method):static{
 		return new static(
 			'methodNotAllowed',
-			'Method '.strtoupper($method).' was not allowed for '.$command.' in '.$router.'.'
+			'Method '.strtoupper($method).' was not allowed for '.$command.'.'
 		);
 	}
 
