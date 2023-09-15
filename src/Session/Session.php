@@ -79,7 +79,7 @@ final class Session implements SessionInterface{
 
 	private function loadFromBearerToken(string $bearer_token){
 		if(!$this->checkBearerTokenFormat($bearer_token)){return;}
-		$payload=json_decode(base64_decode(explode(".",$bearer_token)[1]));
+		$payload=json_decode(base64_decode(explode(".",$bearer_token)[1]),true);
 		//var_dump($payload);
 		$this->account=$payload->account;
 		$this->client=$payload->client;
