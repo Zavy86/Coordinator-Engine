@@ -47,7 +47,7 @@ class Client implements ClientInterface{
 		return $this->execute('DELETE',$url);
 	}
 
-	private function execute(string $method,string $url,mixed $body=null){
+	protected function execute(string $method,string $url,mixed $body=null):mixed{
 		$curl=curl_init();
 		if($curl===false){throw new \Exception('failed to initialize curl');}
 		curl_setopt_array($curl,array(
