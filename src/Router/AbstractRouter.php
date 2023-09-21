@@ -57,9 +57,9 @@ abstract class AbstractRouter implements RouterInterface{
 	final public function resolveRoute(string $requestMethod,string $requestCommand):CallbackInterface{
 		$resolved_callback=null;
 		$cleanedMethod=strtoupper($requestMethod);
-		$cleanedCommand=(str_ends_with($requestCommand,"/")?substr($requestCommand,0,-1):$requestCommand);
+		$cleanedCommand=strtolower((str_ends_with($requestCommand,"/")?substr($requestCommand,0,-1):$requestCommand));
 		foreach($this->routes as $command=>$methods){
-			if(preg_match($command,$cleanedCommand)){
+			if(preg_match(strtolower($command),$cleanedCommand)){
 				if(!array_key_exists($cleanedMethod,$methods)){
 					throw RouterException::methodNotAllowed(static::class,$cleanedCommand,$cleanedMethod);
 				}
