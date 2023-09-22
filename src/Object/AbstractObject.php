@@ -26,10 +26,10 @@ abstract class AbstractObject implements ObjectInterface{
 		return $rp->isInitialized($this);
 	}
 
-	final public function isArray($property):bool{
+	/*final public function isArray($property):bool{
 		$rp=new \ReflectionProperty(static::class,$property);
 		return ($rp->getType()->getName()==='array');
-	}
+	}*/
 
 	final public function setProperties(array $properties=array()):void{
 		foreach($properties as $property=>$value){
@@ -38,6 +38,16 @@ abstract class AbstractObject implements ObjectInterface{
 			}
 			$rp=new \ReflectionProperty(static::class,$property);
 			if($rp->getType()->isBuiltin()){
+				if($rp->getType()->getName()==='array'){
+					if(preg_match('/@var\s+([^\s]+)/',$rp->getDocComment(),$matches)){
+						$class=str_replace('[]','',$matches[1]);
+						$values=[];
+						foreach($value as $v){
+							$values[]=new $class($v);
+						}
+						$value=$values;
+					}
+				}
 				$this->$property=$value;
 			}else{
 				$class=$rp->getType()->getName();
@@ -73,21 +83,24 @@ abstract class AbstractObject implements ObjectInterface{
 		}
 		return $this->$property;
 	}
-	/*
-		final public function addRelated(string $name,mixed $value,bool $overwrite=true):bool{
-			if(!$overwrite){if(array_key_exists($name,$this->relates)){return false;}}
-			$this->relates[$name]=$value;
-			return true;
-		}
 
-		final public function getRelated(string $name):mixed{
-			if(!array_key_exists($name,$this->relates)){
-				//throw ObjectException::propertyNotExists($this::class,$property);
-				return null;
-			}
-			return $this->relates[$name];
-		}
+	/*
+	final public function addRelated(string $name,mixed $value,bool $overwrite=true):bool{
+		if(!$overwrite){if(array_key_exists($name,$this->relates)){return false;}}
+		$this->relates[$name]=$value;
+		return true;
+	}
 	*/
+	/*
+	final public function getRelated(string $name):mixed{
+		if(!array_key_exists($name,$this->relates)){
+			//throw ObjectException::propertyNotExists($this::class,$property);
+			return null;
+		}
+		return $this->relates[$name];
+	}
+	*/
+
 	final public function debug():array{
 		$properties=$this->getProperties();
 		foreach($properties as $property=>$value){
