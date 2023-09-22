@@ -36,7 +36,13 @@ abstract class AbstractObject implements ObjectInterface{
 			if(!in_array($property,array_keys(get_class_vars($this::class)))){
 				throw ObjectException::propertyNotExists($this::class,$property);
 			}
-			$this->$property=$value;
+			$rp=new \ReflectionProperty(static::class,$property);
+			if($rp->getType()->isBuiltin()){
+				$this->$property=$value;
+			}else{
+				$class=$rp->getType()->getName();
+				$this->$property=new $class($value);
+			}
 		}
 	}
 
