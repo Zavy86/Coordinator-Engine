@@ -41,6 +41,7 @@ abstract class AbstractObject implements ObjectInterface{
 				if($rp->getType()->getName()==='array'){
 					if(preg_match('/@var\s+([^\s]+)/',$rp->getDocComment(),$matches)){
 						$class=str_replace('[]','',$matches[1]);
+						if(!str_starts_with($class,'\\')){$class=(new \ReflectionClass(static::class))->getNamespaceName().'\\'.$class;}
 						$values=[];
 						foreach($value as $v){
 							$values[]=new $class($v);
