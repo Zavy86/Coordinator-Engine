@@ -8,6 +8,8 @@
 
 namespace Coordinator\Engine\Object;
 
+use Coordinator\Engine\Collection\CollectionInterface;
+
 abstract class AbstractObject implements ObjectInterface{
 
 	public array $relates=[];
@@ -52,7 +54,18 @@ abstract class AbstractObject implements ObjectInterface{
 				$this->$property=$value;
 			}else{
 				$class=$rp->getType()->getName();
-				$this->$property=new $class($value);
+				//var_dump($class);
+				if(is_subclass_of($class,CollectionInterface::class)){
+					$elementClass=$class::getType();
+					//var_dump($elementClass);
+					$values=[];
+					foreach($value as $v){
+						$values[]=new $elementClass($v);
+					}
+					$this->$property=new $class(...$values);
+				}else{
+					$this->$property=new $class($value);
+				}
 			}
 		}
 	}

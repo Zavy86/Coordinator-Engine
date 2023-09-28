@@ -10,8 +10,6 @@ namespace Coordinator\Engine\Collection;
 
 interface CollectionInterface{
 
-	//public function __construct(...$elements);
-
-	public function getElementType():string;
+	public static function getType():string;
 
 }

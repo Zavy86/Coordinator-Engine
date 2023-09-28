@@ -10,21 +10,20 @@ namespace Coordinator\Engine\Collection;
 
 abstract class AbstractCollection extends \ArrayObject implements CollectionInterface{
 
-	private string $elementType;
+	static protected string $type;
 
-	private function checkElementType(mixed $element):void{
-		if($element instanceof $this->elementType===false){
+	private function checkElementType($element){
+		if($element instanceof static::$type===false){
 			throw CollectionException::invalidCollectionElement($this->elementType);
 		}
 	}
 
-	public function __construct(string $elementType,...$elements){
-		$this->elementType = $elementType;
+	public function __construct(...$elements){
 		foreach($elements as $element){$this->checkElementType($element);}
 		parent::__construct($elements);
 	}
 
-	public function append(mixed $element):void{
+	public function append($element):void{
 		$this->checkElementType($element);
 		parent::append($element);
 	}
@@ -34,8 +33,8 @@ abstract class AbstractCollection extends \ArrayObject implements CollectionInte
 		parent::offsetSet($index,$element);
 	}
 
-	public function getElementType():string{
-		return $this->elementType;
+	public static function getType():string{
+		return static::$type;
 	}
 
 }

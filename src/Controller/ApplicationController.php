@@ -8,6 +8,8 @@
 
 namespace Coordinator\Engine\Controller;
 
+use CAS\Mailer\Collection\AddressCollection;
+use Coordinator\Engine\Collection\CollectionInterface;
 use Coordinator\Engine\Engine;
 use Coordinator\Engine\Response\ResponseCode;
 use Coordinator\Engine\Response\ServiceResponse;
@@ -149,6 +151,14 @@ final class ApplicationController extends AbstractController{
 	}
 
 	private function parseObject(string $objectClass,$array=false){
+
+		//var_dump($objectClass);
+
+		if(is_subclass_of($objectClass,CollectionInterface::class)){
+			$elementObjectClass=$objectClass::getType();
+			//var_dump('collection of '.$elementObjectClass);
+			return $this->parseObject($elementObjectClass,true);
+		}
 
 		$object=new DocsObject($objectClass);
 
