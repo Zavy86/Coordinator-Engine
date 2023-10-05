@@ -74,17 +74,18 @@ abstract class AbstractObject implements ObjectInterface{
 		$response=get_class_vars($this::class);
 		foreach(get_object_vars($this) as $property=>$value){
 			if($value instanceof ObjectInterface){
-				$response[$property]=$value->getProperties();
+				$response[$property] = $value->getProperties();
 			}elseif(is_array($value) || $value instanceof \ArrayObject){
+				if(!count($value)){$response[$property] = [];}
 				foreach($value as $key=>$value_f){
 					if($value_f instanceof ObjectInterface){
-						$response[$property][$key]=$value_f->getProperties();
+						$response[$property][$key] = $value_f->getProperties();
 					}else{
-						$response[$property][$key]=$value_f;
+						$response[$property][$key] = $value_f;
 					}
 				}
 			}else{
-				$response[$property]=$value;
+				$response[$property] = $value;
 			}
 		}
 		unset($response['relates']);
