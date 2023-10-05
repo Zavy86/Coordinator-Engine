@@ -60,11 +60,11 @@ abstract class AbstractObject implements ObjectInterface{
 					//var_dump($elementClass);
 					$values=[];
 					foreach($value as $v){
-						$values[]=new $elementClass($v);
+						$values[]=new $elementClass((array)$v);
 					}
 					$this->$property=new $class(...$values);
 				}else{
-					$this->$property=new $class($value);
+					$this->$property=new $class((array)$value);
 				}
 			}
 		}
