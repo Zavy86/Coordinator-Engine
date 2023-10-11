@@ -44,11 +44,13 @@ abstract class AbstractObject implements ObjectInterface{
 					if(preg_match('/@var\s+([^\s]+)/',$rp->getDocComment(),$matches)){
 						$class=str_replace('[]','',$matches[1]);
 						if(!str_starts_with($class,'\\')){$class=(new \ReflectionClass(static::class))->getNamespaceName().'\\'.$class;}
-						$values=[];
-						foreach($value as $v){
-							$values[]=new $class($v);
+						if(is_array($value)){
+							$values=[];
+							foreach($value as $v){
+								$values[]=new $class($v);
+							}
+							$value=$values;
 						}
-						$value=$values;
 					}
 				}
 				$this->$property=$value;
@@ -58,13 +60,17 @@ abstract class AbstractObject implements ObjectInterface{
 				if(is_subclass_of($class,CollectionInterface::class)){
 					$elementClass=$class::getType();
 					//var_dump($elementClass);
-					$values=[];
-					foreach($value as $v){
-						$values[]=new $elementClass((array)$v);
+					if(is_null($value)){
+						$this->$property=null;
+					}else{
+						$values=[];
+						foreach($value as $v){
+							$values[]=new $elementClass((array)$v);
+						}
+						$this->$property=new $class(...$values);
 					}
-					$this->$property=new $class(...$values);
 				}else{
-					$this->$property=new $class((array)$value);
+					$this->$property=(is_null($value)?null:new $class((array)$value));
 				}
 			}
 		}
