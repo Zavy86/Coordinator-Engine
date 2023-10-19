@@ -28,4 +28,13 @@ class Sorting implements SortingInterface{
 		return $this->properties;
 	}
 
+	public function getRaw():?array{
+		$return=[];
+		if(!count($this->properties)){return null;}
+		foreach($this->properties as $property=>$method){
+			array_push($return,['property'=>$property,'method'=>$method]);
+		}
+		return $return;
+	}
+
 }

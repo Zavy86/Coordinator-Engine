@@ -30,18 +30,22 @@ class Filter implements FilterInterface{
 		protected FilterConditions|ConditionInterface $condition
 	){}
 
-	public function returnTextual():string{
-		return PHP_EOL.'FILTER STRING:'.PHP_EOL.$this->condition->returnTextual(0);
+	public function debug():array{ // @todo?
+		return array(
+			'class'=>$this::class
+		);
 	}
 
 	public function getCondition():FilterConditions|ConditionInterface{
 		return $this->condition;
 	}
 
-	public function debug():array{ // @todo?
-		return array(
-			'class'=>$this::class
-		);
+	public function getRaw():?array{
+		return $this->condition->getRaw();
+	}
+
+	public function returnTextual():string{
+		return PHP_EOL.'FILTER STRING:'.PHP_EOL.$this->condition->returnTextual(0);
 	}
 
 	public static function buildFromArray(array $properties):?Filter{

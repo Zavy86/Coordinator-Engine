@@ -41,4 +41,13 @@ class FilterConditions{
 		return str_repeat(' ',$depth).'('.PHP_EOL.implode(str_repeat(' ',($depth+1)).$this->getOperator().PHP_EOL,$return_string).str_repeat(' ',$depth).')'.PHP_EOL;
 	}
 
+	public function getRaw():?array{
+		if(!count($this->conditions)){return null;}
+		$return=['operator'=>$this->operator,'Conditions'=>[]];
+		foreach($this->conditions as $condition){
+			$return['Conditions'][]=$condition->getRaw();
+		}
+		return $return;
+	}
+
 }

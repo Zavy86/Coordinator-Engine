@@ -13,6 +13,7 @@ interface ConditionInterface{
 	public function getAssertion():string;
 	public function getProperty():string;
 	public function getValue():mixed;
+	public function getRaw():array;
 
 	public function returnTextual(int $depth=0):string;
 

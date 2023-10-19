@@ -14,7 +14,7 @@ interface ClientInterface{
 	public function setToken(string $token):void;
 	public function resetToken():void;
 
-	public function get(string $url):mixed;
+	public function get(string $url,mixed $body=null):mixed;
 	public function post(string $url,mixed $body=null):mixed;
 	public function put(string $url,mixed $body=null):mixed;
 	public function patch(string $url,mixed $body=null):mixed;

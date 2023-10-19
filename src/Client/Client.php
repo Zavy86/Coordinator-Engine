@@ -27,7 +27,7 @@ class Client implements ClientInterface{
 		$this->token=null;
 	}
 
-	public function get(string $url):mixed{
+	public function get(string $url,mixed $body=null):mixed{
 		return $this->execute('GET',$url);
 	}
 

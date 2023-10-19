@@ -13,5 +13,6 @@ interface SortingInterface{
 	//public function __construct();
 
 	public function getProperties():array;
+	public function getRaw():?array;
 
 }

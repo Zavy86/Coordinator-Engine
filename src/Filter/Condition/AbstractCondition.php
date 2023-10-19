@@ -24,6 +24,14 @@ abstract class AbstractCondition implements ConditionInterface{
 	public function getProperty():string{return $this->property;}
 	public function getValue():mixed{return $this->value;}
 
+	public function getRaw():array{
+		return [
+			'property'=>$this->property,
+			'assertion'=>$this->assertion,
+			'value'=>$this->value
+		];
+	}
+
 	public function returnTextual(int $depth=0):string{
 		if(is_array($this->getValue())){$value_string=implode(', ',$this->getValue());}
 		elseif(is_null($this->getValue())){$value_string=null;}

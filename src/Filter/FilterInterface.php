@@ -16,6 +16,8 @@ interface FilterInterface{
 
 	public function getCondition():FilterConditions|ConditionInterface;
 
+	public function getRaw():?array;
+
 	/**
 	 * Debug
 	 *
