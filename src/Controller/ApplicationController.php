@@ -103,7 +103,7 @@ final class ApplicationController extends AbstractController{
 						if(array_key_exists('name',$arguments)){
 							if(array_key_exists('typology',$arguments)){$typology=$arguments['typology'];}else{$typology='string';}
 							if(array_key_exists('default',$arguments)){$default='"'.$arguments['default'].'"';}else{$default='null';}
-							if(array_key_exists('information',$arguments)){$information='"'.$arguments['information'].'"';}else{$information=null;}
+							if(array_key_exists('information',$arguments)){$information=$arguments['information'];}else{$information=null;}
 							$endpoint->query->properties[]=new DocsObjectProperty($arguments['name'],$typology,$default,$information);
 						}
 					}
