@@ -63,7 +63,9 @@ class Client implements ClientInterface{
 		curl_setopt($curl,CURLOPT_CUSTOMREQUEST,$method);
 		if($body){curl_setopt($curl,CURLOPT_POSTFIELDS,json_encode($body));}
 		if($this->token){curl_setopt($curl,CURLOPT_HTTPHEADER,array('Content-Type:application/json','Authorization: Bearer '.$this->token));}
-		$response=json_decode(curl_exec($curl));
+		$execution=curl_exec($curl);
+		//echo $execution;
+		$response=json_decode($execution);
 		if($response===false || $response===null || !isset($response->error)){throw new \Exception(curl_error($curl),curl_errno($curl));}
 		curl_close($curl);
 		if($response->error==true){
