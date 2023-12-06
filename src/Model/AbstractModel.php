@@ -47,7 +47,7 @@ abstract class AbstractModel implements ModelInterface{
 		if($length<8){$length=8;}
 		if($length>32){$length=32;}
 		do{
-			$uid=substr(md5(time().rand(1000,9999)),0,$length);
+			$uid=substr(md5(time().random_int(1000,9999)),0,$length);
 		}while(static::exists($uid));
 		return $this->setUid($uid);      // decidere se sopra tengo bool o throw e in caso fare un try (magari dentro il loop gestendo un max per evitare l'INFL)
 	}
@@ -58,7 +58,7 @@ abstract class AbstractModel implements ModelInterface{
 
 	public function getProperty($property):mixed{
 		if(!in_array($property,array_keys(get_object_vars($this)))){throw ModelException::propertyNotExists(self::class,$property);}
-		return $this->$property;;
+		return $this->$property;
 	}
 
 	public function getProperties():array{
